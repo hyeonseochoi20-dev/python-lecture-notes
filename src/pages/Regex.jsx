@@ -92,7 +92,7 @@ print(re.search(r'[0-9]+', "abc123def"))  # 찾기`} language="python" />
             <tr className="border-b border-gray-200 dark:border-gray-700">
               <td className="p-2"><code>{}</code></td>
               <td className="p-2">횟수 지정</td>
-              <td className="p-2"><code>a{2,4}</code></td>
+              <td className="p-2"><code>{'a{2,4}'}</code></td>
               <td className="p-2">aa, aaa, aaaa</td>
             </tr>
             <tr className="border-b border-gray-200 dark:border-gray-700">

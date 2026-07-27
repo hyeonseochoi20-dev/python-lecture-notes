@@ -122,7 +122,7 @@ export default function HtmlCssBasics() {
               <td className="p-2"><code>find('div').find('p')</code></td>
             </tr>
             <tr>
-              <td className="p-2"><code>태그1 > 태그2</code></td>
+              <td className="p-2"><code>{'태그1 > 태그2'}</code></td>
               <td className="p-2">직접 자식만 선택</td>
               <td className="p-2"><code>select_one('div > p')</code></td>
             </tr>
