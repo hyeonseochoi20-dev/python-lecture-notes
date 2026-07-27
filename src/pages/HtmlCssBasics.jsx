@@ -124,7 +124,7 @@ export default function HtmlCssBasics() {
             <tr>
               <td className="p-2"><code>{'태그1 > 태그2'}</code></td>
               <td className="p-2">직접 자식만 선택</td>
-              <td className="p-2"><code>select_one('div > p')</code></td>
+              <td className="p-2"><code>{`select_one('div > p')`}</code></td>
             </tr>
           </tbody>
         </table>
