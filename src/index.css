@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@layer base {
+  body {
+    @apply bg-gray-50 dark:bg-dark-500 text-gray-800 dark:text-gray-200 font-sans;
+  }
+}
+
+/* 다크 모드 스크롤바 */
+@layer utilities {
+  .dark-scrollbar::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+  .dark-scrollbar::-webkit-scrollbar-track {
+    @apply bg-dark-300;
+  }
+  .dark-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-dark-100 rounded;
+  }
+  .dark-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-600;
+  }
+}
