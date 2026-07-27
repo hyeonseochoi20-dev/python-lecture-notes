@@ -3,152 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Python 강의 요약 - 스마트조선소 AI Academy</title>
+    <title>Python 완전 정리 - 스마트조선소 AI Academy</title>
     <style>
+        :root {
+            --bg: #0a0b10; --card: #181c29; --border: #2a2f45;
+            --text: #e5e7eb; --muted: #9ca3af; --accent: #a78bfa;
+            --code: #fbbf24; --code-bg: #111827;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystem sans-serif;
-            background: #16171d; color: #e5e7eb;
-            line-height: 1.7; padding: 40px;
-        }
-        .container { max-width: 1000px; margin: 0 auto; }
-        h1 { color: #c084fc; margin-bottom: 10px; font-size: 2.5rem; }
-        h2 { color: #a78bfa; margin: 30px 0 15px; font-size: 1.5rem; }
-        h3 { color: #fbbf24; margin: 20px 0 10px; font-size: 1.1rem; }
-        p { margin-bottom: 12px; color: #d1d5e0; }
-        code {
-            background: #1e293b; color: #fbbf24;
-            padding: 2px 8px; border-radius: 4px; font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
-        }
-        pre {
-            background: #0f172a; border: 1px solid #1e293b; border-radius: 8px;
-            padding: 16px; margin: 16px 0; overflow-x: auto;
-        }
-        pre code { background: none; padding: 0; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
-        .card {
-            background: #1f2937; border: 1px solid #374151;
-            border-radius: 12px; padding: 20px; transition: all 0.2s;
-        }
-        .card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-        .icon { font-size: 1.8rem; margin-bottom: 8px; }
-        .title { color: #f3f4f6; font-weight: 600; margin-bottom: 6px; }
-        .desc { color: #9ca3af; font-size: 0.85rem; margin-bottom: 12px; }
-        .tags { display: flex; flex-wrap: wrap; gap: 6px; }
-        .tag {
-            background: #312e81; color: #a5b4fc;
-            padding: 3px 8px; border-radius: 12px; font-size: 0.7rem;
-        }
+        body { background: var(--bg); color: var(--text); font-family: system-ui; line-height: 1.7; padding: 40px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { color: #c084fc; font-size: 2.2rem; margin-bottom: 30px; }
+        h2 { color: var(--accent); font-size: 1.5rem; margin: 40px 0 15px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+        h3 { color: #f59e0b; font-size: 1.2rem; margin: 25px 0 12px; }
+        p { margin: 12px 0; color: var(--muted); }
+        strong { color: #f3f4f6; }
+        code { background: var(--code-bg); color: var(--code); padding: 2px 8px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; }
+        pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin: 16px 0; overflow-x: auto; }
+        pre code { background: none; padding: 0; color: #e5e7eb; font-size: 0.85rem; }
         table { width: 100%; border-collapse: collapse; margin: 16px 0; }
-        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #374151; font-size: 0.85rem; }
-        th { color: #a78bfa; background: #1e293b; }
-        .note { background: #1e293b; border-left: 4px solid #c084fc; padding: 12px 16px; margin: 16px 0; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+        th { background: #1e293b; color: var(--accent); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 20px 0; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+        .note { background: #1e293b; border-left: 4px solid var(--accent); padding: 16px; margin: 20px 0; }
+        .problem { background: #1f2937; border-radius: 8px; padding: 16px; margin: 20px 0; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🐍 스마트조선소 Python 강의 요약</h1>
+        <h1>🐍 Python 완전 정리</h1>
 
-        <!-- 챕터 카드 -->
-        <div class="grid">
-            <div class="card">
-                <div class="icon">📊</div>
-                <div class="title">01. 기본 자료구조</div>
-                <div class="desc">변수, 자료형, 연산자 등 파이썬 기초</div>
-                <div class="tags"><span class="tag">+</span><span class="tag">-</span><span class="tag">*</span></div>
-            </div>
-            <div class="card">
-                <div class="icon">🔀</div>
-                <div class="title">02. 제어문</div>
-                <div class="desc">조건문, 반복문</div>
-                <div class="tags"><span class="tag">if</span><span class="tag">for</span></div>
-            </div>
-            <div class="card">
-                <div class="icon">⚙️</div>
-                <div class="title">03. 함수</div>
-                <div class="desc">def, lambda, 매개변수</div>
-                <div class="tags"><span class="tag">def</span><span class="tag">return</span></div>
-            </div>
-            <div class="card">
-                <div class="icon">🔍</div>
-                <div class="title">07. 정규표현식</div>
-                <div class="desc">re.compile, 메타문자</div>
-                <div class="tags"><span class="tag">*</span><span class="tag">+?</span><span class="tag">[]</span></div>
-            </div>
-        </div>
-
-        <!-- 정규표현식 상세 -->
-        <h2>🔍 정규표현식 메타문자</h2>
+        <!-- 연산자 -->
+        <h2>01. 연산자표현식</h2>
         <table>
-            <tr><th>기호</th><th>의미</th><th>예시</th></tr>
-            <tr><td><code>.</code></td><td>한 문자 (줄바꿈 제외)</td><td><code>a.c</code> → abc, a1c</td></tr>
-            <tr><td><code>*</code></td><td>0개 이상 (없어도 됨)</td><td><code>a*b</code> → b, ab, aab</td></tr>
-            <tr><td><code>+</code></td><td>1개 이상 (반드시 있어야)</td><td><code>a+b</code> → ab, aab</td></tr>
-            <tr><td><code>?</code></td><td>0~1개</td><td><code>colou?r</code> → color, colour</td></tr>
-            <tr><td><code>[]</code></td><td>문자셋 (or)</td><td><code>[abc]</code> → a 또는 b 또는 c</td></tr>
-            <tr><td><code>[^]</code></td><td>부정 (not)</td><td><code>[^0-9]</code> → 숫자가 아닌 것</td></tr>
-            <tr><td><code>^</code></td><td>시작</td><td><code>^abc</code> → abc로 시작</td></tr>
-            <tr><td><code>$</code></td><td>끝</td><td><code>xyz$</code> → xyz로 끝남</td></tr>
+            <tr><th>연산자</th><th>설명</th><th>예시</th><th>결과</th></tr>
+            <tr><td><code>+</code></td><td>더하기</td><td><code>2 + 2</code></td><td>4</td></tr>
+            <tr><td><code>-</code></td><td>빼기</td><td><code>5 - 2</code></td><td>3</td></tr>
+            <tr><td><code>*</code></td><td>곱하기</td><td><code>3 * 5</code></td><td>15</td></tr>
+            <tr><td><code>/</code></td><td>나누기</td><td><code>22 / 8</code></td><td>2.75</td></tr>
+            <tr><td><code>//</code></td><td>몫</td><td><code>22 // 8</code></td><td>2</td></tr>
+            <tr><td><code>%</code></td><td>나머지</td><td><code>22 % 8</code></td><td>6</td></tr>
+            <tr><td><code>**</code></td><td>지수</td><td><code>2 ** 3</code></td><td>8</td></tr>
         </table>
 
-        <h3>코드 예시</h3>
-        <pre><code>import re
-# 메타문자로 한글 추출
-pattern = re.compile(r'[가-힣]+')
-text = "Hello 안녕하세요"
-print(pattern.findall(text))  # ['안녕하세요']
-
-# 이메일 찾기
-email = re.findall(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]+', text)</code></pre>
-
-        <!-- 변수/자료형 -->
-        <h2>📊 변수 & 자료형</h2>
-        <pre><code># 변수 할당
+        <!-- 변수 -->
+        <h2>02. 변수</h2>
+        <pre><code># 변수 할당 방법
 var1 = 'Python'
 var2 = 123
-var3 = ['a', 'b', 'c']
-data = {'key': 'value'}
+var3 = [1, 2, 3]
+data = {'a': 1, 'b': 2}
 
-# 동시 할당
-a, b = ('python', 'variable')
+# 튜플로 동시 할당
+a, b = ('사과', '바나나')
 
-# 네이밍 컨벤션
-camelCase     # personAge
-PascalCase    # PersonAge
-snake_case    # person_age (파이썬 공식)</code></pre>
+# 같은 값 여러 변수
+x = y = 100
+
+# 값 교환
+a, b = b, a</code></pre>
+
+        <h3>변수명 규칙</h3>
+        <div class="grid">
+            <div class="card"><strong>✅ 가능</strong><p>user_name, age2, _count, camelCase</p></div>
+            <div class="card"><strong>❌ 불가능</strong><p>2age, user-name, user$name</p></div>
+        </div>
 
         <!-- 제어문 -->
-        <h2>🔀 제어문</h2>
-        <pre><code># if-elif-else
-if score >= 90:
-    grade = 'A'
-elif score >= 80:
-    grade = 'B'
-else:
-    grade = 'C'
+        <h2>03. 제어문</h2>
+        <h3>비교 연산자</h3>
+        <table>
+            <tr><th>연산자</th><th>의미</th><th>예시</th></tr>
+            <tr><td><code>==</code></td><td>같음</td><td><code>1 == 1</code> → True</td></tr>
+            <tr><td><code>!=</code></td><td>다름</td><td><code>1 != 2</code> → True</td></tr>
+            <tr><td><code>&lt; &gt;</code></td><td>작음/큼</td><td><code>3 &lt; 4</code> → True</td></tr>
+            <tr><td><code>&lt;= &gt;=</code></td><td>작거나같음</td><td><code>5 &lt;= 5</code> → True</td></tr>
+        </table>
 
-# while 반복
+        <h3>논리 연산자</h3>
+        <pre><code>True and False  # False (모두 참)
+True or False   # True  (하나라도 참)
+not True        # False (부정)</code></pre>
+
+        <h3>조건문</h3>
+        <pre><code>if 나이 &gt;= 20:
+    print("성인")
+elif 나이 &gt;= 13:
+    print("청소년")
+else:
+    print("어린이")</code></pre>
+
+        <h3>반복문</h3>
+        <pre><code># while - 조건이 참일 때 반복
 count = 0
-while count < 5:
+while count &lt; 5:
     print(count)
     count += 1
 
-# for 반복
+# for - 리스트 순회
 for i in range(1, 11):
-    print(i, end=' ')</code></pre>
+    print(i, end=' ')
+
+# 리스트 순회
+fruits = ['사과', '바나나']
+for fruit in fruits:
+    print(fruit)</code></pre>
 
         <!-- 함수 -->
-        <h2>⚙️ 함수</h2>
-        <pre><code>def plus(a, b):
+        <h2>04. 함수</h2>
+        <pre><code>def 함수명(매개변수):
+    수행할 코드
+    return 반환값
+
+# 예시
+def plus(a, b):
     return a + b
 
-# 가변 인자
+result = plus(10, 5)
+print(result)  # 15</code></pre>
+
+        <h3>가변 인자 (*args, **kwargs)</h3>
+        <pre><code># 여러 인자 받기
 def total(*args):
     return sum(args)
 
-# lambda
-minus = lambda a, b: a - b</code></pre>
+print(total(1, 2, 3, 4, 5))  # 15
+
+# 키워드 인자
+def info(**kwargs):
+    for key, value in kwargs.items():
+        print(f"{key}: {value}")
+
+info(name='홍길동', age=20)</code></pre>
+
+        <h3>람다 함수</h3>
+        <pre><code>minus = lambda a, b: a - b
+print(minus(10, 3))  # 7
+
+# 리스트 필터
+numbers = [1, 2, 3, 4, 5, 6]
+filtered = list(filter(lambda x: x &gt; 3, numbers))
+print(filtered)  # [4, 5, 6]</code></pre>
+
+        <!-- 정규표현식 -->
+        <h2>05. 정규표현식 (re)</h2>
+        <pre><code>import re
+
+# 컴파일 (재사용 시 유리)
+pattern = re.compile(r'[a-zA-Z]+')
+
+# search: 전체 검색
+result = pattern.search('abc123def')
+print(result.group())  # abc
+
+# findall: 모두 찾기
+results = re.findall(r'\d+', 'a1b22c333')
+print(results)  # ['1', '22', '333']
+
+# sub: 치환
+text = re.sub(r'\d+', '숫자', 'abc123def456')
+print(text)  # abc숫자def숫자</code></pre>
+
+        <h3>메타문자 완전 정리</h3>
+        <table>
+            <tr><th>기호</th><th>의미</th><th>매치 결과</th><th>활용 예시</th></tr>
+            <tr><td><code>.</code></td><td>한 문자</td><td><code>a.c → abc, a1c</code></td><td><code>[가-힣]</code> 한글</td></tr>
+            <tr><td><code>*</code></td><td>0개 이상</td><td><code>a*b → b, ab, aab</code></td><td><code>\w*</code> 단어 0번 이상</td></tr>
+            <tr><td><code>+</code></td><td>1개 이상</td><td><code>a+b → ab, aab</code></td><td><code>[0-9]+</code> 숫자 1개 이상</td></tr>
+            <tr><td><code>?</code></td><td>0~1개</td><td><code>colou?r → color, colour</code></td><td><code>https?</code> http 또는 https</td></tr>
+            <tr><td><code>[]</code></td><td>문자셋</td><td><code>[abc] → a 또는 b 또는 c</code></td><td><code>[가-힣]+</code></td></tr>
+            <tr><td><code>[^]</code></td><td>부정</td><td><code>[^0-9] → 숫자 아님</code></td><td><code>[^A-Z]</code> 대문자 아님</td></tr>
+            <tr><td><code>^</code></td><td>시작</td><td><code>^abc → abc로 시작</code></td><td>문자열 시작 체크</td></tr>
+            <tr><td><code>$</code></td><td>끝</td><td><code>xyz$ → xyz로 끝</code></td><td>문자열 끝 체크</td></tr>
+            <tr><td><code>()</code></td><td>그룹</td><td><code>(a|b)c → ac 또는 bc</code></td><td>캡처 그룹</td></tr>
+            <tr><td><code>{}</code></td><td>횟수</td><td><code>a{2,4} → aa, aaa, aaaa</code></td><td>정확한 반복 횟수</td></tr>
+        </table>
+
+        <h3>실전 예제</h3>
+        <pre><code># 전화번호 추출
+phone = re.findall(r'010-\d{4}-\d{4}', text)
+
+# 이메일 추출
+email = re.findall(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}', text)
+
+# HTML 태그 제거
+clean = re.sub(r'&lt;[^&gt;]+&gt;', '', html_text)</code></pre>
+
+        <!-- 연습문제 -->
+        <h2>06. 연습문제 모음</h2>
+
+        <div class="problem">
+            <h3>초 → 시:분:초 변환</h3>
+            <pre><code>sec = 3703
+hour = sec // 3600
+minute = (sec % 3600) // 60
+second = sec % 60
+print(f'{hour}시간 {minute}분 {second}초')</code></pre>
+        </div>
+
+        <div class="problem">
+            <h3>평년/윤년 판별</h3>
+            <pre><code>year = 2024
+if year % 400 == 0:
+    print("윤년")
+elif year % 100 == 0:
+    print("평년")
+elif year % 4 == 0:
+    print("윤년")
+else:
+    print("평년")</code></pre>
+        </div>
+
+        <div class="problem">
+            <h3>거스름돈 최소 동전</h3>
+            <pre><code>n = 1260
+count = 0
+for coin in [500, 100, 50, 10]:
+    count += n // coin
+    n %= coin
+print(count)  # 6</code></pre>
+        </div>
     </div>
 </body>
 </html>
