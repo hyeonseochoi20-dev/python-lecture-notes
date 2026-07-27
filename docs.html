@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python 강의 요약 - 스마트조선소 AI Academy</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystem sans-serif;
+            background: #16171d; color: #e5e7eb;
+            line-height: 1.7; padding: 40px;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        h1 { color: #c084fc; margin-bottom: 10px; font-size: 2.5rem; }
+        h2 { color: #a78bfa; margin: 30px 0 15px; font-size: 1.5rem; }
+        h3 { color: #fbbf24; margin: 20px 0 10px; font-size: 1.1rem; }
+        p { margin-bottom: 12px; color: #d1d5e0; }
+        code {
+            background: #1e293b; color: #fbbf24;
+            padding: 2px 8px; border-radius: 4px; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+        }
+        pre {
+            background: #0f172a; border: 1px solid #1e293b; border-radius: 8px;
+            padding: 16px; margin: 16px 0; overflow-x: auto;
+        }
+        pre code { background: none; padding: 0; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .card {
+            background: #1f2937; border: 1px solid #374151;
+            border-radius: 12px; padding: 20px; transition: all 0.2s;
+        }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        .icon { font-size: 1.8rem; margin-bottom: 8px; }
+        .title { color: #f3f4f6; font-weight: 600; margin-bottom: 6px; }
+        .desc { color: #9ca3af; font-size: 0.85rem; margin-bottom: 12px; }
+        .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+        .tag {
+            background: #312e81; color: #a5b4fc;
+            padding: 3px 8px; border-radius: 12px; font-size: 0.7rem;
+        }
+        table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #374151; font-size: 0.85rem; }
+        th { color: #a78bfa; background: #1e293b; }
+        .note { background: #1e293b; border-left: 4px solid #c084fc; padding: 12px 16px; margin: 16px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐍 스마트조선소 Python 강의 요약</h1>
+
+        <!-- 챕터 카드 -->
+        <div class="grid">
+            <div class="card">
+                <div class="icon">📊</div>
+                <div class="title">01. 기본 자료구조</div>
+                <div class="desc">변수, 자료형, 연산자 등 파이썬 기초</div>
+                <div class="tags"><span class="tag">+</span><span class="tag">-</span><span class="tag">*</span></div>
+            </div>
+            <div class="card">
+                <div class="icon">🔀</div>
+                <div class="title">02. 제어문</div>
+                <div class="desc">조건문, 반복문</div>
+                <div class="tags"><span class="tag">if</span><span class="tag">for</span></div>
+            </div>
+            <div class="card">
+                <div class="icon">⚙️</div>
+                <div class="title">03. 함수</div>
+                <div class="desc">def, lambda, 매개변수</div>
+                <div class="tags"><span class="tag">def</span><span class="tag">return</span></div>
+            </div>
+            <div class="card">
+                <div class="icon">🔍</div>
+                <div class="title">07. 정규표현식</div>
+                <div class="desc">re.compile, 메타문자</div>
+                <div class="tags"><span class="tag">*</span><span class="tag">+?</span><span class="tag">[]</span></div>
+            </div>
+        </div>
+
+        <!-- 정규표현식 상세 -->
+        <h2>🔍 정규표현식 메타문자</h2>
+        <table>
+            <tr><th>기호</th><th>의미</th><th>예시</th></tr>
+            <tr><td><code>.</code></td><td>한 문자 (줄바꿈 제외)</td><td><code>a.c</code> → abc, a1c</td></tr>
+            <tr><td><code>*</code></td><td>0개 이상 (없어도 됨)</td><td><code>a*b</code> → b, ab, aab</td></tr>
+            <tr><td><code>+</code></td><td>1개 이상 (반드시 있어야)</td><td><code>a+b</code> → ab, aab</td></tr>
+            <tr><td><code>?</code></td><td>0~1개</td><td><code>colou?r</code> → color, colour</td></tr>
+            <tr><td><code>[]</code></td><td>문자셋 (or)</td><td><code>[abc]</code> → a 또는 b 또는 c</td></tr>
+            <tr><td><code>[^]</code></td><td>부정 (not)</td><td><code>[^0-9]</code> → 숫자가 아닌 것</td></tr>
+            <tr><td><code>^</code></td><td>시작</td><td><code>^abc</code> → abc로 시작</td></tr>
+            <tr><td><code>$</code></td><td>끝</td><td><code>xyz$</code> → xyz로 끝남</td></tr>
+        </table>
+
+        <h3>코드 예시</h3>
+        <pre><code>import re
+# 메타문자로 한글 추출
+pattern = re.compile(r'[가-힣]+')
+text = "Hello 안녕하세요"
+print(pattern.findall(text))  # ['안녕하세요']
+
+# 이메일 찾기
+email = re.findall(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]+', text)</code></pre>
+
+        <!-- 변수/자료형 -->
+        <h2>📊 변수 & 자료형</h2>
+        <pre><code># 변수 할당
+var1 = 'Python'
+var2 = 123
+var3 = ['a', 'b', 'c']
+data = {'key': 'value'}
+
+# 동시 할당
+a, b = ('python', 'variable')
+
+# 네이밍 컨벤션
+camelCase     # personAge
+PascalCase    # PersonAge
+snake_case    # person_age (파이썬 공식)</code></pre>
+
+        <!-- 제어문 -->
+        <h2>🔀 제어문</h2>
+        <pre><code># if-elif-else
+if score >= 90:
+    grade = 'A'
+elif score >= 80:
+    grade = 'B'
+else:
+    grade = 'C'
+
+# while 반복
+count = 0
+while count < 5:
+    print(count)
+    count += 1
+
+# for 반복
+for i in range(1, 11):
+    print(i, end=' ')</code></pre>
+
+        <!-- 함수 -->
+        <h2>⚙️ 함수</h2>
+        <pre><code>def plus(a, b):
+    return a + b
+
+# 가변 인자
+def total(*args):
+    return sum(args)
+
+# lambda
+minus = lambda a, b: a - b</code></pre>
+    </div>
+</body>
+</html>
