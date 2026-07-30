@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>BeautifulSoup 완전 정리</title>
+    <style>
+        body{font-family:-apple-system,sans-serif;background:#030712;color:#e5e7eb;line-height:1.7;padding:30px}
+        .content{max-width:900px;margin:0 auto}
+        h1{color:#c084fc;font-size:2rem;margin-bottom:20px}
+        h2{color:#a78bfa;margin:30px 0 12px;font-size:1.4rem}
+        h3{color:#60a5fa;margin:20px 0 8px}
+        code{background:#1e293b;color:#fbbf24;padding:2px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace}
+        pre{background:#0f172a;border:1px solid #1f2937;border-radius:8px;padding:16px;overflow-x:auto}
+        table{width:100%;border-collapse:collapse;margin:15px 0}
+        th,td{border:1px solid #1f2937;padding:12px;font-size:.9rem;text-align:center}
+        th{background:#111827;color:#a78bfa}
+        .note{background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0}
+        .example{background:#0f172a;border:1px solid #1f2937;border-radius:8px;padding:16px;margin:16px 0}
+    </style>
+</head>
+<body>
+<div class="content">
+<h1>🍲 BeautifulSoup 완전 정리</h1>
+
+<h2>BeautifulSoup란?</h2>
+<p>BeautifulSoup은 HTML과 XML 파싱을 쉽게 만들어주는 파이썬 라이브러리입니다.</p>
+<p>복잡한 HTML 구조에서도 원하는 데이터를 쉽게 추출할 수 있도록 도와줍니다.</p>
+
+<h2>설치 방법</h2>
+<pre><code># 터미널에서 실행
+pip install beautifulsoup4
+
+# lxml 파서 (더 빠름, 권장)
+pip install lxml
+</code></pre>
+
+<h2>기본 사용법</h2>
+<pre><code>from bs4 import BeautifulSoup as bs
+import requests
+
+# HTML 문자열로부터 파싱
+html_string = '''
+&lt;html&gt;
+&lt;body&gt;
+    &lt;h1&gt;제목&lt;/h1&gt;
+    &lt;p class="intro"&gt;소개 문단&lt;/p&gt;
+    &lt;ul&gt;
+        &lt;li&gt;항목 1&lt;/li&gt;
+        &lt;li&gt;항목 2&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+'''
+
+soup = bs(html_string, 'html.parser')
+
+# 요소 찾기
+title = soup.find('h1')
+print(title.text)  # 제목
+
+# 또는
+soup = bs('&lt;h1&gt;Hello&lt;/h1&gt;', 'html.parser')
+print(soup.find('h1').text)  # Hello
+</code></pre>
+
+<h2>파서 종류</h2>
+<table>
+<tr><th>파서</th><th>장점</th><th>단점</th><th>설치 필요 여부</th></tr>
+<tr><td>html.parser</td><td>기본 내장, 별도 설치 불필요</td><td>상대적으로 느림</td><td>아니오</td></tr>
+<tr><td>lxml</td><td>매우 빠르고 유연함</td><td>별도 설치 필요</td><td>예 (pip install lxml)</td></tr>
+<tr><td>html5lib</td><td>웹 표준 준수, 관대한 파싱</td><td>가장 느림</td><td>예 (pip install html5lib)</td></tr>
+</table>
+
+<pre><code># lxml 파서 사용 (권장)
+soup = bs(html_string, 'lxml')
+
+# html5lib 파서 사용
+soup = bs(html_string, 'html5lib')
+</code></pre>
+
+<h2>요소 선택 방법</h2>
+
+<h3>1. find() / find_all() - 메서드 방식</h3>
+<h4>find(): 첫 번째 일치하는 요소만 반환</h4>
+<pre><code>soup = bs('&lt;p&gt;첫 번째&lt;/p&gt;&lt;p&gt;두 번째&lt;/p&gt;', 'html.parser')
+
+# 첫 번째 p 태그 찾기
+first_p = soup.find('p')
+print(first_p.text)  # 첫 번째
+
+# 속성을 기준으로 찾기
+soup = bs('&lt;p class="intro"&gt;소개&lt;/p&gt;&lt;p class="content"&gt;내용&lt;/p&gt;', 'html.parser')
+intro_p = soup.find('p', class_='intro')
+print(intro_p.text)  # 소개
+
+# 여러 속성 조합
+element = soup.find('div', {'class': 'container', 'id': 'main'})
+</code></pre>
+
+<h4>find_all(): 모든 일치하는 요소들을 리스트로 반환</h4>
+<pre><code>soup = bs('''
+&lt;p&gt;첫 번째 단락&lt;/p&gt;
+&lt;div class="section"&gt;
+    &lt;p&gt;섹션 내 단락&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;두 번째 단락&lt;/p&gt;
+''', 'html.parser')
+
+# 모든 p 태그 찾기
+all_p = soup.find_all('p')
+print(len(all_p))  # 3
+for p in all_p:
+    print(p.text)
+
+# 특정 클래스를 가진 요소 찾기
+section_divs = soup.find_all('div', class_='section')
+print(len(section_divs))  # 1
+
+# 속성이 존재하는 요소 찾기
+links_with_href = soup.find_all('a', href=True)
+# href 속성이 있는 모든 a 태그 찾기
+
+# 정규표현식으로 속성 매칭
+import re
+pattern_links = soup.find_all('a', href=re.compile(r'https?://'))
+# http 또는 https로 시작하는 링크 찾기
+</code></pre>
+
+<h3>2. select() / select_one() - CSS 선택자 방식</h3>
+<p>CSS 선택자를 사용해 더 직관적이고 강력한 요소를 선택할 수 있습니다.</p>
+
+<h4>select_one(): 첫 번째 일치하는 요소만 반환</h4>
+<pre><code>soup = bs('''
+&lt;div class="container"&gt;
+    &lt;h1&gt;제목&lt;/h1&gt;
+    &lt;p class="intro"&gt;소개 문단&lt;/p&gt;
+    &lt;ul class="menu"&gt;
+        &lt;li class="item"&gt;메뉴 1&lt;/li&gt;
+        &lt;li class="item"&gt;메뉴 2&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;
+''', 'html.parser')
+
+# 클래스 선택자
+intro_p = soup.select_one('.intro')
+print(intro_p.text)  # 소개 문단
+
+# ID 선택자
+# soup.select_one('#header')
+
+# 태그 선택자
+first_li = soup.select_one('li')
+print(first_li.text)  # 메뉴 1
+
+# 자손 선택자 (공백으로 구분)
+menu_items = soup.select('.menu li')
+print(len(menu_items))  # 2
+for item in menu_items:
+    print(item.text)
+
+# 직접 자식 선택자 (&gt;)
+direct_children = soup.select('.container &gt; *')
+# container의 직접 자식 요소들만 선택
+
+# 인접 형제 선택자 (+)
+# h1 + p : h1 바로 다음에 오는 p 요소
+
+# 일반 형제 선택자 (~)
+# h1 ~ p : h1 이후에 오는 모든 p 요소
+</code></pre>
+
+<h4>select(): 모든 일치하는 요소들을 리스트로 반환</h4>
+<pre><code>soup = bs('''
+&lt;ul class="fruits"&gt;
+    &lt;li class="apple"&gt;사과&lt;/li&gt;
+    &lt;li class="banana"&gt;바나나&lt;/li&gt;
+    &lt;li class="apple"&gt;사과&lt;/li&gt;
+&lt;/ul&gt;
+''', 'html.parser')
+
+# 모든 사과 항목 찾기
+apples = soup.select('.apple')
+print(len(apples))  # 2
+
+# 특정 패턴의 클래스 찾기
+items_with_a = soup.select('li[class*="a"]')  # 클래스에 'a'가 포함된 li
+print(len(items_with_a))  # 3 (모두 'a' 포함)
+
+# nth-child 선택자
+first_item = soup.select('li:nth-child(1)')
+second_item = soup.select('li:nth-child(2)')
+last_item = soup.select('li:last-child')
+
+# nth-of-type 선택자
+# 같은 타입 요소 중에서 n번째
+</code></pre>
+
+<h2>텍스트와 속성 추출</h2>
+
+<h3>텍스트 추출 방법</h3>
+<pre><code>element = soup.find('h1')
+
+# 방법 1: .text 속성
+text1 = element.text
+# 모든 자식 요소의 텍스트를 결합 (HTML 태그 제거)
+
+# 방법 2: .get_text() 메서드
+text2 = element.get_text()
+# .text와 동일하지만 추가 옵션 제공
+
+# 방법 3: .string 속성 (단일 텍스트 노드만)
+text3 = element.string
+# 요소가 오직 하나의 텍스트 노드만 가지고 있을 때 사용
+# 자식 요소가 있으면 None 반환
+
+# 텍스트 정리 옵션
+clean_text = element.get_text(strip=True)  # 앞뒤 공백 제거
+clean_text = element.get_text(separator=' ', strip=True)  # 공백으로 연결하고 정리
+</code></pre>
+
+<h3>속성(Attributes) 추출 방법</h3>
+<pre><code>element = soup.find('a', href='https://example.com')
+
+# 방법 1: 딕셔너리처럼 접근 (가장 일반적)
+href_value = element['href']
+print(href_value)  # https://example.com
+
+# 방법 2: .attrs 속성 사용
+attrs_dict = element.attrs
+href_value = attrs_dict['href']
+
+# 방법 3: .get() 메서드 (안전한 접근)
+href_value = element.get('href')
+# 속성이 없을 때 None 반환 (KeyError 방지)
+href_value = element.get('href', '기본값')  # 기본값 지정 가능
+
+# 모든 속성 가져오기
+all_attrs = element.attrs
+print(all_attrs)  # {'href': 'https://example.com', 'class': ['link']}
+
+# 특정 속성 목록 가져오기
+class_list = element.get_attribute_list('class')
+print(class_list)  # ['link'] (리스트 형태로 반환)
+</code></pre>
+
+<h2>실전 예제: 뉴스 기사 크롤링</h2>
+<div class="example">
+<pre><code>import requests
+from bs4 import BeautifulSoup as bs
+
+# 뉴스 기사 페이지 가져오기
+url = "https://news.example.com/article/12345"
+response = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
+response.encoding = 'utf-8'  # 한글 깨짐 방지
+
+# HTML 파싱
+soup = bs(response.text, 'html.parser')
+
+# 기사 제목 추출
+title_element = soup.find('h1', class_='article-title')
+if title_element:
+    title = title_element.text.strip()
+    print(f"제목: {title}")
+
+# 기사 내용 추출
+content_div = soup.find('div', class_='article-content')
+if content_div:
+    # 모든 단락 텍스트 결합
+    paragraphs = content_div.find_all('p')
+    content = '\n'.join([p.text.strip() for p in paragraphs])
+    print(f"내용:\n{content}")
+
+# 작성자 및 날짜 추출
+meta_div = soup.find('div', class_='article-meta')
+if meta_div:
+    author = meta_div.find('span', class_='author')
+    date = meta_div.find('span', class_='date')
+    if author:
+        print(f"작성자: {author.text.strip()}")
+    if date:
+        print(f"날짜: {date.text.strip()}")
+
+# 태그 목록 추출
+tags_div = soup.find('div', class_='article-tags')
+if tags_div:
+    tags = tags_div.find_all('a', class_='tag')
+    tag_list = [tag.text.strip() for tag in tags]
+    print(f"태그: {', '.join(tag_list)}")
+</code></pre>
+</div>
+
+<h2>실전 예제: 상품 정보 크롤링</h2>
+<div class="example">
+<pre><code>import requests
+from bs4 import BeautifulSoup as bs
+
+# 상품 목록 페이지
+url = "https://shop.example.com/category/electronics"
+response = requests.get(url)
+soup = bs(response.text, 'html.parser')
+
+# 모든 상품 카드 찾기
+product_cards = soup.find_all('div', class_='product-card')
+print(f"총 {len(product_cards)}개 상품 발견")
+
+products = []
+for card in product_cards:
+    # 상품명
+    name_element = card.find('h3', class_='product-name')
+    name = name_element.text.strip() if name_element else "정보 없음"
+
+    # 가격
+    price_element = card.find('span', class_='price')
+    price = price_element.text.strip() if price_element else "가격 정보 없음"
+
+    # 이미지 URL
+    img_element = card.find('img')
+    img_url = img_element['src'] if img_element and img_element.has_attr('src') else "이미지 없음"
+
+    # 평점
+    rating_element = card.find('div', class_='rating')
+    rating = rating_element.text.strip() if rating_element else "평가 없음"
+
+    products.append({
+        'name': name,
+        'price': price,
+        'image_url': img_url,
+        'rating': rating
+    })
+
+# 결과 출력
+for i, product in enumerate(products[:5], 1):  # 처음 5개만 출력
+    print(f"{i}. {product['name']}")
+    print(f"   가격: {product['price']}")
+    print(f"   평점: {product['rating']}")
+    print(f"   이미지: {product['image_url']}")
+    print()
+</code></pre>
+</div>
+
+<h2>고급 기술: 요소 탐색 및 탐색</h2>
+<h3>부모, 자식, 형제 요소 탐색</h3>
+<pre><code>element = soup.find('div', class_='target')
+
+# 부모 요소 탐색
+parent = element.parent
+parents = element.parents  # 모든 부모 요소들의 제네레이터
+
+# 자식 요소 탐색
+children = element.children  # 직접 자식들의 제네레이터
+descendants = element.descendants  # 모든 후손 요소들의 제네레이터
+
+# 형제 요소 탐색
+next_sibling = element.next_sibling  # 다음 형제
+previous_sibling = element.previous_sibling  # 이전 형제
+next_siblings = element.next_siblings  # 이후 모든 형제들
+previous_siblings = element.previous_siblings  # 이전 모든 형제들
+
+# 특정 조건의 요소 찾기
+# 특정 텍스트를 포함하는 요소 찾기
+elements_with_text = soup.find_all(text=lambda text: text and 'important' in text)
+
+# 특정 속성 값을 가진 요소 찾기
+elements_with_attr = soup.find_all(attrs={'data-value': lambda v: v and v.startswith('prefix')})
+</code></pre>
+
+<h2>실전 예제: 복잡한 구조 탐색</h2>
+<div class="example">
+<pre><code>import requests
+from bs4 import BeautifulSoup as bs
+
+# 복잡한 HTML 구조 시뮬레이션
+html_content = '''
+&lt;div class="blog-post"&gt;
+    &lt;header class="post-header"&gt;
+        &lt;h1 class="post-title"&gt;블로그 글 제목&lt;/h1&gt;
+        &lt;div class="post-meta"&gt;
+            &lt;span class="post-date"&gt;2024-07-29&lt;/span&gt;
+            &lt;span class="post-author"&gt;작성자: 홍길동&lt;/span&gt;
+            &lt;div class="post-tags"&gt;
+                &lt;span class="tag"&gt;파이썬&lt;/span&gt;
+                &lt;span class="tag"&gt;웹스크래핑&lt;/span&gt;
+                &lt;span class="tag"&gt;튜토리얼&lt;/span&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/header&gt;
+    &lt;div class="post-content"&gt;
+        &lt;p&gt;첫 번째 단락입니다.&lt;/p&gt;
+        &lt;div class="code-block"&gt;
+            &lt;pre&gt;&lt;code&gt;print("Hello, World!")&lt;/code&gt;&lt;/pre&gt;
+        &lt;/div&gt;
+        &lt;p&gt;두 번째 단락입니다. &lt;a href="https://example.com"&gt;참고 링크&lt;/a&gt;입니다.&lt;/p&gt;
+        &lt;blockquote&gt;
+            &lt;p&gt;인용구입니다.&lt;/p&gt;
+        &lt;/blockquote&gt;
+    &lt;/div&gt;
+    &lt;footer class="post-footer"&gt;
+        &lt;div class="social-share"&gt;
+            &lt;a href="#" class="share-btn facebook"&gt;Facebook&lt;/a&gt;
+            &lt;a href="#" class="share-btn twitter"&gt;Twitter&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/footer&gt;
+&lt;/div&gt;
+'''
+
+soup = bs(html_content, 'html.parser')
+
+# 블로그 글 제목 추출
+title = soup.select_one('.post-title')
+print(f"제목: {title.text.strip()}")
+
+# 메타 정보 추출
+date = soup.select_one('.post-date')
+author = soup.select_one('.post-author')
+tags = soup.select_all('.post-tags .tag')
+
+print(f"날짜: {date.text.strip()}")
+print(f"작성자: {author.text.strip()}")
+tag_list = [tag.text.strip() for tag in tags]
+print(f"태그: {', '.join(tag_list)}")
+
+# 본문 내용 추출 (단락 단위로)
+content_paragraphs = soup.select('.post-content p')
+content_text = '\n'.join([p.text.strip() for p in content_paragraphs])
+print(f"본문:\n{content_text}")
+
+# 코드 블록 추출
+code_block = soup.select_one('.code-block code')
+if code_block:
+    print(f"코드:\n{code_block.text}")
+
+# 인용구 추출
+blockquote = soup.select_one('.post-content blockquote p')
+if blockquote:
+    print(f"인용구:\n{blockquote.text.strip()}")
+
+# 소셜 공유 링크 추출
+share_links = soup.select('.social-share .share-btn')
+for link in share_links:
+    print(f"공유 버튼: {link.text.strip()} -> {link.get('href', '#')}")
+</code></pre>
+</div>
+
+<h2>연습문제</h2>
+
+<div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
+<strong>영화 정보 크롤링</strong>
+<pre><code>import requests
+from bs4 import BeautifulSoup as bs
+
+# 영화 목록 페이지 시뮬레이션
+html_content = '''
+&lt;div class="movie-list"&gt;
+    &lt;div class="movie-item"&gt;
+        &lt;h2 class="movie-title"&gt;인셉션&lt;/h2&gt;
+        &lt;div class="movie-info"&gt;
+            &lt;span class="year"&gt;2010&lt;/span&gt;
+            &lt;span class="genre"&gt;SF, 스릴러&lt;/span&gt;
+            &lt;span class="rating"&gt;8.8&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;p class="movie-summary"&gt;도둑들이 꿈을 훔치는 이야기&lt;/p&gt;
+        &lt;img class="movie-poster" src="inception.jpg" alt="인셉션 포스터"&gt;
+    &lt;/div&gt;
+    &lt;div class="movie-item"&gt;
+        &lt;h2 class="movie-title"&gt;인터스텔라&lt;/h2&gt;
+        &lt;div class="movie-info"&gt;
+            &lt;span class="year"&gt;2014&lt;/span&gt;
+            &lt;span class="genre"&gt;SF, 드라마&lt;/span&gt;
+            &lt;span class="rating"&gt;8.6&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;p class="movie-summary"&gt;우주를 여행하는 아버지의 이야기&lt;/p&gt;
+        &lt;img class="movie-poster" src="interstellar.jpg" alt="인터스텔라 포스터"&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+'''
+
+soup = bs(html_content, 'html.parser')
+
+# 모든 영화 항목 찾기
+movie_items = soup.select('.movie-item')
+print(f"총 {len(movie_items)}개 영화 발견\n")
+
+for movie in movie_items:
+    # 제목
+    title = movie.select_one('.movie-title').text.strip()
+
+    # 정보
+    year = movie.select_one('.year').text.strip()
+    genre = movie.select_one('.genre').text.strip()
+    rating = movie.select_one('.rating').text.strip()
+
+    # 줄거리
+    summary = movie.select_one('.movie-summary').text.strip()
+
+    # 포스터 URL
+    poster_img = movie.select_one('.movie-poster')
+    poster_url = poster_img['src'] if poster_img else "이미지 없음"
+
+    print(f"제목: {title}")
+    print(f"연도: {year} | 장르: {genre} | 평점: {rating}")
+    print(f"줄거리: {summary}")
+    print(f"포스터: {poster_url}")
+    print("-" * 50)
+</code></pre>
+</div>
+
+<div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
+<strong>주식 시세 크롤링</strong>
+<pre><code>import requests
+from bs4 import BeautifulSoup as bs
+
+# 주식 목록 페이지 시뮬레이션
+html_content = '''
+&lt;table class="stock-table"&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;종목명&lt;/th&gt;
+            &lt;th&gt;현재가&lt;/th&gt;
+            &lt;th&gt;등락률&lt;/th&gt;
+            &lt;th&gt;거래량&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td class="stock-name"&gt;삼성전자&lt;/td&gt;
+            &lt;td class="price"&gt;78,500&lt;/td&gt;
+            &lt;td class="change"&gt;+1.2%&lt;/td&gt;
+            &lt;td class="volume"&gt;12,345,678&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td class="stock-name"&gt;LG전자&lt;/td&gt;
+            &lt;td class="price"&gt;65,200&lt;/td&gt;
+            &lt;td class="change"&gt;-0.5%&lt;/td&gt;
+            &lt;td class="volume"&gt;5,678,901&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td class="stock-name"&gt;현대차&lt;/td&gt;
+            &lt;td class="price"&gt;180,300&lt;/td&gt;
+            &lt;td class="change"&gt;+2.1%&lt;/td&gt;
+            &lt;td class="volume"&gt;8,765,432&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
+'''
+
+soup = bs(html_content, 'html.parser')
+
+# 테이블 행 찾기 (헤더 제외)
+rows = soup.select('.stock-table tbody tr')
+print(f"총 {len(rows)}개 종목 발견\n")
+
+for row in rows:
+    # 각 컬럼 데이터 추출
+    name = row.select_one('.stock-name').text.strip()
+    price = row.select_one('.price').text.strip()
+    change = row.select_one('.change').text.strip()
+    volume = row.select_one('.volume').text.strip()
+
+    print(f"종목: {name}")
+    print(f"현재가: {price}원")
+    print(f"등락률: {change}")
+    print(f"거래량: {volume}주")
+    print("-" * 30)
+</code></pre>
+</div>
+</div>
+</body>
+</html>

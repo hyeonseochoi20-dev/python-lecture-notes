@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>변수 완전 정리</title>
+    <style>
+        body{font-family:-apple-system,sans-serif;background:#030712;color:#e5e7eb;line-height:1.7;padding:30px}
+        .content{max-width:900px;margin:0 auto}
+        h1{color:#c084fc;font-size:2rem;margin-bottom:20px}
+        h2{color:#a78bfa;margin:30px 0 12px;font-size:1.4rem}
+        code{background:#1e293b;color:#fbbf24;padding:2px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace}
+        pre{background:#0f172a;border:1px solid #1f2937;border-radius:8px;padding:16px;overflow-x:auto}
+        table{width:100%;border-collapse:collapse;margin:15px 0}
+        th,td{border:1px solid #1f2937;padding:12px;font-size:.9rem}
+        th{background:#111827;color:#a78bfa}
+        .good{background:#064e3b;color:#4ade80}
+        .bad{background:#7f1d1d;color:#fca5a5}
+    </style>
+</head>
+<body>
+<div class="content">
+<h1>📦 변수 완전 정리</h1>
+
+<h2>변수 정의</h2>
+<p><strong>변수</strong>는 값을 저장할 수 있는 메모리 공간입니다.</p>
+<ul>
+<li>재사용 가능</li>
+<li>값에 이름을 붙여서 사용하기 쉬움</li>
+<li>반복 등장하는 값을 관리하기 좋음</li>
+</ul>
+
+<h2>변수명 규칙</h2>
+<table>
+<tr><th>규칙</th><th>예시</th><th>가능여부</th></tr>
+<tr><td>글자, 숫자, 언더바(_)만</td><td><code>user_name</code></td><td class="good">가능</td></tr>
+<tr><td>숫자로 시작 금지</td><td><code>user1</code> vs <code>1user</code></td><td class="good">좋음 / <span class="bad">안됨</span></td></tr>
+<tr><td>빈칸 안됨</td><td><code>user_name</code> vs <code>user name</code></td><td class="good">좋음 / <span class="bad">안됨</span></td></tr>
+<tr><td>대소문자 구분</td><td><code>UserName</code> vs <code>username</code></td><td class="good">다름</td></tr>
+</table>
+
+<h2>네이밍 컨벤션</h2>
+<pre><code># snake_case (파이썬 공식)
+user_name = "홍길동"
+total_score = 100
+
+# camelCase
+userName = "홍길동"
+totalScore = 100
+
+# PascalCase
+UserName = "홍길동"
+TotalScore = 100</code></pre>
+
+<h2>변수 할당 방법</h2>
+<pre><code># 숫자
+var1 = 12345
+
+# 문자열
+var2 = 'Python'
+
+# 리스트
+var3 = ['a', 'b', 'c', 'd', 'e']
+
+# 딕셔너리
+data = {'a': 1, 'b': 2, 'c': 3}
+
+# 튜플로 동시 할당
+a, b = ('python', 'variable')  # a='python', b='variable'
+
+# 리스트로 동시 할당
+a, b = ['python', 'variable']  # 동일하게 동작
+
+# 같은 값 여러 변수
+x = y = 1234  # x=1234, y=1234
+
+# 값 교환 (파이썬 특유)
+a, b = b, a</code></pre>
+
+<h2>타입 힌트 (Type Hinting)</h2>
+<pre><code>var1: str = 'Python'      # 문자열
+var2: int = 12345       # 정수
+var3: list[str] = ['a']  # 문자열 리스트
+data: dict[str, int] = {'a': 1}  # 문자열-정수 매핑
+
+def greet(name: str) -&gt; str:
+    return f"Hello {name}"</code></pre>
+
+<h2>자료형 종류</h2>
+<table>
+<tr><th>형태</th><th>설명</th><th>예시</th></tr>
+<tr><td>int</td><td>정수</td><td><code>123, -5, 0xFF</code></td></tr>
+<tr><td>float</td><td>실수</td><td><code>3.14, -2.5e10</code></td></tr>
+<tr><td>str</td><td>문자열</td><td><code>'hello', "Python"</code></td></tr>
+<tr><td>bool</td><td>논리값</td><td><code>True, False</code></td></tr>
+<tr><td>list</td><td>리스트</td><td><code>[1, 2, 3]</code></td></tr>
+<tr><td>tuple</td><td>튜플</td><td><code>(1, 2, 3)</code></td></tr>
+<tr><td>dict</td><td>딕셔너리</td><td><code>{'a': 1}</code></td></tr>
+<tr><td>set</td><td>집합</td><td><code>{1, 2, 3}</code></td></tr>
+</table>
+
+<h2>문자열 연산</h2>
+<pre><code>s = "hello"
+
+# 인덱싱 (0부터 시작)
+print(s[0])   # h
+print(s[-1])  # o
+
+# 슬라이싱
+print(s[1:4]) # ell
+print(s[:3])  # hel
+print(s[2:])  # llo
+
+# 연결
+s2 = s + " world"  # hello world
+
+# 반복
+s3 = "hi" * 3  # hihihi
+
+# 길이
+print(len(s))   # 5</code></pre>
+
+<h2>연습문제</h2>
+<div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
+<strong>초를 시:분:초로 변환</strong>
+<pre><code>sec = 3703
+
+hour = sec // 3600
+minute = (sec % 3600) // 60
+second = sec % 60
+
+print(f"{hour}시간 {minute}분 {second}초")  # 1시간 1분 43초</code></pre>
+</div>
+</div>
+</body>
+</html>

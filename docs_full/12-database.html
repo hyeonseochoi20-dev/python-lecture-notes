@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>데이터베이스 & SQL 완전 정리</title>
+    <style>
+        body{font-family:-apple-system,sans-serif;background:#030712;color:#e5e7eb;line-height:1.7;padding:30px}
+        .content{max-width:900px;margin:0 auto}
+        h1{color:#c084fc;font-size:2rem;margin-bottom:20px}
+        h2{color:#a78bfa;margin:30px 0 12px;font-size:1.4rem}
+        h3{color:#60a5fa;margin:20px 0 8px}
+        code{background:#1e293b;color:#fbbf24;padding:2px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace}
+        pre{background:#0f172a;border:1px solid #1f2937;border-radius:8px;padding:16px;overflow-x:auto}
+        table{width:100%;border-collapse:collapse;margin:15px 0}
+        th,td{border:1px solid #1f2937;padding:12px;font-size:.9rem;text-align:center}
+        th{background:#111827;color:#a78bfa}
+        .note{background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0}
+        .example{background:#0f172a;border:1px solid #1f2937;border-radius:8px;padding:16px;margin:16px 0}
+        .good{background:#064e3b;color:#4ade80}
+        .bad{background:#7f1d1d;color:#fca5a5}
+    </style>
+</head>
+<body>
+<div class="content">
+<h1>🗄️ 데이터베이스 & SQL 완전 정리</h1>
+
+<h2>데이터베이스 기본 개념</h2>
+<div class="note">
+<strong>💡 학습 목표:</strong> 데이터베이스와 테이블의 기본 개념을 이해하고, SQL로 데이터를 조회·조작하는 방법을 마스터하기
+</div>
+
+<h3>데이터베이스(Database)란?</h3>
+<ul>
+<li><strong>데이터베이스</strong>: 데이터를 관리하는 프로그램(서버). 접속했을 때 보이는 "목록"이라고 생각하면 됩니다.</li>
+<li><strong>테이블(Table)</strong>: 데이터베이스 안에 있는 개별 표.</li>
+</ul>
+<div class="note">
+<strong>💡 쉬운 비유</strong><br>
+데이터베이스 = 엑셀 파일 (하나의 .xlsx 파일)<br>
+테이블 = 그 파일 안의 개별 시트(Sheet)
+</div>
+
+<h3>기본키(Primary Key)와 외래키(Foreign Key)</h3>
+<table>
+<tr><th>종류</th><th>설명</th></tr>
+<tr><td>기본키 (PK)</td><td>데이터를 구분(식별)할 수 있는 값. 테이블에 반드시 존재해야 함</td></tr>
+<tr><td>외래키 (FK)</td><td>다른 테이블의 기본키를 그대로 가져온 값. 기본키로 존재하는 값만 입력 가능하며, 반대로 외래키로 사용 중인 기본키는 삭제할 수 없음</td></tr>
+</table>
+<p>그 외에도 대체키, 후보키, 수퍼키 등이 있지만 실무에서는 기본키/외래키 개념만 정확히 알아도 충분합니다.</p>
+
+<h3>테이블 간의 연관 관계</h3>
+<div class="example">
+<h4>1. 1:N (일대다) 관계</h4>
+<p>데이터는 종류별로 나뉘고, 서로 연관관계를 맺을 수 있습니다. 더 많이 등장하는 쪽(N쪽)에 외래키가 위치합니다.</p>
+<ul>
+<li>예: 게시물 1개 - 댓글 N개</li>
+<li>예: 영상 1개 - 좋아요 N개</li>
+</ul>
+<p>우리 주변에서 가장 흔하게 볼 수 있는 관계입니다.</p>
+</div>
+<div class="example">
+<h4>2. N:N (다대다) 관계</h4>
+<p>1:N 관계의 연장선입니다. 두 테이블을 직접 연결할 수 없기 때문에 <strong>매핑 테이블(중간 테이블)</strong>이 반드시 필요하며, 매핑 테이블과 각 방향의 테이블은 1:N 또는 N:1 관계로 구성됩니다.</p>
+<p>예: 버스, 택시, 공유 킥보드 (사용자 ↔ 이용수단 매핑 테이블 통해 N:N 연결)</p>
+</div>
+
+<h2>SQL 기본 문법</h2>
+<h3>데이터베이스에서 사용할 SQL 종류</h3>
+<table>
+<tr><th>동작</th><th>문법</th></tr>
+<tr><td>입력 (Create)</td><td><code>INSERT INTO 테이블 (컬럼1, 컬럼2, …) VALUES (값1, 값2, …)</code></td></tr>
+<tr><td>조회 (Read)</td><td><code>SELECT * FROM 테이블</code> 또는 <code>SELECT 컬럼1, 컬럼2, … FROM 테이블</code></td></tr>
+<tr><td>수정 (Update)</td><td><code>UPDATE 테이블 SET 컬럼1=값1, 컬럼2=값2, …</code></td></tr>
+<tr><td>삭제 (Delete)</td><td><code>DELETE FROM 테이블</code></td></tr>
+</table>
+<div class="warning" style="background:linear-gradient(180deg,#7f1d1d,#450a0a);border-left:4px solid #fca5a5;padding:20px;margin:25px 0;border-radius:0 8px 8px 0;">
+<strong>⚠️ 주의!</strong> UPDATE와 DELETE는 <code>WHERE</code> 조건절이 없으면 <strong>테이블의 모든 데이터</strong>에 적용됩니다. 반드시 <code>WHERE</code>로 수정/삭제할 데이터를 정확히 지정하세요.
+</div>
+
+<h3>데이터 조회 (SELECT) 전체 구조</h3>
+<div class="example">
+<pre><code>SELECT [DISTINCT] 컬럼1, 컬럼2, …
+  FROM 테이블명
+  WHERE 조건
+ GROUP BY 그룹기준컬럼
+HAVING 그룹조건
+ ORDER BY 정렬기준 [ASC|DESC]
+ LIMIT 개수;
+</code></pre>
+</div>
+
+<h4>1. 기본 조회</h4>
+<ul>
+<li><code>DISTINCT</code>: 중복 제거</li>
+<li><code>AS</code>: 별칭 지정 (컬럼명을 원하는 이름으로 변경)</li>
+<li><code>+ - * /</code>: 산술 연산 그대로 SELECT 절에서 사용 가능</li>
+</ul>
+
+<h4>2. WHERE - 조건 검색</h4>
+<ul>
+<li>비교 연산자: <code>= &gt; &lt; &gt;= &lt;= !=</code></li>
+<li>논리 연산자: <code>AND OR NOT</code></li>
+<li>포함 검색: <code>LIKE '%키워드%'</code></li>
+</ul>
+
+<h4>3. ORDER BY - 정렬</h4>
+<ul>
+<li><code>ASC</code>: 오름차순 (기본값)</li>
+<li><code>DESC</code>: 내림차순</li>
+</ul>
+
+<h4>4. LIMIT - 개수 제한</h4>
+<p>조회 결과 중 원하는 개수만 잘라서 가져올 때 사용 (<code>LIMIT 시작위치, 개수</code>)</p>
+
+<h4>5. 함수 (숫자/문자/날짜)</h4>
+<ul>
+<li>숫자 함수: 연산 관련 (반올림, 절댓값 등)</li>
+<li>문자 함수: 찾기(<code>INSTR</code>), 변경, 잘라내기(<code>SUBSTR</code>) 등</li>
+<li>날짜 함수: 현재일시(<code>NOW()</code>), 출력 양식 지정(<code>DATE_FORMAT</code>) 등</li>
+</ul>
+
+<h4>6. 통계(집계) 함수 - GROUP BY</h4>
+<div class="note">
+<strong>💡 통계 함수의 특징</strong>
+<ul>
+<li><code>NULL</code>은 처리(집계)하지 못합니다 (무시됨)</li>
+<li>여러 행(row)의 데이터를 요약하여 <strong>하나의 결과값</strong>으로 반환합니다 (개수, 평균, 합계, 최대, 최소 등)</li>
+<li><code>GROUP BY</code>와 자주 함께 사용됩니다 (전체 집계뿐 아니라 그룹별 집계도 가능)</li>
+</ul>
+</div>
+<p><code>GROUP BY</code>에 사용된 열은 결과에도 함께 보이는 것이 기본입니다. 그룹이 <strong>형성된 후</strong>의 조건은 <code>HAVING</code>을 사용합니다.</p>
+<table>
+<tr><th>구분</th><th>동작 시점</th></tr>
+<tr><td><code>WHERE</code></td><td>그룹이 만들어지기 <strong>전</strong> 동작 (원본 행 필터링)</td></tr>
+<tr><td><code>HAVING</code></td><td>그룹이 만들어진 <strong>후</strong> 동작 (집계 결과 필터링)</td></tr>
+</table>
+
+<h4>7. JOIN - 테이블 연결하기</h4>
+<p>여러 개의 테이블을 하나로 합칠 때 사용합니다. 보통 한 테이블의 <strong>기본키</strong>와 다른 테이블의 <strong>외래키</strong>를 연결합니다. 여러 개를 이어 붙여 결과가 큰 테이블이 될 뿐, WHERE/GROUP BY/ORDER BY 등 기존 문법의 흐름은 그대로 유지됩니다.</p>
+
+<h3>조회 SQL 실행 순서 (매우 중요!)</h3>
+<div class="sql-flow">
+<div class="sql-step"><span class="sql-step-num">1</span><code class="sql-step-kw">FROM</code><span class="sql-step-desc">어느 테이블에서 시작할지 지정</span></div>
+<div class="sql-step sql-step-sub"><span class="sql-step-num"></span><code class="sql-step-kw">JOIN / ON</code><span class="sql-step-desc">다른 테이블과 연결 (LEFT JOIN 또는 RIGHT JOIN 가능)</span></div>
+<div class="sql-step"><span class="sql-step-num">2</span><code class="sql-step-kw">WHERE</code><span class="sql-step-desc">원본 행 필터링</span></div>
+<div class="sql-step"><span class="sql-step-num">3</span><code class="sql-step-kw">GROUP BY</code><span class="sql-step-desc">그룹 나누기</span></div>
+<div class="sql-step"><span class="sql-step-num">4</span><code class="sql-step-kw">HAVING</code><span class="sql-step-desc">그룹 결과 필터링</span></div>
+<div class="sql-step"><span class="sql-step-num">5</span><code class="sql-step-kw">SELECT</code><span class="sql-step-desc">실제로 보여줄 컬럼 결정</span></div>
+<div class="sql-step"><span class="sql-step-num">6</span><code class="sql-step-kw">ORDER BY</code><span class="sql-step-desc">정렬</span></div>
+<div class="sql-step"><span class="sql-step-num">7</span><code class="sql-step-kw">LIMIT</code><span class="sql-step-desc">개수 제한</span></div>
+</div>
+<div class="note">
+<strong>💡 왜 실행 순서를 알아야 할까?</strong><br>
+SQL 문장을 <strong>작성</strong>하는 순서(SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT)와 실제로 데이터베이스가 <strong>실행</strong>하는 순서는 다릅니다. 이 때문에 <code>WHERE</code>절에는 <code>GROUP BY</code>로 만든 별칭을 쓸 수 없고(아직 그룹이 안 만들어졌으므로), <code>HAVING</code>절에서는 집계 함수를 바로 쓸 수 있는 것입니다.
+</div>
+
+<h2>✏️ 연습문제 1: 함수 활용 - 주차장 지역번호 추출</h2>
+<div class="example">
+<p><strong>문제:</strong> 명절 무료 주차장 데이터를 사용해서 아래 조건을 만족하는 SQL을 작성하세요.</p>
+<ol>
+<li>전화번호(tel)에서 지역번호만 추출</li>
+<li>전화번호가 없는 데이터는 제외</li>
+<li>지역번호 오름차순으로 정렬</li>
+</ol>
+<pre><code>SELECT institution, tel, sido,
+       SUBSTR(tel, 1, 3),
+       INSTR(tel, '-'),
+       SUBSTR(tel, 1, INSTR(tel, '-')-1)
+  FROM holiday_parking
+ WHERE tel != ''
+ ORDER BY SUBSTR(tel, 1, INSTR(tel, '-')-1);
+</code></pre>
+<p><strong>핵심 포인트:</strong> <code>INSTR(문자열, 찾을문자)</code>로 하이픈(-)의 위치를 먼저 찾고, <code>SUBSTR(문자열, 시작, 길이)</code>로 그 위치 앞부분만 잘라내면 "02", "051" 같은 지역번호만 추출할 수 있습니다.</p>
+</div>
+
+<h2>✏️ 연습문제 2: 함수 활용 - 국회의원 출생 연도/월 추출</h2>
+<div class="example">
+<p><strong>문제:</strong> 국회의원 데이터를 사용해서 아래 조건을 만족하는 SQL을 작성하세요.</p>
+<ol>
+<li>생년월일(bth_date)에서 출생 연도와 월을 추출</li>
+<li>생년월일 정보가 없는 데이터는 제외</li>
+<li>한글이름 오름차순으로 정렬</li>
+</ol>
+<pre><code>SELECT hg_nm, sch_unit_cd,
+       bth_date,
+       INSTR(bth_date, '-'),
+       SUBSTR(bth_date, 1, INSTR(bth_date, '-')-1),
+       SUBSTR(bth_date, INSTR(bth_date, '-')+1, 2)
+  FROM assembly_member
+ WHERE bth_date IS NOT NULL
+   AND bth_date != ''
+ ORDER BY hg_nm;
+</code></pre>
+<p><strong>핵심 포인트:</strong> <code>NULL</code>과 빈 문자열(<code>''</code>)은 서로 다릅니다. 실무 데이터에서는 둘 다 존재할 수 있으므로 <code>IS NOT NULL</code>과 <code>!= ''</code> 두 조건을 모두 확인하는 습관이 중요합니다.</p>
+</div>
+
+<h2>✏️ 연습문제 3: GROUP BY 활용 - 교통사고 데이터</h2>
+<div class="example">
+<p><strong>문제:</strong> 교통사고 데이터를 사용해서 아래 4가지 조건을 만족하는 SQL을 작성하세요.</p>
+<ol>
+<li>요일별 교통사고 사망자 수</li>
+<li>지역별(시/도, 구/군/시) 교통사고 사망자 수</li>
+<li>많이 발생된 사고 원인 1~5위</li>
+<li>교통사고가 가장 적게 발생된 요일</li>
+</ol>
+<h4>풀이</h4>
+<pre><code>-- 1) 요일별 교통사고 사망자 수
+SELECT WEEK, SUM(DIE)
+  FROM accident
+ GROUP BY WEEK;
+
+-- 2) 지역별(시/도, 구/군/시) 교통사고 사망자 수
+SELECT AREA1, AREA2, SUM(DIE)
+  FROM accident
+ GROUP BY AREA1, AREA2;
+
+-- 3) 많이 발생된 사고 원인 1~5위
+SELECT KIND, COUNT(*)
+  FROM accident
+ GROUP BY KIND
+ ORDER BY COUNT(*) DESC
+ LIMIT 0, 5;
+
+-- 4) 교통사고가 가장 적게 발생된 요일
+SELECT WEEK, COUNT(DIE)
+  FROM accident
+ GROUP BY WEEK
+ ORDER BY COUNT(DIE) ASC
+ LIMIT 0, 1;
+</code></pre>
+</div>
+
+<h2>✏️ 연습문제 4: GROUP BY 활용 - 방문자 데이터</h2>
+<div class="example">
+<p><strong>문제:</strong> 방문자 데이터를 사용해서 아래 조건을 만족하는 SQL을 작성하세요.</p>
+<ol>
+<li>방문횟수가 2번 이상인 IP 현황</li>
+<li>연도별 방문자 현황</li>
+<li>월별 방문자 현황 (방문자 수 내림차순)</li>
+</ol>
+<h4>풀이</h4>
+<pre><code>-- 1) 방문횟수가 2번 이상인 IP 현황
+SELECT IP_ADDRESS, COUNT(*)
+  FROM visitor_tb
+ GROUP BY IP_ADDRESS
+HAVING COUNT(*) &gt;= 2
+ ORDER BY COUNT(*) DESC;
+
+-- 2) 연도별 방문자 현황
+SELECT DATE_FORMAT(VST_TIME, '%Y'), COUNT(*)
+  FROM visitor_tb
+ GROUP BY DATE_FORMAT(VST_TIME, '%Y');
+
+-- 3) 월별 방문자 현황 (방문자 수 내림차순)
+SELECT DATE_FORMAT(VST_TIME, '%m'), COUNT(*)
+  FROM visitor_tb
+ GROUP BY DATE_FORMAT(VST_TIME, '%m')
+ ORDER BY COUNT(*) DESC;
+</code></pre>
+<div class="note">
+<strong>💡 WHERE와 HAVING의 차이가 드러나는 예제</strong><br>
+"방문횟수 2번 이상"이라는 조건은 <code>GROUP BY</code>로 IP별로 묶은 <strong>이후</strong>에 계산되는 값(COUNT)에 대한 조건이므로 <code>WHERE</code>가 아니라 반드시 <code>HAVING</code>을 사용해야 합니다.
+</div>
+</div>
+
+<h2>✏️ 연습문제 5: JOIN 활용 - 반려동물 스키마 (animal, owner, product)</h2>
+<div class="example">
+<p>3개의 테이블(<code>owner</code> 주인, <code>animal</code> 반려동물, <code>product</code> 사용 물품)이 서로 외래키로 연결된 구조에서 다양한 JOIN 문제를 풀어봅니다.</p>
+
+<h4>1. '중형견 사료'를 사준 사람의 이름은?</h4>
+<pre><code>SELECT o.name
+  FROM owner o
+  JOIN animal a ON o.id = a.owner_id
+  JOIN product p ON a.id = p.animal_id
+ WHERE p.name = '중형견 사료';
+-- 결과: 최길동
+</code></pre>
+
+<h4>2. '얼룩이'의 주인과 사용하고 있는 물품은?</h4>
+<pre><code>SELECT o.name AS owner_name, p.name AS product_name
+  FROM animal a
+  JOIN owner o ON a.owner_id = o.id
+  JOIN product p ON a.id = p.animal_id
+ WHERE a.name = '얼룩이';
+-- 결과: 홍길동, 소형묘 사료
+</code></pre>
+
+<h4>3. '홍길동'이 반려동물에게 사준 모든 물품은?</h4>
+<pre><code>SELECT p.name
+  FROM owner o
+  JOIN animal a ON o.id = a.owner_id
+  JOIN product p ON a.id = p.animal_id
+ WHERE o.name = '홍길동';
+-- 결과: 중형묘 사료, 소형묘 사료
+</code></pre>
+
+<h4>4. 모든 반려동물의 이름과 주인의 이름을 출력하시오.</h4>
+<pre><code>SELECT a.name AS animal_name, o.name AS owner_name
+  FROM animal a
+  JOIN owner o ON a.owner_id = o.id;
+-- 결과: 슈슈-최길동, 치치-최길동, 마당이-홍길동, 얼룩이-홍길동
+</code></pre>
+
+<h4>5. '슈슈'가 사용하는 물품의 이름과 가격을 출력하시오.</h4>
+<pre><code>SELECT p.name, p.price
+  FROM animal a
+  JOIN product p ON a.id = p.animal_id
+ WHERE a.name = '슈슈';
+-- 결과: 목줄 5000, 중형견 사료 10000
+</code></pre>
+
+<h4>6. 각 주인이 기르는 반려동물 이름과 해당 동물이 사용하는 물품 이름을 출력하시오.</h4>
+<pre><code>SELECT o.name AS owner_name, a.name AS animal_name, p.name AS product_name
+  FROM owner o
+  JOIN animal a ON o.id = a.owner_id
+  JOIN product p ON a.id = p.animal_id;
+</code></pre>
+
+<h4>7. '홍길동'이 기르는 모든 반려동물의 이름과 나이를 출력하시오.</h4>
+<pre><code>SELECT a.name, a.age
+  FROM owner o
+  JOIN animal a ON o.id = a.owner_id
+ WHERE o.name = '홍길동';
+-- 결과: 마당이 5, 얼룩이 7
+</code></pre>
+
+<h4>8. '소형묘 사료'를 사용하는 동물의 이름과 주인의 이름을 출력하시오.</h4>
+<pre><code>SELECT a.name AS animal_name, o.name AS owner_name
+  FROM product p
+  JOIN animal a ON p.animal_id = a.id
+  JOIN owner o ON a.owner_id = o.id
+ WHERE p.name = '소형묘 사료';
+-- 결과: 얼룩이 홍길동
+</code></pre>
+
+<h4>9. 가격이 1만 원 이상인 물품과 그 물품을 사용하는 반려동물 이름을 출력하시오.</h4>
+<pre><code>SELECT p.name AS product_name, a.name AS animal_name
+  FROM product p
+  JOIN animal a ON p.animal_id = a.id
+ WHERE p.price &gt;= 10000;
+</code></pre>
+
+<h4>10. 각 주인이 사준 물품의 개수를 구하시오. (주인 이름과 개수 출력)</h4>
+<pre><code>SELECT o.name AS owner_name, COUNT(p.id) AS product_count
+  FROM owner o
+  JOIN animal a ON o.id = a.owner_id
+  JOIN product p ON a.id = p.animal_id
+ GROUP BY o.name;
+-- 결과: 최길동 4, 홍길동 2
+</code></pre>
+<div class="note">
+<strong>💡 3중 JOIN 패턴 정리</strong><br>
+이 예제처럼 <code>owner → animal → product</code>가 순서대로 연결된 구조는 실무에서 매우 흔합니다 (회원 → 주문 → 주문상품 같은 구조와 동일한 패턴). JOIN을 연결할 때는 항상 "누구의 기본키가 어디의 외래키인지"를 먼저 그림으로 그려보고 SQL을 작성하면 실수를 줄일 수 있습니다.
+</div>
+</div>
+
+<h2>✏️ 연습문제 6: JOIN 활용 - company (인사관리) 스키마</h2>
+<div class="example">
+<p>사원(employees), 부서(departments), 지역(locations), 국가(countries) 테이블이 연결된 전형적인 인사관리 스키마 문제입니다.</p>
+<ol>
+<li>사원번호가 140인 사원의 성과 이름, 근무부서가 위치한 나라명을 확인하시오 → <code>Patel Joshua, Shipping, United States of America</code></li>
+<li>'IT' 부서에 근무하는 사원 수와 모든 사원의 급여 합을 확인하시오 → <code>5명, 28800</code></li>
+<li>'Asia' 지역(대륙)에 속해있는 국가를 확인하시오 → <code>Australia, China, India, Japan, Malaysia, Singapore</code></li>
+<li>'Washington' 주에 위치한 부서 목록을 확인하시오 → <code>Administration, Purchasing, …</code></li>
+<li>부서별 사원 수를 구하시오 (부서명, 인원수) → <code>IT 5, Shipping 45, Sales 34, …</code></li>
+<li>국가별로 근무하는 사원 수를 구하시오 (국가명, 사원수) → <code>United States of America 68, United Kingdom 35, Canada 2, Germany 1</code></li>
+<li>지역(Region)별 사원 수와 평균 급여를 구하시오 → <code>Americas 70명 평균 5192, Europe 36명 평균 8917</code></li>
+</ol>
+<div class="note">
+<strong>💡 다단계 JOIN 스키마 읽는 법</strong><br>
+<code>employees → departments → locations → countries → regions</code>처럼 4~5단계로 연결되는 스키마는 언뜻 복잡해 보이지만, 결국 "사원이 속한 부서, 그 부서가 있는 지역, 그 지역이 속한 국가, 그 국가가 속한 대륙" 하나의 이야기 흐름을 따라가는 것뿐입니다. 필요한 컬럼이 어느 테이블에 있는지만 파악하면 JOIN 순서는 자연스럽게 정해집니다.
+</div>
+</div>
+
+<h2>Outer Join (외부 조인)</h2>
+<div class="note">
+<strong>💡 INNER JOIN vs OUTER JOIN</strong><br>
+지금까지 사용한 <code>JOIN</code>(정확히는 <code>INNER JOIN</code>)은 양쪽 테이블에 모두 데이터가 있는 경우만 결과에 포함합니다. 반면 <code>LEFT JOIN</code>은 왼쪽 테이블의 데이터는 모두 포함하고, 연결되는 오른쪽 데이터가 없으면 <code>NULL</code>로 채워서 보여줍니다. 예를 들어 "댓글이 하나도 없는 게시물까지 포함해서 게시물 목록을 보고 싶다"는 경우 <code>LEFT JOIN</code>이 필요합니다.
+</div>
+<div class="example">
+<p><strong>연습 시나리오:</strong> 게시판 예제(<code>BOARD</code> 게시글, <code>BOARD_CODE</code> 카테고리 코드, <code>BOARD_FILE</code> 첨부파일)를 만들어 Outer Join을 연습합니다. 첨부파일이 없는 게시글도 결과에서 누락되지 않도록 <code>BOARD LEFT JOIN BOARD_FILE</code> 형태로 연결하는 것이 핵심입니다.</p>
+<pre><code>-- 첨부파일이 없는 글도 모두 포함해서 게시글+첨부파일 목록 조회
+SELECT b.title, b.writer, f.file_name
+  FROM BOARD b
+  LEFT JOIN BOARD_FILE f ON b.id = f.board_id;
+</code></pre>
+</div>
+
+<h2>더 연습해보고 싶다면</h2>
+<div class="note">
+프로그래머스의 <a href="https://school.programmers.co.kr/learn/challenges?tab=sql_practice_kit" target="_blank" rel="noopener">SQL 고득점 Kit</a>에서 더 다양한 난이도의 SQL 문제를 풀어볼 수 있습니다.
+</div>
+
+</div>
+</body>
+</html>

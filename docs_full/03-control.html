@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>제어문 완전 정리</title>
+    <style>
+        body{font-family:-apple-system,sans-serif;background:#030712;color:#e5e7eb;line-height:1.7;padding:30px}
+        .content{max-width:900px;margin:0 auto}
+        h1{color:#c084fc;font-size:2rem;margin-bottom:20px}
+        h2{color:#a78bfa;margin:30px 0 12px;font-size:1.4rem}
+        h3{color:#60a5fa;margin:20px 0 8px}
+        code{background:#1e293b;color:#fbbf24;padding:2px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace}
+        pre{background:#0f172a;border:1px solid #1f2937;border-radius:8px;padding:16px;overflow-x:auto}
+        table{width:100%;border-collapse:collapse;margin:15px 0}
+        th,td{border:1px solid #1f2937;padding:12px;font-size:.9rem;text-align:center}
+        th{background:#111827;color:#a78bfa}
+    </style>
+</head>
+<body>
+<div class="content">
+<h1>🔀 제어문 완전 정리</h1>
+
+<h2>비교 연산자</h2>
+<table>
+<tr><th>연산자</th><th>의미</th><th>예시</th><th>결과</th></tr>
+<tr><td><code>==</code></td><td>같음</td><td><code>1 == 1</code></td><td>True</td></tr>
+<tr><td><code>!=</code></td><td>다름</td><td><code>1 != 2</code></td><td>True</td></tr>
+<tr><td><code>&lt;</code></td><td>작음</td><td><code>3 &lt; 4</code></td><td>True</td></tr>
+<tr><td><code>&gt;</code></td><td>큼</td><td><code>3 &gt; 4</code></td><td>False</td></tr>
+<tr><td><code>&lt;=</code></td><td>작거나 같음</td><td><code>5 &lt;= 5</code></td><td>True</td></tr>
+<tr><td><code>&gt;=</code></td><td>크거나 같음</td><td><code>5 &gt;= 6</code></td><td>False</td></tr>
+</table>
+
+<h2>논리 연산자 진리표</h2>
+<h3>논리곱 (AND)</h3>
+<table>
+<tr><th>X</th><th>Y</th><th>X <code>and</code> Y</th></tr>
+<tr><td style="color:#4ade80">True</td><td style="color:#4ade80">True</td><td style="color:#4ade80">True</td></tr>
+<tr><td style="color:#4ade80">True</td><td style="color:#fca5a5">False</td><td style="color:#fca5a5">False</td></tr>
+<tr><td style="color:#fca5a5">False</td><td style="color:#4ade80">True</td><td style="color:#fca5a5">False</td></tr>
+<tr><td style="color:#fca5a5">False</td><td style="color:#fca5a5">False</td><td style="color:#fca5a5">False</td></tr>
+</table>
+
+<h3>논리합 (OR)</h3>
+<table>
+<tr><th>X</th><th>Y</th><th>X <code>or</code> Y</th></tr>
+<tr><td style="color:#4ade80">True</td><td style="color:#4ade80">True</td><td style="color:#4ade80">True</td></tr>
+<tr><td style="color:#4ade80">True</td><td style="color:#fca5a5">False</td><td style="color:#4ade80">True</td></tr>
+<tr><td style="color:#fca5a5">False</td><td style="color:#4ade80">True</td><td style="color:#4ade80">True</td></tr>
+<tr><td style="color:#fca5a5">False</td><td style="color:#fca5a5">False</td><td style="color:#fca5a5">False</td></tr>
+</table>
+
+<h3>부정 (NOT)</h3>
+<table>
+<tr><th>X</th><th><code>not X</code></th></tr>
+<tr><td style="color:#4ade80">True</td><td style="color:#fca5a5">False</td></tr>
+<tr><td style="color:#fca5a5">False</td><td style="color:#4ade80">True</td></tr>
+</table>
+
+<h2>조건문 - if</h2>
+
+<h3>if만 사용</h3>
+<pre><code>if 조건:
+    실행할 코드
+
+# 예시
+if score &gt;= 60:
+    print('합격')</code></pre>
+
+<h3>if-else 사용</h3>
+<pre><code>if 조건:
+    실행1
+else:
+    실행2
+
+# 예시
+score = 55
+if score &gt;= 60:
+    print('합격')
+else:
+    print('불합격')</code></pre>
+
+<h3>if-elif-else 사용</h3>
+<pre><code>if 조건1:
+    실행1
+elif 조건2:
+    실행2
+else:
+    실행3
+
+# 예시
+score = 85
+if score &gt;= 90:
+    grade = 'A'
+elif score &gt;= 80:
+    grade = 'B'
+elif score &gt;= 70:
+    grade = 'C'
+else:
+    grade = 'F'
+print(grade)  # B</code></pre>
+
+<h2>논리 연산자 활용 예시</h2>
+<pre><code># AND 활용
+has_pc = True
+has_phone = False
+if has_pc or has_phone:
+    print('인터넷 검색 가능')
+
+# OR 활용
+age = 20
+has_license = True
+if age &gt;= 20 and has_license:
+    print('운전 가능')
+
+# NOT 활용
+is_weekend = False
+if not is_weekend:
+    print('평일입니다')</code></pre>
+
+<h2>반복문 - while</h2>
+
+<h3>기본 구조</h3>
+<pre><code># 조건이 참인 동안 반복
+while 조건:
+    실행할 코드
+
+# 예시
+count = 0
+while count &lt; 5:
+    print(count)
+    count += 1  # 중요: 무한 루프 방지!
+# 출력: 0 1 2 3 4</code></pre>
+
+<h3>무한 루프와 break</h3>
+<pre><code>while True:
+    user = input('명령어 입력 (quit로 종료): ')
+    if user == 'quit':
+        break
+    print(f'입력: {user}')</code></pre>
+
+<h2>반복문 - for</h2>
+
+<h3>range 함수</h3>
+<pre><code># range(stop) : 0부터 stop-1까지
+for i in range(5):
+    print(i, end=' ')  # 0 1 2 3 4
+
+# range(start, stop)
+for i in range(2, 7):
+    print(i, end=' ')  # 2 3 4 5 6
+
+# range(start, stop, step)
+for i in range(1, 11, 2):
+    print(i, end=' ')  # 1 3 5 7 9</code></pre>
+
+<h3>리스트 순회</h3>
+<pre><code>fruits = ['사과', '바나나', '오렌지']
+
+# 값만 출력
+for fruit in fruits:
+    print(fruit)
+
+# 인덱스와 값 함께
+for idx, fruit in enumerate(fruits, start=1):
+    print(f'{idx}: {fruit}')
+# 1: 사과
+# 2: 바나나
+# 3: 오렌지</code></pre>
+
+<h3>여러 리스트 동시 순회</h3>
+<pre><code>names = ['홍', '김', '이']
+scores = [90, 85, 95]
+
+for name, score in zip(names, scores):
+    print(f'{name}: {score}')</code></pre>
+
+<h2>연습문제</h2>
+
+<div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
+<strong>평년/윤년 판별</strong>
+<pre><code>year = int(input('년도 입력: '))
+
+if year % 400 == 0:
+    print('윤년')
+elif year % 100 == 0:
+    print('평년')
+elif year % 4 == 0:
+    print('윤년')
+else:
+    print('평년')</code></pre>
+
+<strong>홀수 짝수 확인</strong>
+<pre><code>num = int(input('숫자 입력: '))
+
+if num % 2 == 0:
+    print('짝수')
+else:
+    print('홀수')</code></pre>
+
+<strong>in 연산자 활용 - 리스트에 값 있는지</strong>
+<pre><code>items = [1, 2, 3, 4, 5]
+
+if 3 in items:
+    print('3이 있습니다')
+
+if 10 not in items:
+    print('10이 없습니다')</code></pre>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>내장함수 완전 정리</title>
+    <style>
+        body{font-family:-apple-system,sans-serif;background:#030712;color:#e5e7eb;line-height:1.7;padding:30px}
+        .content{max-width:900px;margin:0 auto}
+        h1{color:#c084fc;font-size:2rem;margin-bottom:20px}
+        h2{color:#a78bfa;margin:30px 0 12px;font-size:1.4rem}
+        h3{color:#60a5fa;margin:20px 0 8px}
+        code{background:#1e293b;color:#fbbf24;padding:2px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace}
+        pre{background:#0f172a;border:1px solid #1f2937;border-radius:8px;padding:16px;overflow-x:auto}
+        table{width:100%;border-collapse:collapse;margin:15px 0}
+        th,td{border:1px solid #1f2937;padding:12px;font-size:.9rem;text-align:center}
+        th{background:#111827;color:#a78bfa}
+        .note{background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0}
+    </style>
+</head>
+<body>
+<div class="content">
+<h1>🔧 내장함수 완전 정리</h1>
+
+<h2>내장함수란?</h2>
+<p>파이썬에 기본적으로 포함되어 있는 함수들로, import 없이 바로 사용할 수 있습니다.</p>
+<p>내장함수 목록 확인: <code>dir(__builtins__)</code></p>
+
+<h2>수학/계산 관련 함수</h2>
+<table>
+<tr><th>함수</th><th>설명</th><th>예시</th><th>결과</th></tr>
+<tr><td><code>abs(x)</code></td><td>절댓값</td><td><code>abs(-7)</code></td><td>7</td></tr>
+<tr><td><code>divmod(a, b)</code></td><td>몫과 나머지를 튜플로 반환</td><td><code>divmod(17, 5)</code></td><td>(3, 2)</td></tr>
+<tr><td><code>max(iterable)</code></td><td>최댓값</td><td><code>max([90, 80, 70])</code></td><td>90</td></tr>
+<tr><td><code>min(iterable)</code></td><td>최솟값</td><td><code>min([90, 80, 70])</code></td><td>70</td></tr>
+<tr><td><code>pow(x, y)</code></td><td>x의 y제곱</td><td><code>pow(2, 3)</code></td><td>8</td></tr>
+<tr><td><code>round(x, n)</code></td><td>소수점 n자리까지 반올림</td><td><code>round(3.14159, 2)</code></td><td>3.14</td></tr>
+<tr><td><code>sum(iterable)</code></td><td>합계</td><td><code>sum([90, 80, 70])</code></td><td>240</td></tr>
+</table>
+
+<h3>실전 예제</h3>
+<pre><code>scores = [90, 80, 70, 95, 85]
+print(f"최고점: {max(scores)}")  # 95
+print(f"최저점: {min(scores)}")  # 70
+print(f"총점: {sum(scores)}")    # 420
+print(f"평균: {sum(scores)/len(scores):.1f}")  # 84.0
+
+# divmod 예제
+minutes, seconds = divmod(125, 60)
+print(f"{minutes}분 {seconds}초")  # 2분 5초
+</code></pre>
+
+<h2>형 변환 관련 함수</h2>
+<table>
+<tr><th>함수</th><th>설명</th><th>예시</th></tr>
+<tr><td><code>int(x)</code></td><td>정수로 변환</td><td><code>int('123') → 123</code></td></tr>
+<tr><td><code>float(x)</code></td><td>실수로 변환</td><td><code>float('3.14') → 3.14</code></td></tr>
+<tr><td><code>str(x)</code></td><td>문자열로 변환</td><td><code>str(123) → '123'</code></td></tr>
+<tr><td><code>list(x)</code></td><td>리스트로 변환</td><td><code>list('abc') → ['a','b','c']</code></td></tr>
+<tr><td><code>tuple(x)</code></td><td>튜플로 변환</td><td><code>tuple([1,2,3]) → (1,2,3)</code></td></tr>
+<tr><td><code>set(x)</code></td><td>집합으로 변환</td><td><code>set([1,1,2,3]) → {1,2,3}</code></td></tr>
+</table>
+
+<h3>실전 예제</h3>
+<pre><code># 문자열 → 숫자
+age_str = "25"
+age_int = int(age_str)  # 25
+
+# 숫자 → 문자열
+price = 1000
+price_str = str(price) + "원"  # "1000원"
+
+# 리스트 → 튜플
+numbers_list = [1, 2, 3]
+numbers_tuple = tuple(numbers_list)  # (1, 2, 3)
+
+# 숫자열 → 정수 (16진수)
+hex_value = "0xFF"
+decimal_value = int(hex_value, 16)  # 255
+</code></pre>
+
+<h2>순서/반복 관련 함수</h2>
+<table>
+<tr><th>함수</th><th>설명</th></tr>
+<tr><td><code>range(start, stop, step)</code></td><td>범위 객체 생성</td></tr>
+<tr><td><code>enumerate(iterable)</code></td><td>(인덱스, 값) 쌍 반환</td></tr>
+<tr><td><code>zip(*iterables)</code></td><td>여러 시퀀스를 튜플로 묶음</td></tr>
+<tr><td><code>sorted(iterable)</code></td><td>정렬된 리스트 반환</td></tr>
+<tr><td><code>reversed(iterable)</code></td><td>역순 반복자 반환</td></tr>
+</table>
+
+<h3>실전 예제</h3>
+<pre><code># range
+for i in range(1, 6):
+    print(i, end=' ')  # 1 2 3 4 5
+
+# enumerate
+fruits = ['사과', '바나나', '오렌지']
+for idx, fruit in enumerate(fruits, 1):
+    print(f'{idx}: {fruit}')  # 1: 사과, 2: 바나나, 3: 오렌지
+
+# zip
+names = ['홍', '김', '이']
+scores = [90, 85, 95]
+for name, score in zip(names, scores):
+    print(f'{name}: {score}')
+
+# sorted
+numbers = [3, 1, 4, 1, 5]
+print(sorted(numbers))  # [1, 1, 3, 4, 5]
+print(sorted(numbers, reverse=True))  # [5, 4, 3, 1, 1]
+
+# reversed
+for num in reversed(range(1, 4)):
+    print(num, end=' ')  # 3 2 1
+</code></pre>
+
+<h2>연습문제</h2>
+
+<div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
+<strong>거리 계산 함수</strong>
+<pre><code>def distance(start, end):
+    """두 점 사이의 거리 계산"""
+    dx = abs(end[0] - start[0])
+    dy = abs(end[1] - start[1])
+    return dx, dy
+
+start = (1, 1)
+end = (5, 3)
+dx, dy = distance(start, end)
+print(f'x 차이: {dx}, y 차이: {dy}')  # x 차이: 4, y 차이: 2
+</code></pre>
+</div>
+
+<div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
+<strong>몫과 나머지 구하기 (divmod 활용)</strong>
+<pre><code>a = 123
+b = 16
+quotient, remainder = divmod(a, b)
+print(f'{a} ÷ {b} = {quotient}...{remainder}')  # 123 ÷ 16 = 7...11
+</code></pre>
+</div>
+</div>
+</body>
+</html>

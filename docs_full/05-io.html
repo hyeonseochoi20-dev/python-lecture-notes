@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>입출력 완전 정리</title>
+    <style>
+        body{font-family:-apple-system,sans-serif;background:#030712;color:#e5e7eb;line-height:1.7;padding:30px}
+        .content{max-width:900px;margin:0 auto}
+        h1{color:#c084fc;font-size:2rem;margin-bottom:20px}
+        h2{color:#a78bfa;margin:30px 0 12px;font-size:1.4rem}
+        code{background:#1e293b;color:#fbbf24;padding:2px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace}
+        pre{background:#0f172a;border:1px solid #1f2937;border-radius:8px;padding:16px;overflow-x:auto}
+    </style>
+</head>
+<body>
+<div class="content">
+<h1>📥 입력/출력 완전 정리</h1>
+
+<h2>사용자 입력 - input()</h2>
+<pre><code># 기본 입력 (항상 문자열 반환)
+text = input()
+print(text)
+print(type(text))  # &lt;class 'str'&gt;
+
+# 안내문구와 함께
+name = input('이름을 입력하세요: ')
+print(f'안녕하세요, {name}님!')
+
+# 숫자 입력받기 (문자열을 숫자로 변환)
+age = int(input('나이: '))
+height = float(input('키: '))</code></pre>
+
+<h3>여러 값 한 번에 입력받기</h3>
+<pre><code># 공백으로 구분된 입력
+a, b, c = input('세 값 입력: ').split()
+# 입력: 10 20 30
+# a='10', b='20', c='30'
+
+# 숫자로 변환하면서 받기
+x, y = map(int, input('두 수: ').split())
+# 입력: 10 20
+# x=10, y=20
+
+# 리스트로 받기
+numbers = list(map(int, input('숫자들: ').split()))
+print(sum(numbers))</code></pre>
+
+<h2>출력 - print()</h2>
+<pre><code># 기본 출력
+print('Hello')
+print(123)
+print([1, 2, 3])
+
+# 여러 값 출력
+print('Life', 'is', 'too', 'short')
+# Life is too short
+
+# 구분자 변경
+print('Life', 'is', 'too', 'short', sep='-')
+# Life-is-too-short
+
+# 줄바꿈 없이 출력
+print('Life', end=' ')
+print('is', end=' ')
+print('too', end=' ')
+print('short')</code></pre>
+
+<h2>파일 입출력</h2>
+
+<h3>파일 모드</h3>
+<table>
+<tr><th>모드</th><th>설명</th></tr>
+<tr><td><code>r</code></td><td>읽기 (기본, 없으면 오류)</td></tr>
+<tr><td><code>w</code></td><td>쓰기 (없으면 생성, 있으면 덮어씀)</td></tr>
+<tr><td><code>a</code></td><td>추가 (기존 내용 유지)</td></tr>
+<tr><td><code>t</code></td><td>텍스트 모드 (기본)</td></tr>
+<tr><td><code>b</code></td><td>바이너리 모드</td></tr>
+</table>
+
+<h3>파일 읽기</h3>
+<pre><code># 전체 읽기
+with open('file.txt', 'rt', encoding='utf8') as f:
+    content = f.read()
+
+# 한 줄씩 읽기
+with open('file.txt', 'rt', encoding='utf8') as f:
+    line = f.readline()
+
+# 모든 줄 리스트로
+with open('file.txt', 'rt', encoding='utf8') as f:
+    lines = f.readlines()
+
+# 한 줄씩 순회 (추천)
+with open('file.txt', 'rt', encoding='utf8') as f:
+    for line in f:
+        print(line.strip())</code></pre>
+
+<h3>파일 쓰기</h3>
+<pre><code># 덮어쓰기
+with open('output.txt', 'wt', encoding='utf8') as f:
+    f.write('새로운 내용\n')
+
+# 추가쓰기
+with open('log.txt', 'at', encoding='utf8') as f:
+    f.write('새 로그\n')
+
+# 여러 줄 쓰기
+lines = ['첫째\n', '둘째\n', '셋째\n']
+with open('output.txt', 'wt') as f:
+    f.writelines(lines)</code></pre>
+
+<h2>with 문 - 자동 close</h2>
+<pre><code># with를 사용하면 자동으로 close됨
+with open('file.txt', 'rt') as f:
+    data = f.read()
+# 여기서 자동으로 f.close() 호출됨
+
+# 인코딩 지정 (한글 파일)
+with open('소나기.txt', 'rt', encoding='utf8') as f:
+    text = f.read()
+
+# ms949/cp949 (구 한글 인코딩)
+with open('파일.txt', 'rt', encoding='ms949') as f:
+    text = f.read()</code></pre>
+
+<h2>연습문제</h2>
+
+<div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
+<strong>시스템 로그 파일 생성</strong>
+<pre><code>import datetime
+
+current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+log_messages = [
+    "사용자가 관리자 페이지에 로그인했습니다.",
+    "데이터베이스 연결에 성공했습니다.",
+    "경고: 디스크 용량이 80% 이상 채워졌습니다.",
+    "에러: 파일 업로드 중 예기치 못한 오류가 발생했습니다."
+]
+
+print("로그 생성을 시작합니다...")
+
+with open('system.log', 'a', encoding='utf8') as f:
+    for msg in log_messages:
+        f.write(f"[{current_time}] {msg}\n")
+
+print("로그 파일 작성 완료!")</code></pre>
+</div>
+
+<div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
+<strong>이미지 다운로드</strong>
+<pre><code>import requests
+
+image_url = "http://ggoreb.com/python/images/python-image.jpg"
+
+print("웹에서 이미지를 요청하는 중...")
+
+response = requests.get(image_url)
+image_bytes = response.content
+
+print("이미지 다운로드 완료!")
+
+with open('python-image.jpg', 'wb') as f:
+    f.write(image_bytes)
+
+print("이미지 파일 저장 완료!")</code></pre>
+</div>
+</div>
+</body>
+</html>

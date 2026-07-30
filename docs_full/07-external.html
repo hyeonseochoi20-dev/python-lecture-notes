@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>외장함수 완전 정리</title>
+    <style>
+        body{font-family:-apple-system,sans-serif;background:#030712;color:#e5e7eb;line-height:1.7;padding:30px}
+        .content{max-width:900px;margin:0 auto}
+        h1{color:#c084fc;font-size:2rem;margin-bottom:20px}
+        h2{color:#a78bfa;margin:30px 0 12px;font-size:1.4rem}
+        h3{color:#60a5fa;margin:20px 0 8px}
+        code{background:#1e293b;color:#fbbf24;padding:2px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace}
+        pre{background:#0f172a;border:1px solid #1f2937;border-radius:8px;padding:16px;overflow-x:auto}
+        table{width:100%;border-collapse:collapse;margin:15px 0}
+        th,td{border:1px solid #1f2937;padding:12px;font-size:.9rem;text-align:center}
+        th{background:#111827;color:#a78bfa}
+        .note{background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0}
+        .example{background:#0f172a;border:1px solid #1f2937;border-radius:8px;padding:16px;margin:16px 0}
+    </style>
+</head>
+<body>
+<div class="content">
+<h1>📦 외장함수 완전 정리</h1>
+
+<h2>외장함수란?</h2>
+<p>파이썬에서 제공하는 표준 라이브러리(표준모듈)로, 사용하기 전에 import를 해야 합니다.</p>
+<p>내장함수 vs 외장함수:</p>
+<table>
+<tr><th>구분</th><th>내장함수</th><th>외장함수</th></tr>
+<tr><td>정의</td><td>파이썬 내부에 기본 탑재된 함수</td><td>파이썬에서 제공하는 표준모듈</td></tr>
+<tr><td>사용</td><td>import 불필요</td><td>import 반드시 필요</td></tr>
+<tr><td>예시</td><td>len(), sum(), max()</td><td>os, sys, json, random</td></tr>
+<tr><td>제공범위</td><td>자료형 처리, 기본연산</td><td>파일/네트워크/시간/데이터 처리등</td></tr>
+</table>
+
+<h2>시스템/환경 관련 모듈</h2>
+
+<h3>os 모듈</h3>
+<div class="example">
+<h4>주요 기능</h4>
+<ul>
+<li>운영체제 기능 제어 (환경변수, 디렉토리, 파일)</li>
+<li>현재 작업 디렉토리 확인</li>
+<li>디렉토리 생성/삭제</li>
+<li>파일 목록 조회</li>
+</ul>
+</div>
+<pre><code>import os
+
+# 현재 작업 디렉토리 확인
+print(os.getcwd())  # 예: C:\Users\user\project
+
+# 디렉토리 생성
+os.makedirs('new_folder', exist_ok=True)
+
+# 파일 목록
+files = os.listdir('.')
+print([f for f in files if f.endswith('.py')])
+
+# 환경 변수
+print(os.getenv('PATH'))
+
+# 경로 조합
+path = os.path.join('folder', 'subfolder', 'file.txt')
+</code></pre>
+
+<h3>sys 모듈</h3>
+<div class="example">
+<h4>주요 기능</h4>
+<ul>
+<li>파이썬 인터프리터 제어</li>
+<li>인자 처리, 종료, 경로 확인</li>
+</ul>
+</div>
+<pre><code>import sys
+
+# 명령행 인자 확인
+print(sys.argv)  # ['script.py', 'arg1', 'arg2']
+
+# 경로 출력
+for p in sys.path:
+    print(p)
+
+# 프로그램 종료
+sys.exit(0)  # 정상 종료
+sys.exit(1)  # 오류 종료
+
+# 버전 확인
+print(sys.version)
+</code></pre>
+
+<h3>pathlib 모듈 (객체지향 경로 처리)</h3>
+<div class="example">
+<h4>주요 기능</h4>
+<ul>
+<li>객체지향 방식으로 경로 조작</li>
+<li>더 직관적이고 읽기 쉬운 코드</li>
+</ul>
+</div>
+<pre><code>from pathlib import Path
+
+# 현재 디렉토리
+cwd = Path('.')
+print(cwd)
+
+# 디렉토리 생성
+Path('new_folder').mkdir(exist_ok=True)
+
+# 파일 존재 여부
+file_path = Path('data.txt')
+if file_path.exists():
+    print('파일이 존재합니다')
+
+# 경로 조합
+path = Path('folder') / 'subfolder' / 'file.txt'
+print(path)  # folder/subfolder/file.txt
+
+# 파일 내용 읽기
+content = file_path.read_text(encoding='utf8')
+</code></pre>
+
+<h3>glob 모듈</h3>
+<div class="example">
+<h4>주요 기능</h4>
+<ul>
+<li>특정 패턴과 일치하는 파일 목록 찾기</li>
+<li>와일드카드 사용 (*.txt, ?.py 등)</li>
+</ul>
+</div>
+<pre><code>import glob
+
+# 현재 디렉토리의 모든 파이썬 파일
+py_files = glob.glob('*.py')
+print(py_files)
+
+# 재귀적으로 모든 하위 디렉토리 탐색
+py_files_recursive = glob.glob('**/*.py', recursive=True)
+
+# 특정 패턴 매칭
+txt_files = glob.glob('data_*.txt')
+number_files = glob.glob('file[0-9].txt')
+</code></pre>
+
+<h2>데이터 처리 관련 모듈</h2>
+
+<h3>json 모듈</h3>
+<div class="example">
+<h4>주요 기능</h4>
+<ul>
+<li>JSON 데이터 인코딩/디코딩</li>
+<li>API 데이터 교환 필수</li>
+</ul>
+</div>
+<pre><code>import json
+
+# JSON 문자열 → 파이썬 객체
+json_str = '{"name": "홍길동", "age": 20}'
+data = json.loads(json_str)
+print(data['name'])  # 홍길동
+print(data['age'])   # 20
+
+# 파이썬 객체 → JSON 문자열
+data = {'name': '철수', 'score': 95}
+json_str = json.dumps(data, ensure_ascii=False, indent=2)
+print(json_str)
+"""
+{
+  "name": "철수",
+  "score": 95
+}
+"""
+
+# 파일에서 JSON 읽기
+with open('data.json', 'r', encoding='utf8') as f:
+    data = json.load(f)
+
+# 파일에 JSON 쓰기
+with open('output.json', 'w', encoding='utf8') as f:
+    json.dump(data, f, ensure_ascii=False, indent=2)
+</code></pre>
+
+<h3>csv 모듈</h3>
+<div class="example">
+<h4>주요 기능</h4>
+<ul>
+<li>CSV 파일 읽기/쓰기</li>
+<li>데이터 분석 및 처리</li>
+</ul>
+</div>
+<pre><code>import csv
+
+# CSV 파일 읽기
+with open('students.csv', 'r', encoding='utf8') as f:
+    reader = csv.reader(f)
+    header = next(reader)  # 헤더 건너뛰기
+    for row in reader:
+        print(f'{row[0]}: {row[1]}점')
+
+# DictReader 사용 (헤더를 키로 사용)
+with open('students.csv', 'r', encoding='utf8') as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        print(f"{row['name']}: {row['score']}점")
+
+# CSV 파일 쓰기
+data = [
+    {'name': '홍길동', 'score': 95},
+    {'name': '김철수', 'score': 87}
+]
+
+with open('scores.csv', 'w', newline='', encoding='utf8') as f:
+    writer = csv.DictWriter(f, fieldnames=['name', 'score'])
+    writer.writeheader()
+    writer.writerows(data)
+</code></pre>
+
+<h3>pickle 모듈</h3>
+<div class="example">
+<h4>주요 기능</h4>
+<ul>
+<li>파이썬 객체를 그대로 저장/복원</li>
+<li>복잡한 객체도 직렬화 가능</li>
+</ul>
+</div>
+<pre><code>import pickle
+
+# 객체 저장
+data = {'name': '홍길동', 'scores': [90, 85, 92]}
+with open('data.pkl', 'wb') as f:
+    pickle.dump(data, f)
+
+# 객체 복원
+with open('data.pkl', 'rb') as f:
+    loaded_data = pickle.load(f)
+    print(loaded_data['name'])  # 홍길동
+</code></pre>
+
+<h2>시간/날짜 관련 모듈</h2>
+
+<h3>time 모듈</h3>
+<div class="example">
+<h4>주요 기능</h4>
+<ul>
+<li>시간 관련 함수 제공</li>
+<li>초 단위로 시간 측정</li>
+</ul>
+</div>
+<pre><code>import time
+
+# 현재 시간 (에포크로부터의 초)
+timestamp = time.time()
+print(timestamp)  # 1722230400.123456
+
+# 지역 시간 구조체
+local_time = time.localtime(timestamp)
+print(local_time.tm_year, local_time.tm_mon, local_time.tm_mday)
+
+# 포맷팅
+formatted = time.strftime("%Y-%m-%d %H:%M:%S", local_time)
+print(formatted)  # 2024-07-29 14:30:00
+
+# 일시 정지
+time.sleep(2)  # 2초 대기
+</code></pre>
+
+<h3>datetime 모듈</h3>
+<div class="example">
+<h4>주요 기능</h4>
+<ul>
+<li>날짜와 시간 처리</li>
+<li>연산 및 포맷 변환 지원</li>
+</ul>
+</div>
+<pre><code>import datetime
+
+# 현재 날짜와 시간
+now = datetime.datetime.now()
+print(now)  # 2024-07-29 14:30:00.123456
+
+# 날짜만
+today = datetime.date.today()
+print(today)  # 2024-07-29
+
+# 시간만
+current_time = datetime.time.now()
+print(current_time)  # 14:30:00.123456
+
+# 특정 날짜 생성
+specific_date = datetime.date(2024, 1, 1)
+print(specific_date)  # 2024-01-01
+
+# 날짜 연산
+tomorrow = today + datetime.timedelta(days=1)
+print(tomorrow)  # 2024-07-30
+
+# 차이 계산
+date1 = datetime.date(2024, 7, 29)
+date2 = datetime.date(2024, 8, 5)
+diff = date2 - date1
+print(diff.days)  # 7
+
+# 포맷팅
+formatted = now.strftime("%Y년 %m월 %d일 %H시 %M분 %S초")
+print(formatted)  # 2024년 07월 29일 14시 30분 00초
+</code></pre>
+
+<h2>난수 생성 관련 모듈</h2>
+
+<h3>random 모듈</h3>
+<div class="example">
+<h4>주요 기능</h4>
+<ul>
+<li>난수 생성 및 선택</li>
+<li>게임, 시뮬레이션, 테스트 데이터 생성에 유용</li>
+</ul>
+</div>
+<pre><code>import random
+
+# 정수 난수 (포함 범위)
+num = random.randint(1, 10)  # 1부터 10까지의 정수
+print(num)  # 예: 7
+
+# 부동소수점 난수 (0.0 이상 1.0 미만)
+num = random.random()
+print(num)  # 예: 0.4218390383103978
+
+# 범위 지정 부동소수점
+num = random.uniform(1.0, 10.0)
+print(num)  # 예: 5.63829103920491
+
+# 리스트에서 무작위 선택
+items = ['사과', '바나나', '오렌지']
+choice = random.choice(items)
+print(choice)  # 예: 바나나
+
+# 리스트 섞기 (in-place)
+cards = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
+random.shuffle(cards)
+print(cards[:5])  # 예: ['7', 'K', '2', '9', 'Q']
+
+# 샘플링 (중복 없이 여러 개 선택)
+lotto = random.sample(range(1, 46), 6)  # 1-45에서 6개 선택
+print(sorted(lotto))  # 예: [3, 12, 23, 28, 34, 41]
+</code></pre>
+
+<h2>암호화 관련 모듈</h2>
+<h3>hashlib 모듈 (해시)</h3>
+<div class="note">
+<strong>💡 해시(Hash)란?</strong><br>
+임의의 길이를 가진 데이터를 고정된 길이의 (거의) 고유한 값으로 변경하는 것을 말합니다. 이렇게 만들어진 값을 <strong>해시값(Hash Code)</strong>, 이를 생성해주는 함수를 <strong>해시 함수(Hash Function)</strong>라고 부릅니다.<br><br>
+예를 들어 SHA-256 해시는 2의 256승 가지의 경우의 수를 가지는데, 전 세계 80억 인구가 1초에 하나씩 시도해도 136해(垓) 년이 걸릴 정도의 확률이라 <strong>중복(충돌)될 확률은 사실상 0%</strong>입니다. 그래서 비밀번호는 원본을 저장하지 않고 해시값만 저장합니다.
+</div>
+<div class="example">
+<pre><code>import hashlib
+
+old_pwd = '1234'
+m = hashlib.sha256()
+m.update(old_pwd.encode())
+new_pwd = m.hexdigest()
+# 한 줄로: new_pwd = hashlib.sha256(old_pwd.encode()).hexdigest()
+
+print(new_pwd)
+# fcbcf165908dd4e97c780f8c7bb...
+
+# 같은 입력이면 항상 같은 해시값 -&gt; 로그인 시 비밀번호를 다시 해시해서 비교
+print(hashlib.sha256('1234'.encode()).hexdigest() == new_pwd)  # True
+</code></pre>
+<p><strong>핵심 포인트:</strong> 해시는 "되돌릴 수 없는(일방향) 암호화"입니다. 해시값만 보고 원본 비밀번호를 복원할 수 없기 때문에, 서버가 해킹당해도 실제 비밀번호는 안전하게 보호됩니다. 로그인 시에는 사용자가 입력한 비밀번호를 다시 해시해서, DB에 저장된 해시값과 <strong>비교만</strong> 합니다.</p>
+</div>
+
+<h2>이메일 자동 발송 (smtplib)</h2>
+<p>서버 모니터링, 알림 자동화 등에 자주 쓰이는 Gmail을 통한 이메일 발송 방법입니다.</p>
+<div class="note">
+<strong>💡 사전 준비: 구글 이메일 앱 비밀번호 발급</strong>
+<ol>
+<li>구글 gmail.com 계정 준비</li>
+<li>[Google 계정 관리] → [보안 및 로그인] → [2단계 인증] 사용 설정 (패스키/전화번호 등 인증 수단 추가)</li>
+<li>Google 계정 검색에서 "앱 비밀번호" 검색 (또는 <code>myaccount.google.com/apppasswords</code> 접속)</li>
+<li>"앱 이름" 입력 후 16자리 비밀번호 발급 → 일반 로그인 비밀번호 대신 이 앱 비밀번호를 코드에 사용</li>
+</ol>
+</div>
+<div class="example">
+<pre><code>import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+SMTP_SERVER = "smtp.gmail.com"
+SMTP_PORT = 587
+SENDER = "my_account@gmail.com"
+PASSWORD = "앱비밀번호16자리"   # 일반 로그인 비밀번호 아님! 앱 비밀번호 사용
+RECIPIENT = "target@example.com"
+
+def send_email(subject, body):
+    msg = MIMEMultipart()
+    msg["From"] = SENDER
+    msg["To"] = RECIPIENT
+    msg["Subject"] = subject
+    msg.attach(MIMEText(body, "html"))
+    try:
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()             # TLS 암호화 연결
+            server.login(SENDER, PASSWORD)
+            server.send_message(msg)
+    except Exception as e:
+        print(f"❌ 발송 실패: {e}")
+
+send_email("[경고] 디스크 사용량 초과", "&lt;h3&gt;⚠ 디스크 경고&lt;/h3&gt;&lt;p&gt;서버 점검이 필요합니다.&lt;/p&gt;")
+print("이메일 발송 완료")
+</code></pre>
+</div>
+
+<div class="example">
+<h3>실전 예제: 디스크 사용량 자동 점검 & 이메일 알림</h3>
+<pre><code>import shutil
+
+def check_disk_usage(path="/", threshold=80):
+    total, used, free = shutil.disk_usage(path)
+    usage = used / total * 100
+    return usage, threshold
+
+if __name__ == "__main__":
+    usage, threshold = check_disk_usage("/")
+    if usage &gt;= threshold:
+        subject = f"[경고] 디스크 사용량 {usage:.1f}% 초과"
+        body = f"&lt;h3&gt;⚠ 디스크 경고&lt;/h3&gt;&lt;p&gt;현재 디스크 사용량은 &lt;b&gt;{usage:.1f}%&lt;/b&gt;입니다.&lt;br&gt;서버 점검이 필요합니다.&lt;/p&gt;"
+        send_email(subject, body)
+        print("⚠ 이메일 발송 완료")
+    else:
+        print(f"정상 (사용량 {usage:.1f}%)")
+</code></pre>
+<p><strong>활용 아이디어:</strong> 이 패턴(상태 체크 함수 + 조건부 이메일 발송 함수)은 API 서버 헬스체크, 정기 리포트 발송 등 다양한 모니터링 자동화에 그대로 재사용할 수 있습니다. 예를 들어 여러 API 서버에 각각 <code>requests.get(url)</code>을 보내서 <code>status_code</code>가 200이 아닌 서버가 하나라도 있으면 담당자에게 메일을 보내고, 모두 정상이면 콘솔에만 메시지를 출력하는 식으로 확장할 수 있습니다.</p>
+</div>
+
+<h2>✏️ 종합 연습문제 (1장~6장 통합 활용)</h2>
+<div class="note">
+<strong>💡 안내</strong><br>
+지금까지 배운 자료형, 연산자, 제어문, 함수, 입출력, 내장함수, 외장함수를 종합적으로 활용하는 8개의 실전형 문제입니다.
+</div>
+
+<div class="example">
+<h3>문제 1: 회식비 정산하기 (divmod, round)</h3>
+<p>총 결제금액을 인원수대로 나눠 1인당 금액과 나머지 금액을 구하고, 100원 단위로 반올림한 금액도 함께 구하세요.</p>
+<pre><code>total_price = 187500
+people = 7
+
+share, remain = divmod(total_price, people)
+print(f'1인당 {share}원, 나머지 {remain}원은 총무가 부담')
+
+rounded = round(total_price / people, -2)
+print(f'반올림 정산 시 1인당 {rounded}원')
+# 1인당 26785원, 나머지 5원은 총무가 부담
+# 반올림 정산 시 1인당 26800.0원
+</code></pre>
+<p><strong>참고:</strong> <code>divmod()</code>는 몫과 나머지를 한 번에 구해줍니다. <code>round()</code>의 두 번째 인자로 음수를 주면 정수 자릿수 단위로 반올림할 수 있습니다.</p>
+</div>
+
+<div class="example">
+<h3>문제 2: 매출 순위표 만들기 (zip, sorted, enumerate)</h3>
+<pre><code>names = ['김민준', '이서연', '박도윤', '최하은', '정지호']
+sales = [3200000, 4550000, 2980000, 4550000, 3870000]
+
+ranking = sorted(zip(names, sales), key=lambda x: x[1], reverse=True)
+for i, (name, sale) in enumerate(ranking):
+    print(f'{i}위 {name} {sale}원')
+# 0위 이서연 4550000원
+# 1위 최하은 4550000원
+# ...
+</code></pre>
+<p><strong>참고:</strong> <code>sorted()</code>의 <code>key</code>와 <code>reverse</code> 옵션을 활용하면 딕셔너리나 튜플 리스트도 원하는 기준으로 자유롭게 정렬할 수 있습니다.</p>
+</div>
+
+<div class="example">
+<h3>문제 3: 회원가입 폼 유효성 검사 (isinstance, all)</h3>
+<pre><code>def check_signup(user_id, password, age):
+    conditions = [
+        isinstance(user_id, str),
+        len(password) &gt;= 8,
+        isinstance(age, int) and age &gt;= 14,
+    ]
+    return all(conditions)
+
+print(check_signup('minjun01', 'pw12345678', 20))  # True
+print(check_signup('minjun01', 'pw123', 20))        # False (비밀번호 짧음)
+print(check_signup('minjun01', 'pw12345678', '20')) # False (age가 문자열)
+</code></pre>
+</div>
+
+<div class="example">
+<h3>문제 4: 이벤트 쿠폰 코드 만들기 (ord, hex)</h3>
+<pre><code>user_id = 'minjun01'
+
+codes = [ord(ch) for ch in user_id]
+hex_code = hex(sum(codes))[2:]  # 0x 제거
+
+print(f'쿠폰코드: EVENT-{hex_code}')
+# 쿠폰코드: EVENT-2f2
+</code></pre>
+<p><strong>참고:</strong> <code>ord()</code>는 문자 하나를 정수(유니코드 코드값)로 바꿔주고, <code>hex()</code>의 결과 앞에는 항상 <code>0x</code>가 붙으므로 슬라이싱(<code>[2:]</code>)으로 제거합니다.</p>
+</div>
+
+<div class="example">
+<h3>문제 5: 재고 데이터 일괄 처리하기 (map, filter, lambda)</h3>
+<pre><code>stock_raw = ['120', '35', '8', '250', '64']
+stock = list(map(int, stock_raw))
+
+low_stock = list(filter(lambda n: n &lt; 50, stock))
+print('재고부족 목록:', low_stock)              # [35, 8]
+
+transfer_list = list(map(lambda n: n // 2 if n &gt;= 100 else n, stock))
+print('이관 수량:', [n for n in transfer_list if n != stock[stock.index(n)] or n &gt;= 50])
+# 120 -&gt; 60, 250 -&gt; 125로 절반만 이관
+</code></pre>
+</div>
+
+<div class="example">
+<h3>문제 6: 거래처 API 응답 데이터 파싱 (json)</h3>
+<pre><code>import json
+
+response = '''
+[
+   {"order_id": 101, "customer": "김민준", "status": "배송중"},
+   {"order_id": 102, "customer": "이서연", "status": "배송대기"},
+   {"order_id": 103, "customer": "박도윤", "status": "배송대기"},
+   {"order_id": 104, "customer": "최하은", "status": "배송완료"}
+]
+'''
+orders = json.loads(response)
+waiting_customers = [o['customer'] for o in orders if o['status'] == '배송대기']
+print(waiting_customers)  # ['이서연', '박도윤']
+</code></pre>
+</div>
+
+<div class="example">
+<h3>문제 7: 경품 이벤트 당첨자 추첨 (random.shuffle, random.sample)</h3>
+<pre><code>import random
+
+participants = ['user_a','user_b','user_c','user_d','user_e','user_f','user_g','user_h','user_i','user_j']
+
+random.shuffle(participants)  # 리스트 자체를 무작위로 섞음 (반환값 없음)
+print('참여자 명단:', participants)
+
+first_prize = random.sample(participants, 1)[0]   # 중복 없이 1명
+second_prize = random.sample(participants, 2)      # 중복 없이 2명
+print('1등:', first_prize)
+print('2등:', second_prize)
+</code></pre>
+</div>
+
+<div class="example">
+<h3>문제 8: 서버 백업 파일명 자동 생성 & 실행시간 측정 (time, datetime)</h3>
+<pre><code>import time
+import datetime
+
+backup_filename = datetime.datetime.now().strftime("backup_%Y%m%d_%H%M%S.zip")
+print(backup_filename)   # backup_20260726_105920.zip
+
+start = time.time()
+total = 0
+for i in range(30_000_000):
+    total += i
+elapsed = time.time() - start
+print(f'백업 소요시간: {elapsed:.2f}초')
+</code></pre>
+</div>
+
+<h2>연습문제</h2>
+
+<div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
+<strong>디렉토리 및 파일 관리</strong>
+<pre><code>import os
+from pathlib import Path
+
+# practice 폴더 생성
+practice_dir = Path('practice')
+practice_dir.mkdir(exist_ok=True)
+
+# hello.txt 파일 생성
+hello_file = practice_dir / 'hello.txt'
+hello_file.write_text('Hello, Python!', encoding='utf8')
+
+# 현재 디렉토리의 모든 .txt 파일 찾기
+txt_files = list(Path('.').glob('*.txt'))
+print(f'텍스트 파일 개수: {len(txt_files)}')
+
+# 's'가 포함된 파일명 찾기
+s_files = list(Path('.').glob('*s*'))
+print(f"'s' 포함 파일: {[f.name for f in s_files]}")
+</code></pre>
+</div>
+
+<div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
+<strong>JSON API 데이터 처리</strong>
+<pre><code>import json
+import requests
+
+# 가상의 API 응답 시뮬레이션
+api_response = '''
+{
+  "students": [
+    {"name": "홍길동", "score": 95},
+    {"name": "김철수", "score": 87},
+    {"name": "이영희", "score": 92}
+  ]
+}
+'''
+
+# JSON 파싱
+data = json.loads(api_response)
+
+# 점수 90점 이상인 학생 필터링
+high_scorers = [s for s in data['students'] if s['score'] &gt;= 90]
+print("우수 학생:")
+for student in high_scorers:
+    print(f"  {student['name']}: {student['score']}점")
+
+# 평균 점수 계산
+average = sum(s['score'] for s in data['students']) / len(data['students'])
+print(f"평균 점수: {average:.1f}점")
+</code></pre>
+</div>
+</div>
+</body>
+</html>

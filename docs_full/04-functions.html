@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>함수 완전 정리</title>
+    <style>
+        body{font-family:-apple-system,sans-serif;background:#030712;color:#e5e7eb;line-height:1.7;padding:30px}
+        .content{max-width:900px;margin:0 auto}
+        h1{color:#c084fc;font-size:2rem;margin-bottom:20px}
+        h2{color:#a78bfa;margin:30px 0 12px;font-size:1.4rem}
+        code{background:#1e293b;color:#fbbf24;padding:2px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace}
+        pre{background:#0f172a;border:1px solid #1f2937;border-radius:8px;padding:16px;overflow-x:auto}
+    </style>
+</head>
+<body>
+<div class="content">
+<h1>⚙️ 함수 완전 정리</h1>
+
+<h2>함수 정의</h2>
+<pre><code>def 함수명(매개변수1, 매개변수2):
+    """함수 설명 (선택)"""
+    실행할 코드
+    return 반환값
+
+# 예시: 두 수 더하기
+def plus(a, b):
+    result = a + b
+    return result
+
+# 호출
+sum_val = plus(10, 5)
+print(sum_val)  # 15</code></pre>
+
+<h2>함수 4가지 형태</h2>
+<h3>입력값 O, 반환값 O (일반적)</h3>
+<pre><code>def add(a, b):
+    return a + b
+
+result = add(3, 5)
+print(result)  # 8</code></pre>
+
+<h3>입력값 O, 반환값 X</h3>
+<pre><code>def print_hello(name):
+    print(f'Hello, {name}!')
+
+print_hello('홍길동')  # Hello, 홍길동!</code></pre>
+
+<h3>입력값 X, 반환값 O</h3>
+<pre><code>def get_pi():
+    return 3.14159
+
+pi = get_pi()
+print(pi)  # 3.14159</code></pre>
+
+<h3>입력값 X, 반환값 X</h3>
+<pre><code>def print_warning():
+    print('경고: 주의 필요!')
+
+print_warning()</code></pre>
+
+<h2>*args (가변 위치 인자)</h2>
+<pre><code>def total(*args):
+    """입력된 모든 수 더하기"""
+    result = 0
+    for num in args:
+        result += num
+    return result
+
+print(total(1, 2, 3))      # 6
+print(total(1, 2, 3, 4, 5)) # 15</code></pre>
+
+<h2>**kwargs (가변 키워드 인자)</h2>
+<pre><code>def profile(**kwargs):
+    """키-값 쌍 출력"""
+    for key, value in kwargs.items():
+        print(f'{key}: {value}')
+
+profile(name='홍길동', age=20, city='부산')
+# name: 홍길동
+# age: 20
+# city: 부산</code></pre>
+
+<h2>결합 사용</h2>
+<pre><code>def complex_func(*args, **kwargs):
+    print('args:', args)
+    print('kwargs:', kwargs)
+
+complex_func('a', 'b', x=1, y=2)</code></pre>
+
+<h2>람다 함수</h2>
+<pre><code># 일반 함수
+def minus(a, b):
+    return a - b
+
+# 람다로 변환
+minus = lambda a, b: a - b
+
+print(minus(10, 3))  # 7
+
+# 리스트 정렬에 유용
+students = [('홍', 90), ('김', 85), ('이', 95)]
+students.sort(key=lambda x: x[1])  # 점수 기준
+print(students)  # [('김', 85), ('홍', 90), ('이', 95)]</code></pre>
+
+<h2>매개변수 기본값</h2>
+<pre><code>def greet(name, message='안녕하세요'):
+    print(f'{message}, {name}!')
+
+greet('홍길동')  # 안녕하세요, 홍길동!
+greet('홍길동', '반갑다')  # 반갑다, 홍길동!</code></pre>
+
+<h2>여러 값 반환</h2>
+<pre><code>def calculate(a, b):
+    return a+b, a-b, a*b
+
+plus, minus, multi = calculate(10, 5)
+print(plus, minus, multi)  # 15 5 50
+
+# 또는 tuple로 반환됨
+result = calculate(10, 5)
+print(result)  # (15, 5, 50)</code></pre>
+
+<h2>내부 함수와 클로저</h2>
+<pre><code>def outer(x):
+    def inner(y):
+        return x + y
+    return inner
+
+add_5 = outer(5)
+print(add_5(3))  # 8</code></pre>
+
+<h2>연습문제</h2>
+
+<div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
+<strong>거리 계산 함수</strong>
+<pre><code>def distance(start, end):
+    """시작점과 끝점 거리 계산"""
+    dx = abs(end[0] - start[0])
+    dy = abs(end[1] - start[1])
+    return dx, dy
+
+start = (1, 1)
+end = (5, 3)
+dx, dy = distance(start, end)
+print(f'dx: {dx}, dy: {dy}')  # dx: 4, dy: 2</code></pre>
+</div>
+</div>
+</body>
+</html>

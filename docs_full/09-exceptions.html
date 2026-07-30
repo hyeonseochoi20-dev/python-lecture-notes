@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>예외처리 완전 정리</title>
+    <style>
+        body{font-family:-apple-system,sans-serif;background:#030712;color:#e5e7eb;line-height:1.7;padding:30px}
+        .content{max-width:900px;margin:0 auto}
+        h1{color:#c084fc;font-size:2rem;margin-bottom:20px}
+        h2{color:#a78bfa;margin:30px 0 12px;font-size:1.4rem}
+        h3{color:#60a5fa;margin:20px 0 8px}
+        code{background:#1e293b;color:#fbbf24;padding:2px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace}
+        pre{background:#0f172a;border:1px solid #1f2937;border-radius:8px;padding:16px;overflow-x:auto}
+        table{width:100%;border-collapse:collapse;margin:15px 0}
+        th,td{border:1px solid #1f2937;padding:12px;font-size:.9rem;text-align:center}
+        th{background:#111827;color:#a78bfa}
+        .note{background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0}
+        .example{background:#0f172a;border:1px solid #1f2937;border-radius:8px;padding:16px;margin:16px 0}
+        .warning{background:#7f1d1d;color:#fca5a5;padding:12px;border-radius:4px;margin:10px 0}
+    </style>
+</head>
+<body>
+<div class="content">
+<h1>⚠️ 예외처리 완전 정리</h1>
+
+<h2>예외(Exception)란?</h2>
+<p>프로그램 실행 중에 발생하는 오류로, 정상적인 프로그램 흐름을 방해(interrupt)하는 사건입니다.</p>
+<p>적절한 예외처리가 없으면 프로그램이 비정상적으로 종료됩니다.</p>
+
+<h2>주요 예외 종류</h2>
+<table>
+<tr><th>예외 클래스</th><th>발생 상황</th><th>예시 코드</th></tr>
+<tr><td>ZeroDivisionError</td><td>0으로 나누려고 할 때</td><td><code>10 / 0</code></td></tr>
+<tr><td>IndexError</td><td>리스트/문자열 인덱스 범위 초과</td><td><code>[1,2,3][3]</code></td></tr>
+<tr><td>KeyError</td><td>딕셔너리에 없는 키 접근</td><td><code>{'a':1}['b']</code></td></tr>
+<tr><td>ValueError</td><td>잘못된 값으로 함수 호출</td><td><code>int('abc')</code></td></tr>
+<tr><td>TypeError</td><td>타입 불일치로 연산/function 호출</td><td><code>'hello' + 5</code></td></tr>
+<tr><td>FileNotFoundError</td><td>존재하지 않는 파일 열기 시도</td><td><code>open('없는파일.txt')</code></td></tr>
+<tr><td>ImportError</td><td>모듈을 찾을 수 없을 때</td><td><code>import 없는모듈</code></td></tr>
+<tr><td>KeyboardInterrupt</td><td>사용자가 Ctrl+C를 눌렀을 때</td><td>무한 루프 중 인터럽트</td></tr>
+</table>
+
+<h2>예외처리 기본 문법</h2>
+
+<h3>기본 형태</h3>
+<pre><code>try:
+    # 예외가 발생할 수 있는 코드
+    위험한_코드
+except 예외타입:
+    # 특정 예외가 발생했을 때 처리
+    처리할_코드
+else:
+    # 예외가 발생하지 않았을 때 실행
+    정상처리_코드
+finally:
+    # 예외 발생 여부와 관계없이 항상 실행
+    정리_코드
+</code></pre>
+
+<h3>다중 예외 처리</h3>
+<pre><code>try:
+    risk = 10 / int(input("숫자 입력: "))
+except ZeroDivisionError:
+    print("0으로 나눌 수 없습니다!")
+except ValueError:
+    print("올바른 숫자를 입력해주세요!")
+except Exception as e:  # 모든 기타 예외 catch
+    print(f"예상치 못한 오류: {e}")
+else:
+    print(f"결과: {risk}")
+finally:
+    print("프로그램 종료 정리 중...")  # 항상 실행
+</code></pre>
+
+<h3>예외 정보 얻기</h3>
+<pre><code>try:
+    result = 10 / 0
+except ZeroDivisionError as e:
+    print(f"예외 타입: {type(e).__name__}")
+    print(f"예외 메시지: {e}")
+    print(f"예외 인자: {e.args}")
+    # 완전한 트레이스백 출력 (디버깅용)
+    import traceback
+    traceback.print_exc()
+</code></pre>
+
+<h2>특정 예외 상세 설명</h2>
+
+<h3>ZeroDivisionError</h3>
+<pre><code>try:
+    percentage = (correct / total) * 100
+except ZeroDivisionError:
+    print("총 문제 수가 0입니다 - 백분율 계산 불가")
+    percentage = 0
+</code></pre>
+
+<h3>IndexError</h3>
+<pre><code>my_list = [10, 20, 30]
+try:
+    print(my_list[5])  # 인덱스 5는 존재하지 않음
+except IndexError as e:
+    print(f"인덱스 오류: 리스트 길이는 {len(my_list)}지만 인덱스 {5}에 접근하려 함")
+    # 안전한 접근 방법
+    index = 5
+    if 0 &lt;= index &lt; len(my_list):
+        print(my_list[index])
+    else:
+        print("유효하지 않은 인덱스입니다")
+</code></pre>
+
+<h3>ValueError</h3>
+<pre><code>def get_positive_number():
+    while True:
+        try:
+            num = float(input("양수를 입력하세요: "))
+            if num &lt;= 0:
+                print("0보다 큰 수를 입력해주세요!")
+                continue
+            return num
+        except ValueError:
+            print("올바른 숫자를 입력해주세요!")
+
+number = get_positive_number()
+print(f"입력된 숫자: {number}")
+</code></pre>
+
+<h3>FileNotFoundError</h3>
+<pre><code>filename = "data.txt"
+try:
+    with open(filename, 'r', encoding='utf8') as f:
+        data = f.read()
+except FileNotFoundError:
+    print(f"파일 '{filename}'을 찾을 수 없습니다.")
+    # 기본 데이터 생성 또는 사용자 입력 요청
+    data = "기본 데이터"
+    with open(filename, 'w', encoding='utf8') as f:
+        f.write(data)
+except PermissionError:
+    print(f"파일 '{filename}'에 대한 읽기 권한이 없습니다.")
+</code></pre>
+
+<h2>의도적인 예외 발생 (raise)</h2>
+<pre><code>def validate_age(age):
+    """나이 유효성 검사"""
+    if not isinstance(age, int):
+        raise TypeError("나이는 정수여야 합니다")
+    if age &lt; 0:
+        raise ValueError("나이는 음수가 될 수 없습니다")
+    if age &gt; 150:
+        raise ValueError("나이가 너무 많습니다 (150세를 초과)")
+    return True
+
+# 사용
+try:
+    validate_age(-5)
+except ValueError as e:
+    print(f"입력 오류: {e}")
+except TypeError as e:
+    print(f"타입 오류: {e}")
+</code></pre>
+
+<h2>사용자 정의 예외 클래스</h2>
+<pre><code># 기본 사용자 정의 예외
+class 맞춤예외(Exception):
+    """기본 사용자 정의 예외 클래스"""
+    pass
+
+# 특정 정보를 포함하는 사용자 정의 예외
+class ValidationError(Exception):
+    """입력 검증 관련 예외"""
+    def __init__(self, message, field=None):
+        self.message = message
+        self.field = field
+        super().__init__(self.message)
+
+class AgeValidationError(ValidationError):
+    """나이 검증 관련 예외"""
+    def __init__(self, message, age=None):
+        self.age = age
+        super().__init__(message, field="age")
+
+# 사용
+def register_user(age, username):
+    if not isinstance(age, int):
+        raise TypeError("나이는 정수여야 합니다")
+    if age &lt; 0:
+        raise AgeValidationError("나이는 음수가 될 수 없습니다", age=age)
+    if age &gt; 150:
+        raise AgeValidationError("나이가 150세를 초과할 수 없습니다", age=age)
+    if not username or len(username.strip()) &lt; 2:
+        raise ValidationError("사용자 이름은 2자 이상이어야 합니다", field="username")
+
+    return {"age": age, "username": username.strip()}
+
+# 예외 처리
+try:
+    user = register_user(-5, "ab")
+except AgeValidationError as e:
+    print(f"나이 오류: {e.message} (입력값: {e.age})")
+except ValidationError as e:
+    print(f"검증 오류: {e.message} (필드: {e.field})")
+except TypeError as e:
+    print(f"타입 오류: {e}")
+</code></pre>
+
+<h2>finally의 중요성</h2>
+<p>리소스 정리에 finally가 필수적입니다:</p>
+<pre><code># 파일 처리 예시
+file = None
+try:
+    file = open('data.txt', 'r', encoding='utf8')
+    data = file.read()
+    # 데이터 처리...
+    result = process(data)
+finally:
+    if file is not None:
+        file.close()  # 예외 발생 여부와 관계없이 파일을 닫음
+        print("파일이 정상적으로 닫혔습니다")
+
+# 또는 with 문 사용 (자동으로 finally 처리)
+try:
+    with open('data.txt', 'r', encoding='utf8') as f:
+        data = f.read()
+        result = process(data)
+except FileNotFoundError:
+    print("파일을 찾을 수 없습니다")
+# with 문을 벗어나면 자동으로 f.close() 호출됨
+</code></pre>
+
+<h2>연습문제</h2>
+
+<div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
+<strong>안전한 계산기</strong>
+<pre><code>def safe_divide(a, b):
+    """0으로 나누지 않는 안전한 나눗셈"""
+    try:
+        return a / b
+    except ZeroDivisionError:
+        print("오류: 0으로 나눌 수 없습니다")
+        return None
+    except TypeError as e:
+        print(f"오류: 숫자가 아닌 값을 입력했습니다 - {e}")
+        return None
+
+# 테스트
+print(safe_divide(10, 2))   # 5.0
+print(safe_divide(10, 0))   # None (오류 메시지 출력)
+print(safe_divide(10, "a")) # None (오류 메시지 출력)
+</code></pre>
+</div>
+
+<div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
+<strong>파일 처리 프로그램</strong>
+<pre><code>def read_file_safely(filename):
+    """파일을 안전하게 읽는 함수"""
+    try:
+        with open(filename, 'r', encoding='utf8') as f:
+            content = f.read()
+        return content, None  # (내용, 오류)
+    except FileNotFoundError:
+        return None, f"파일 '{filename}'을 찾을 수 없습니다"
+    except PermissionError:
+        return None, f"파일 '{filename}'에 대한 읽기 권한이 없습니다"
+    except UnicodeDecodeError:
+        return None, f"파일 '{filename}'의 인코딩을 읽을 수 없습니다"
+    except Exception as e:
+        return None, f"예상치 못한 오류: {e}"
+
+# 사용
+content, error = read_file_safely("data.txt")
+if error:
+    print(f"오류 발생: {error}")
+else:
+    print(f"파일 내용 (처음 100자): {content[:100]}...")
+</code></pre>
+</div>
+</div>
+</body>
+</html>

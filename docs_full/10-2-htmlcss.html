@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML/CSS 기초 완전 정리</title>
+    <style>
+        body{font-family:-apple-system,sans-serif;background:#030712;color:#e5e7eb;line-height:1.7;padding:30px}
+        .content{max-width:900px;margin:0 auto}
+        h1{color:#c084fc;font-size:2rem;margin-bottom:20px}
+        h2{color:#a78bfa;margin:30px 0 12px;font-size:1.4rem}
+        h3{color:#60a5fa;margin:20px 0 8px}
+        code{background:#1e293b;color:#fbbf24;padding:2px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace}
+        pre{background:#0f172a;border:1px solid #1f2937;border-radius:8px;padding:16px;overflow-x:auto}
+        table{width:100%;border-collapse:collapse;margin:15px 0}
+        th,td{border:1px solid #1f2937;padding:12px;font-size:.9rem;text-align:center}
+        th{background:#111827;color:#a78bfa}
+        .note{background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0}
+        .example{background:#0f172a;border:1px solid #1f2937;border-radius:8px;padding:16px;margin:16px 0}
+        .good{background:#064e3b;color:#4ade80}
+        .bad{background:#7f1d1d;color:#fca5a5}
+    </style>
+</head>
+<body>
+<div class="content">
+<h1>🌐 HTML/CSS 기초 완전 정리</h1>
+
+<h2>HTML이란?</h2>
+<p><strong>HTML(HyperText Markup Language)</strong>은 웹 페이지의 구조를 정의하는 마크업 언어입니다.</p>
+<ul>
+<li>태그(tag)로 구성 요소들을 정의합니다</li>
+<li>웹 브라우저가 해석해서 화면에 표시합니다</li>
+<li>구조만 담당하며, 스타일은 CSS가 담당합니다</li>
+</ul>
+
+<h2>기본 HTML 구조</h2>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ko"&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;페이지 제목&lt;/title&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!-- 화면에 표시되는 내용 --&gt;
+    &lt;h1&gt;메인 제목&lt;/h1&gt;
+    &lt;p&gt;단락 텍스트&lt;/p&gt;
+    &lt;!-- ... --&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+<h3>DOCTYPE 선언</h3>
+<p><code>&lt;!DOCTYPE html&gt;</code>는 HTML5임을 선언합니다. 이 선언이 없으면 브라우저가 쿼크 모드(quirks mode)로 렌더링할 수 있습니다.</p>
+
+<h3>head 요소</h3>
+<p>브라우저에 대한 메타데이터를 제공합니다 (화면에 표시되지 않음):</p>
+<ul>
+<li><code>&lt;meta charset="utf-8"&gt;</code>: 문자 인코딩 지정 (한글 정상 표시 필수)</li>
+<li><code>&lt;title&gt;</code>: 브라우저 탭 제목 및 북마크 이름</li>
+<li><code>&lt;meta name="viewport"&gt;</code>: 모바일 반응형 디자인 필수</li>
+<li><code>&lt;link rel="stylesheet"&gt;</code>: 외부 CSS 파일 연결</li>
+<li><code>&lt;script&gt;</code>: 자바스크립트 코드 또는 외부 파일 연결</li>
+</ul>
+
+<h3>body 요소</h3>
+<p>실제로 화면에 표시되는 내용이 들어갑니다.</p>
+
+<h2>HTML 기본 태그</h2>
+
+<h3>텍스트 관련 태그</h3>
+<table>
+<tr><th>태그</th><th>의미</th><th>예시</th><th>결과</th></tr>
+<tr><td>&lt;h1&gt;~&lt;h6&gt;</td><td>제목 (h1이 가장 큰 제목)</td><td><h1>메인 제목</h1><br><h2>부제목</h2></td><td>크고 굵은 텍스트</td></tr>
+<tr><td>&lt;p&gt;</td><td>문단</td><td><p>이것은 단락입니다.</p></td><td>위아래 여백이 있는 텍스트 블록</td></tr>
+<tr><td>&lt;br&gt;</td><td>줄바꿈</td><td>첫번째 줄<br>두번째 줄</td><td>줄바꿈만 발생</td></tr>
+<tr><td>&lt;hr&gt;</td><td>수평선</td><td>내용<hr>다른 내용</td><td>구분을 위한 가로줄</td></tr>
+<tr><td>&lt;strong&gt;</td><td>강조 (중요도)</td><td><strong>중요한 텍스트</strong></td><td>굵은 텍스트 (의미적 강조)</td></tr>
+<tr><td>&lt;em&gt;</td><td>emphasis (강조)</td><td><em>강조된 텍스트</em></td><td>기울임 텍스트 (의미적 강조)</td></tr>
+<tr><td>&lt;small&gt;</td><td>작은 텍스트</td><td><small>세부 사항</small></td><td>작은 크기의 텍스트</td></tr>
+<tr><td>&lt;mark&gt;</td><td>하이라이트</td><td><mark>하이라이트된 텍스트</mark></td><td>노란색 배경 강조</td></tr>
+<tr><td>&lt;del&gt;</td><td>삭제된 텍스트</td><td><del>삭제된 내용</del></td><td>가로줄 그어진 텍스트</td></tr>
+<tr><td>&lt;ins&gt;</td><td>삽입된 텍스트</td><td><ins>새로 추가된 내용</ins></td><td>밑줄이 그어진 텍스트</td></tr>
+</table>
+
+<h3>리스트 태그</h3>
+<table>
+<tr><th>태그</th><th>의미</th><th>예시</th></tr>
+<tr><td>&lt;ul&gt;</td><td>순서 없는 리스트</td><td><ul><li>항목1</li><li>항목2</li></ul></td></tr>
+<tr><td>&lt;ol&gt;</td><td>순서 있는 리스트</td><td><ol><li>첫번째</li><li>두번째</li></ol></td></tr>
+<tr><td>&lt;li&gt;</td><td>리스트 항목</td><td>ul/ol 안에서 사용</td></tr>
+<tr><td>&lt;dl&gt;</td><td>정의 리스트</td><td><dl><dt>용어</dt><dd>설명</dd></dl></td></tr>
+<tr><td>&lt;dt&gt;</td><td>용어 정의</td><td>정의할 용어</td></tr>
+<tr><td>&lt;dd&gt;</td><td>용어 설명</td><td>용어에 대한 설명</td></tr>
+</table>
+
+<pre><code>&lt;ul&gt;
+    &lt;li&gt;사과&lt;/li&gt;
+    &lt;li&gt;바나나&lt;/li&gt;
+    &lt;li&gt;오렌지&lt;/li&gt;
+&lt;/ul&gt;
+&lt;!--
+• 사과
+• 바나나
+• 오렌지
+--&gt;
+
+&lt;ol&gt;
+    &lt;li&gt;첫 번째 단계&lt;/li&gt;
+    &lt;li&gt;두 번째 단계&lt;/li&gt;
+    &lt;li&gt;세 번째 단계&lt;/li&gt;
+&lt;/ol&gt;
+&lt;!--
+1. 첫 번째 단계
+2. 두 번째 단계
+3. 세 번째 단계
+--&gt;
+</code></pre>
+
+<h3>링크와 이미지</h3>
+<table>
+<tr><th>태그</th><th>의미</th><th>속성(Attributes)</th><th>예시</th></tr>
+<tr><td>&lt;a&gt;</td><td>하이퍼링크</td><td>href(필수), target, title, rel</td><td><a href="https://example.com">링크</a></td></tr>
+<tr><td>&lt;img&gt;</td><td>이미지</td><td>src(필수), alt, width, height</td><td><img src="photo.jpg" alt="설명"></td></tr>
+</table>
+
+<pre><code>&lt;a href="https://python.org" target="_blank" rel="noopener"&gt;
+    파이썬 공식 사이트 (새 탭에서 열기)
+&lt;/a&gt;
+
+&lt;img src="logo.png" alt="파이썬 로고" width="200" height="100"&gt;
+</code></pre>
+
+<h3>테이블 태그</h3>
+<table>
+<tr><th>태그</th><th>의미</th></tr>
+<tr><td>&lt;table&gt;</td><td>테이블 컨테이너</td></tr>
+<tr><td>&lt;thead&gt;</td><td>테이블 헤더</td></tr>
+<tr><td>&lt;tbody&gt;</td><td>테이블 본문</td></tr>
+<tr><td>&lt;tfoot&gt;</td><td>테이블 푸트</td></tr>
+<tr><td>&lt;tr&gt;</td><td>테이블 행</td></tr>
+<tr><td>&lt;th&gt;</td><td>테이블 헤더 셀</td></tr>
+<tr><td>&lt;td&gt;</td><td>테이블 데이터 셀</td></tr>
+</table>
+
+<pre><code>&lt;table&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;이름&lt;/th&gt;
+            &lt;th&gt;점수&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td&gt;홍길동&lt;/td&gt;
+            &lt;td&gt;95&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;김철수&lt;/td&gt;
+            &lt;td&gt;87&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
+</code></pre>
+
+<h3>폼 태그 (사용자 입력)</h3>
+<table>
+<tr><th>태그</th><th>의미</th><th>주요 속성</th></tr>
+<tr><td>&lt;form&gt;</td><td>폼 컨테이너</td><td>action, method</td></tr>
+<tr><td>&lt;input&gt;</td><td>입력 필드</td><td>type, name, value, placeholder, required</td></tr>
+<tr><td>&lt;textarea&gt;</td><td>여러 줄 텍스트 입력</td><td>rows, cols, placeholder</td></tr>
+<tr><td>&lt;select&gt;</td><td>드롭다운 선택</td><td>name, multiple</td></tr>
+<tr><td>&lt;option&gt;</td><td>선택 항목</td><td>value, selected</td></tr>
+<tr><td>&lt;button&gt;</td><td>버튼</td><td>type, name, value</td></tr>
+</table>
+
+<pre><code>&lt;form action="/submit" method="POST"&gt;
+    &lt;label&gt;이름: &lt;/label&gt;
+    &lt;input type="text" name="username" required placeholder="이름을 입력하세요"&gt;
+    &lt;br&gt;&lt;br&gt;
+    &lt;label&gt;비밀번호: &lt;/label&gt;
+    &lt;input type="password" name="password" required&gt;
+    &lt;br&gt;&lt;br&gt;
+    &lt;input type="submit" value="제출"&gt;
+&lt;/form&gt;
+</code></pre>
+
+<h2>CSS(Cascading Style Sheets)란?</h2>
+<p>HTML 요소에 스타일을 적용하는 언어입니다. HTML은 구조, CSS는 presentación(표현)을 담당합니다.</p>
+<p>CSS는 캐스케이딩(cascading) 원리에 따라 여러 스타일 규칙이 충돌할 때 우선순위를 결정합니다.</p>
+
+<h2>CSS 적용 방법</h2>
+<h3>1. 인라인 스타일 (Inline Style)</h3>
+<pre><code>&lt;p style="color: red; font-size: 16px;"&gt;빨간 텍스트&lt;/p&gt;
+</code></pre>
+<p>단점: 재사용 불가능, HTML과 스타일이 혼합됨</p>
+
+<h3>2. 내부 스타일 시트 (Internal Style Sheet)</h3>
+<pre><code>&lt;style&gt;
+    p {
+        color: blue;
+        font-size: 14px;
+    }
+&lt;/style&gt;
+</code></pre>
+<p>단점: 해당 HTML 문서에서만 사용 가능</p>
+
+<h3>3. 외부 스타일 시트 (External Style Sheet) - 권장 방법</h3>
+<pre><code>&lt;!-- HTML 파일 내 --&gt;
+&lt;link rel="stylesheet" href="styles.css"&gt;
+
+/* styles.css 파일 내용 */
+p {
+    color: green;
+    font-size: 18px;
+}
+</code></pre>
+<p>장점: 재사용 가능, 캐싱으로 인한 성능 향상, 유지보수 용이</p>
+
+<h2>CSS 선택자(Selector) 완전 정리</h2>
+<p>CSS 선택자는 크롤링에서 <code>select()</code>/<code>select_one()</code>을 쓸 때도 그대로 사용되므로 정확히 익혀두면 크롤링 실력이 크게 향상됩니다.</p>
+<table>
+<tr><th>선택자 종류</th><th>문법</th><th>예시</th></tr>
+<tr><td>전체</td><td><code>*</code></td><td><code>* { }</code></td></tr>
+<tr><td>태그</td><td><code>태그명</code></td><td><code>li { }</code></td></tr>
+<tr><td>클래스</td><td><code>.클래스명</code></td><td><code>.product { }</code></td></tr>
+<tr><td>아이디</td><td><code>#아이디명</code></td><td><code>#gnb { }</code></td></tr>
+<tr><td>속성</td><td><code>[속성=값]</code></td><td><code>[data-stock="out"] { }</code></td></tr>
+<tr><td>인접 형제</td><td><code>A + B</code></td><td><code>.highlight + tr { }</code></td></tr>
+<tr><td>일반 형제</td><td><code>A ~ B</code></td><td><code>.special ~ li { }</code></td></tr>
+<tr><td>자식</td><td><code>A &gt; B</code></td><td><code>.wrapper &gt; main { }</code></td></tr>
+<tr><td>하위(자손)</td><td><code>A B</code></td><td><code>.wrapper li { }</code></td></tr>
+<tr><td>n번째 자식</td><td><code>:nth-child(n)</code></td><td><code>tr:nth-child(2) { }</code></td></tr>
+<tr><td>n번째 같은타입</td><td><code>:nth-of-type(n)</code></td><td><code>td:nth-of-type(2) { }</code></td></tr>
+</table>
+
+<h3>✏️ CSS 선택자 연습문제</h3>
+<div class="note">
+<strong>💡 실습 방법</strong><br>
+아래 요구사항에 맞는 선택자와 CSS 속성을 직접 작성해보세요. HTML 파일에 요구사항에 맞는 요소들(<code>info-box</code> 클래스, <code>product-list</code> 아이디, <code>gnb</code> 등)을 준비하고 저장한 뒤 브라우저로 열면 바로 결과를 확인할 수 있습니다. 사용하는 CSS 속성은 아래 몇 가지만 알면 충분합니다.
+<ul>
+<li><code>color</code>: 글자 색</li>
+<li><code>background-color</code> (또는 <code>background</code>): 배경 색</li>
+<li><code>font-weight: bold</code>: 글자 굵게</li>
+<li><code>text-align: center</code>: 가운데 정렬</li>
+<li><code>border: 2px solid red</code>: 테두리</li>
+<li><code>font-size: 20px</code>: 글자 크기</li>
+</ul>
+</div>
+<div class="example">
+<ol>
+<li><code>info-box</code> 클래스 안에 있는 모든 요소의 글자 크기를 20px로 만들어보세요.</li>
+<li><code>product-list</code> 아이디 안의 모든 요소에 파란색 테두리를 넣어보세요.</li>
+<li>페이지에 있는 모든 <code>li</code> 태그의 글자 색을 초록색으로 바꿔보세요.</li>
+<li>모든 <code>td</code> 태그의 텍스트를 가운데 정렬 해보세요.</li>
+<li><code>product</code> 클래스를 가진 요소들의 배경색을 노란색으로 바꿔보세요.</li>
+<li><code>ad</code> 클래스를 가진 모든 광고 영역에 빨간색 테두리를 추가해보세요.</li>
+<li><code>gnb</code>(상단 메뉴, <code>id="gnb"</code>)의 배경색을 검정으로, 글자색을 흰색으로 바꿔보세요.</li>
+<li><code>id="price-table"</code>인 표의 글자 크기를 18px로 바꿔보세요.</li>
+<li><code>data-stock="out"</code> 속성을 가진 행(품절 상품)의 배경색을 회색으로 바꿔보세요.</li>
+<li><code>target="_blank"</code> 속성을 가진 링크(<code>a</code> 태그)의 글자색을 초록색으로 바꿔보세요.</li>
+<li><code>highlight</code> 클래스가 붙은 행 바로 다음 행의 배경색을 하늘색으로 바꿔보세요. (인접 형제 선택자)</li>
+<li><code>special</code> 클래스가 붙은 상품 이후에 나오는 모든 <code>li</code> 상품의 글자를 굵게 만들어보세요. (일반 형제 선택자)</li>
+<li><code>wrapper</code> 클래스 바로 아래에 있는 <code>main</code> 태그의 배경색을 연한 노란색으로 바꿔보세요. (자식 선택자)</li>
+<li><code>product-list</code> 목록의 바로 아래 자식인 <code>li</code>들만 글자색을 보라색으로 바꿔보세요.</li>
+<li>표의 본문(<code>tbody</code>) 안에서 2번째 행의 배경색을 주황색으로 바꿔보세요. (<code>:nth-child</code>)</li>
+<li>상품 목록에서 홀수 번째 <code>li</code>들의 배경색을 연회색으로 바꿔보세요. (<code>:nth-child(odd)</code>)</li>
+<li>각 행(<code>tr</code>)에서 2번째 <code>td</code>(가격 칸)의 글자를 굵게 만들어보세요. (<code>:nth-of-type</code>)</li>
+<li>표 안에서 첫 번째 <code>tr</code>(헤더 행)의 글자색을 빨간색으로 바꿔보세요.</li>
+</ol>
+</div>
+<div class="example">
+<h4>정답 예시 (일부)</h4>
+<pre><code>/* 1. info-box 클래스 안의 모든 요소 글자 크기 */
+.info-box * { font-size: 20px; }
+
+/* 9. data-stock="out" 속성을 가진 행 */
+tr[data-stock="out"] { background-color: gray; }
+
+/* 11. highlight 다음 바로 오는 형제 행 */
+.highlight + tr { background-color: skyblue; }
+
+/* 12. special 이후 모든 형제 li */
+.special ~ li { font-weight: bold; }
+
+/* 13. wrapper의 직접 자식인 main */
+.wrapper &gt; main { background-color: #fffacd; }
+
+/* 15. tbody 안의 2번째 행 */
+tbody tr:nth-child(2) { background-color: orange; }
+
+/* 16. 홀수 번째 li */
+.product-list li:nth-child(odd) { background-color: #eee; }
+
+/* 17. 각 행의 2번째 td */
+tr td:nth-of-type(2) { font-weight: bold; }
+</code></pre>
+</div>
+</div>
+</body>
+</html>

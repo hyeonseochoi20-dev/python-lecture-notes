@@ -1,61 +1,38 @@
-# 🐍 스마트조선소 AI전문가 양성과정 Python 강의 요약
+# 🐍 스마트조선소 AI전문가 양성과정 Python 강의 정리
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-배포-blue?logo=github)](https://your-username.github.io/python-lecture-notes)
+스마트조선소 AI전문가 양성과정 Python 강의 자료를 체계적으로 정리한 학습 자료입니다.
 
-## 🎯 프로젝트 소개
+## 📖 사용법
 
-스마트조선소 AI전문가 양성과정의 Python 강의 자료를 체계적으로 정리한 인터랙티브 웹 사이트입니다.
+`docs.html` 파일을 더블클릭하거나 브라우저로 열면 바로 볼 수 있습니다. 별도의 설치나 빌드 과정이 필요 없습니다.
 
-### 📚 목차
+## 📚 목차
 
 | 챕터 | 내용 |
 |------|------|
+| 00 | 환경 설정 (Python 설치, 가상환경) |
 | 01 | 기본 자료구조 (변수, 자료형, 연산자) |
-| 02 | 제어문 (조건문, 반복문, 연산자) |
-| 03 | 함수 (def, lambda, *args) |
+| 02 | 제어문 (조건문, 반복문) |
+| 03 | 함수 (def, lambda, *args/**kwargs) |
 | 04 | 입력/출력 (input, print, 파일) |
 | 05 | 내장함수 (abs, max, min, sum 등) |
-| 06 | 외장함수 (os, sys, glob, json 등) |
-| 07 | 정규표현식 (re 모듈, 메타문자) |
-| 08 | 클래스 (객체지향, __init__) |
-| 09 | 예외처리 (try-except, 사용자 정의) |
+| 06 | 외장함수 (os, sys, json, hashlib, smtplib 등) |
+| 07 | 정규표현식 (re 모듈, 메타문자, 플래그) |
+| 08 | 클래스 (객체지향, __init__, 상속) |
+| 09 | 예외처리 (try-except, 사용자 정의 예외) |
 | 10-1 | Requests 크롤링 |
 | 10-2 | HTML/CSS 기초 |
 | 10-3 | BeautifulSoup |
+| 11 | 알고리즘 - 그리디 |
+| 12 | 데이터베이스 & SQL |
 
-## 🚀 시작하기
+## 📁 파일 구조
 
-```bash
-# 의존성 설치
-npm install
+- `docs.html` — 전체 챕터가 통합된 메인 학습 자료 (사이드바 네비게이션, 코드 syntax highlighting)
+- `docs_full/` — 챕터별 원본 소스 파일 (개별 확인/수정용)
 
-# 개발 서버 실행
-npm run dev
+## 🎨 특징
 
-# 빌드
-npm run build
-```
-
-## 🛠️ 기술 스택
-
-- **Vite** - 빠른 번들러
-- **React 18** - 컴포넌트 기반 UI
-- **React Router** - SPA 라우팅
-- **Tailwind CSS** - 유틸리티 퍼스트 스타일링
-- **Framer Motion** - 부드러운 애니메이션
-- **React Syntax Highlighter** - 코드 하이라이팅
-
-## 🎨 디자인 특징
-
-- 다크모드 기본 지원
-- 반응형 디자인 (모바일/태블릿/데스크톱)
-- JetBrains Mono + Inter 타이포그래피
-- GitHub 스타일 다크 테마
-
-## 📦 배포
-
-빌드 후 `dist` 폴더를 GitHub Pages에 푸시하거나 Vercel에 배포하세요.
-
----
-
-> 🤖 이 사이트는 Claude Code로 자동 생성되었습니다.
+- 다크 테마, 사이드바 기반 챕터 네비게이션
+- 코드 블록 syntax highlighting (키워드/문자열/주석/숫자 색상 구분)
+- 별도 설치/빌드 없이 파일 하나로 바로 확인 가능

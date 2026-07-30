@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>클래스 완전 정리</title>
+    <style>
+        body{font-family:-apple-system,sans-serif;background:#030712;color:#e5e7eb;line-height:1.7;padding:30px}
+        .content{max-width:900px;margin:0 auto}
+        h1{color:#c084fc;font-size:2rem;margin-bottom:20px}
+        h2{color:#a78bfa;margin:30px 0 12px;font-size:1.4rem}
+        h3{color:#60a5fa;margin:20px 0 8px}
+        code{background:#1e293b;color:#fbbf24;padding:2px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace}
+        pre{background:#0f172a;border:1px solid #1f2937;border-radius:8px;padding:16px;overflow-x:auto}
+        table{width:100%;border-collapse:collapse;margin:15px 0}
+        th,td{border:1px solid #1f2937;padding:12px;font-size:.9rem;text-align:center}
+        th{background:#111827;color:#a78bfa}
+        .note{background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0}
+        .example{background:#0f172a;border:1px solid #1f2937;border-radius:8px;padding:16px;margin:16px 0}
+    </style>
+</head>
+<body>
+<div class="content">
+<h1>🏛️ 클래스 완전 정리</h1>
+
+<h2>클래스란?</h2>
+<p><strong>클래스(Class)</strong>는 객체지향의 기본 개념으로, 관련된 속성(모습)과 동작(기능)을 하나로 묶은 설계도입니다.</p>
+<ul>
+<li><strong>클래스 (Class)</strong>: 설계도면</li>
+<li><strong>객체 (Object)</strong>: 설계도에 의해 만들어진 완성품</li>
+<li><strong>인스턴스 (Instance)</strong>: 객체와 동일한 의미 (특정 객체)</li>
+</ul>
+
+<h2>왜 클래스를 사용할까?</h2>
+<ol>
+<li><strong>새로운 자료형</strong>: 사용자 정의 타입 생성 가능</li>
+<li><strong>기능의 집합</strong>: 관련 기능을 하나로 정리</li>
+<li><strong>다형성 구현</strong>: 상속을 통해 확장 및 재사용성 향상</li>
+</ol>
+
+<h2>클래스 기본 구조</h2>
+<pre><code>class 클래스명:
+    # 클래스 변수 (모든 인스턴스가 공유)
+    클래스변수 = 값
+
+    def __init__(self, 매개변수1, 매개변수2):
+        # 생성자: 객체 생성 시 자동 호출
+        self.인스턴스변수1 = 매개변수1
+        self.인스턴스변수2 = 매개변수2
+
+    def 인스턴스메서드(self):
+        # 인스턴스 메서드: self 사용, 객체 필요
+        self.인스턴스변수1 += 10
+
+    @staticmethod
+    def 정적메서드():
+        # 정적 메서드: self/cls 사용 불필요, 단순히 기능만 제공
+        지역변수 = 100
+        print(f'함수 동작: {지역변수}')
+
+    @classmethod
+    def 클래스메서드(cls):
+        # 클래스 메서드: cls 사용, 클래스 변수 접근
+        print(cls.클래스변수)
+
+# 객체 생성 및 사용
+obj = 클래스명(값1, 값2)
+obj.인스턴스메서드()
+클래스명.정적메서드()
+클래스명.클래스메서드()
+</code></pre>
+
+<h3>자동차 클래스 예시</h3>
+<div class="example">
+<pre><code>class 자동차:
+    # 클래스 변수 (모든 자동차가 공유)
+    제조사 = "현대"
+    총생산대수 = 0
+
+    def __init__(self, 색상, 모델):
+        # 생성자: 객체 생성 시 호출
+        self.색상 = 색상          # 인스턴스 변수 (객체별로 다름)
+        self.모델 = 모델
+        self.속도 = 0
+        자동차전체생산대수 += 1   # 클래스 변수 증가
+
+    def 가속(self, amount):
+        """속도 증가"""
+        self.속도 += amount
+        if self.속도 &gt; 180:  # 최고속도 제한
+            self.속도 = 180
+
+    def 브레이크(self, amount):
+        """속도 감소"""
+        self.속도 -= amount
+        if self.속도 &lt; 0:
+            self.속도 = 0
+
+    def 정지(self):
+        """완전 정지"""
+        self.속도 = 0
+
+    @staticmethod
+    def 경고음():
+        """경고 울리기 (객체 생성 없이 사용 가능)"""
+        print("삐익!")
+
+    @classmethod
+    def 정보(cls):
+        """클래스 정보 출력"""
+        print(f"제조사: {cls.제조사}, 총 생산대수: {cls.총생산대수}대")
+
+# 객체 생성 및 사용
+my_car = 자동차("빨강", "소나타")
+my_car.가속(30)
+print(f"현재 속도: {my_car.속도} km/h")  # 30 km/h
+
+my_car.가속(100)
+print(f"현재 속도: {my_car.속도} km/h")  # 180 km/h (최대 제한)
+
+자동차.경고음()  # 객체 없이 사용 가능
+자동차.정보()    # 클래스 정보 출력
+</code></pre>
+</div>
+
+<h2>상속 (Inheritance)</h2>
+<p>기존 클래스의 기능을 물려받아 새로운 클래스를 만드는 것</p>
+<pre><code># 부모 클래스
+class 동물:
+    def __init__(self, 이름, 종):
+        self.이름 = 이름
+        self.종 = 종
+
+    def 소개(self):
+        return f"{self.이름}은 {self.종}입니다"
+
+    def 소리(self):
+        return "알 수 없는 소리"
+
+# 자식 클래스 (상속)
+class 개(동물):
+    def __init__(self, 이름, 품종):
+        super().__init__(이름, "개")  # 부모 클래스 생성자 호출
+        self.품종 = 품종
+
+    def 소리(self):  # 메서드 오버라이딩
+        return "멍멍!"
+
+    def 꼬리흔들기(self):
+        return "꼬리를 흔듭니다"
+
+# 사용
+dog = 개("뽀시", "골든리트리버")
+print(dog.소개())   # 뽀시는 개입니다
+print(dog.소리())   # 멍멍!
+print(dog.꼬리흔들기())  # 꼬리를 흔듭니다
+
+# 다형성 예시
+animals = [개("멍이", "시바"), 고양이("야옹이", "러시안블루")]
+for animal in animals:
+    print(f"{animal.이름}: {animal.소리()}")
+    # 멍이: 멍멍!
+    # 야옹이: 야옹!
+</code></pre>
+
+<h2>다중 상속과 MRO</h2>
+<pre><code>class 비행가능:
+    def 비행(self):
+        return "날 수 있습니다"
+
+class 수영가능:
+    def 수영(self):
+        return "수영할 수 있습니다"
+
+# 다중 상속
+class 오리(비행가능, 수영가능):
+    def __init__(self, 이름):
+        self.이름 = 이름
+
+duck = 오리("도날드")
+print(duck.비행())  # 날 수 있습니다
+print(duck.수영())  # 수영할 수 있습니다
+
+# MRO (Method Resolution Order) 확인
+print(오리.__mro__)
+# (&lt;class '__main__.오리'&gt;, &lt;class '__main__.비행가능'&gt;,
+#  &lt;class '__main__.수영가능'&gt;, &lt;class 'object'&gt;)
+</code></pre>
+
+<h2>특수 메서드 (마법 메서드)</h2>
+<table>
+<tr><th>메서드</th><th>설명</th><th>예시</th></tr>
+<tr><td><code>__init__</code></td><td>생성자</td><td>객체 생성 시 호출</td></tr>
+<tr><td><code>__str__</code></td><td>문자열 표현</td><td>print(obj) 시 호출</td></tr>
+<tr><td><code>__repr__</code></td><td>공식적인 문자열 표현</td><td>디버깅용</td></tr>
+<tr><td><code>__len__</code></td><td>길이 반환</td><td>len(obj) 시 호출</td></tr>
+<tr><td><code>__getitem__</code></td><td>인덱스 접근</td><td>obj[key] 시 호출</td></tr>
+<tr><td><code>__setitem__</code></td><td>인덱스 할당</td><td>obj[key] = value 시 호출</td></tr>
+<tr><td><code>__add__</code></td><td>더하기 연산</td><td>obj1 + obj2 시 호출</td></tr>
+</table>
+
+<h2>실전 예제: 은행 계좌 클래스</h2>
+<div class="example">
+<pre><code>class 은행계좌:
+    # 클래스 변수
+    은행이름 = "스마트은행"
+    총계좌수 = 0
+
+    def __init__(self, 계좌번호, 소유주, 초기잔액=0):
+        self.계좌번호 = 계좌번호
+        self.소유주 = 소유주
+        self.__잔액 = 초기잔액  # 프라이빗 변수 (관례상)
+        은행계좌.총계좌수 += 1
+
+    def 입금(self, 금액):
+        if 금액 &gt; 0:
+            self.__잔액 += 금액
+            return True
+        return False
+
+    def 출금(self, 금액):
+        if 0 &lt; 금액 &lt;= self.__잔액:
+            self.__잔액 -= 금액
+            return True
+        return False
+
+    def 잔액조회(self):
+        return self.__잔액
+
+    def 계좌정보(self):
+        return f"{self.은행이름} {self.계좌번호} ({self.소유주}): {self.__잔액}원"
+
+    @classmethod
+    def 전체계좌수(cls):
+        return cls.총계좌수
+
+# 사용
+계좌1 = 은행계좌("123-456", "홍길동", 100000)
+계좌2 = 은행계좌("789-012", "김철수", 500000)
+
+print(계좌1.계좌정보())  # 스마트은행 123-456 (홍길동): 100000원
+계좌1.출금(30000)
+print(f"출금 후 잔액: {계좌1.잔액조회()}원")  # 70000원
+
+print(f"총 계좌 수: {은행계좌.전체계좌수()}개")  # 2개
+</code></pre>
+</div>
+
+<h2>연습문제</h2>
+
+<div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
+<strong>학생 성적 관리 클래스</strong>
+<pre><code>class 학생:
+    # 클래스 변수
+    학교 = "스마트조선고등학교"
+
+    def __init__(self, 이름, 반, 번호):
+        self.이름 = 이름
+        self.반 = 반
+        self.번호 = 번호
+        self.성적 = {}  # 과목: 점수
+
+    def 성적입력(self, 과목, 점수):
+        if 0 &lt;= 점수 &lt;= 100:
+            self.성적[과목] = 점수
+            return True
+        return False
+
+    def 평균점수(self):
+        if not self.성적:
+            return 0
+        return sum(self.성적.values()) / len(self.성적)
+
+    def 등급(self):
+        avg = self.평균점수()
+        if avg &gt;= 90: return "A"
+        elif avg &gt;= 80: return "B"
+        elif avg &gt;= 70: return "C"
+        elif avg &gt;= 60: return "D"
+        else: return "F"
+
+    def 성적표출력(self):
+        print(f"=== {self.이름} 학생의 성적표 ===")
+        print(f"학교: {self.학교} | 반: {self.반}반 {self.번호}번")
+        for 과목, 점수 in self.성적.items():
+            print(f"{과목}: {점수}점")
+        print(f"평균: {self.평균점수():.1f}점 | 등급: {self.등급()}")
+
+# 사용
+student = 학생("김철수", 2, 15)
+student.성적입력("수학", 95)
+student.성적입력("영어", 87)
+student.성적입력("과학", 92)
+student.성적표출력()
+</code></pre>
+</div>
+</div>
+</body>
+</html>

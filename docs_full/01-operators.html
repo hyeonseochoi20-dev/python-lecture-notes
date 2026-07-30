@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>연산자 완전 정리</title>
+    <style>
+        body{font-family:-apple-system,sans-serif;background:#030712;color:#e5e7eb;line-height:1.7;padding:30px}
+        .content{max-width:900px;margin:0 auto}
+        h1{color:#c084fc;font-size:2rem;margin-bottom:20px}
+        h2{color:#a78bfa;margin:30px 0 12px;font-size:1.4rem}
+        h3{color:#60a5fa;margin:20px 0 8px}
+        code{background:#1e293b;color:#fbbf24;padding:2px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace}
+        pre{background:#0f172a;border:1px solid #1f2937;border-radius:8px;padding:16px;overflow-x:auto}
+        table{width:100%;border-collapse:collapse;margin:15px 0}
+        th,td{border:1px solid #1f2937;padding:12px;font-size:.9rem}
+        th{background:#111827;color:#a78bfa}
+    </style>
+</head>
+<body>
+<div class="content">
+<h1>📊 연산자 완전 정리</h1>
+
+<h2>산술 연산자</h2>
+<table>
+<tr><th>연산자</th><th>설명</th><th>예시</th><th>결과</th></tr>
+<tr><td><code>+</code></td><td>덧셈</td><td><code>2 + 2</code></td><td>4</td></tr>
+<tr><td><code>-</code></td><td>뺄셈</td><td><code>5 - 2</code></td><td>3</td></tr>
+<tr><td><code>*</code></td><td>곱셈</td><td><code>3 * 5</code></td><td>15</td></tr>
+<tr><td><code>/</code></td><td>나눗셈</td><td><code>22 / 8</code></td><td>2.75 (실수)</td></tr>
+<tr><td><code>//</code></td><td>정수 나눗셈 (몫)</td><td><code>22 // 8</code></td><td>2</td></tr>
+<tr><td><code>%</code></td><td>나머지</td><td><code>22 % 8</code></td><td>6</td></tr>
+<tr><td><code>**</code></td><td>거듭제곱</td><td><code>2 ** 3</code></td><td>8 (2³)</td></tr>
+</table>
+
+<h3>복합 대입 연산자</h3>
+<pre><code>a = 10
+a += 5   # a = 15
+a -= 3   # a = 12
+a *= 2   # a = 24
+a //= 4  # a = 6
+a %= 4   # a = 2
+a **= 3  # a = 8</code></pre>
+
+<h2>비교 연산자</h2>
+<table>
+<tr><th>연산자</th><th>의미</th><th>예시</th><th>결과</th></tr>
+<tr><td><code>==</code></td><td>같음</td><td><code>1 == 1</code></td><td>True</td></tr>
+<tr><td><code>!=</code></td><td>다름</td><td><code>1 != 2</code></td><td>True</td></tr>
+<tr><td><code>&lt;</code></td><td>작음</td><td><code>3 &lt; 4</code></td><td>True</td></tr>
+<tr><td><code>&gt;</code></td><td>큼</td><td><code>3 &gt; 4</code></td><td>False</td></tr>
+<tr><td><code>&lt;=</code></td><td>작거나 같음</td><td><code>5 &lt;= 5</code></td><td>True</td></tr>
+<tr><td><code>&gt;=</code></td><td>크거나 같음</td><td><code>5 &gt;= 6</code></td><td>False</td></tr>
+</table>
+
+<h2>논리 연산자</h2>
+<h3>논리곱 (AND)</h3>
+<table><tr><th>X</th><th>Y</th><th>X and Y</th></tr>
+<tr><td>True</td><td>True</td><td>True</td></tr>
+<tr><td>True</td><td>False</td><td>False</td></tr>
+<tr><td>False</td><td>True</td><td>False</td></tr>
+<tr><td>False</td><td>False</td><td>False</td></tr>
+</table>
+
+<h3>논리합 (OR)</h3>
+<table><tr><th>X</th><th>Y</th><th>X or Y</th></tr>
+<tr><td>True</td><td>True</td><td>True</td></tr>
+<tr><td>True</td><td>False</td><td>True</td></tr>
+<tr><td>False</td><td>True</td><td>True</td></tr>
+<tr><td>False</td><td>False</td><td>False</td></tr>
+</table>
+
+<h3>부정 (NOT)</h3>
+<table><tr><th>X</th><th>not X</th></tr>
+<tr><td>True</td><td>False</td></tr>
+<tr><td>False</td><td>True</td></tr>
+</table>
+
+<h3>실전 예제</h3>
+<pre><code>age = 20
+has_license = True
+
+if age &gt;= 20 and has_license:
+    print("운전 가능")
+
+score = 85
+if 90 &lt;= score &lt;= 100:
+    grade = 'A'</code></pre>
+</div>
+</body>
+</html>
