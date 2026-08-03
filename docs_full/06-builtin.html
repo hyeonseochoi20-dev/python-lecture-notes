@@ -129,6 +129,23 @@ end = (5, 3)
 dx, dy = distance(start, end)
 print(f'x 차이: {dx}, y 차이: {dy}')  # x 차이: 4, y 차이: 2
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 하루 중 최고/최저 기온 차이 구하기</h4>
+<p><code>abs()</code>와 <code>max()</code>, <code>min()</code>을 사용해서, 하루 동안 측정된 기온 리스트에서 최고 기온과 최저 기온의 차이(일교차)를 구하는 코드를 작성해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>temps = [18, 23, 15, 27, 12, 21]
+
+highest = max(temps)
+lowest = min(temps)
+diff = abs(highest - lowest)
+
+print(f'최고 {highest}도, 최저 {lowest}도, 일교차: {diff}도')
+# 최고 27도, 최저 12도, 일교차: 15도
+</code></pre>
+</details>
+</div>
 </div>
 
 <div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
@@ -138,6 +155,21 @@ b = 16
 quotient, remainder = divmod(a, b)
 print(f'{a} ÷ {b} = {quotient}...{remainder}')  # 123 ÷ 16 = 7...11
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 사탕을 학생들에게 공평하게 나눠주기</h4>
+<p>사탕 <code>250</code>개를 학생 <code>17</code>명에게 최대한 공평하게 나눠줄 때, 한 명당 몇 개씩 받고 몇 개가 남는지 <code>divmod()</code>로 구해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>candies = 250
+students = 17
+
+each, leftover = divmod(candies, students)
+print(f'한 명당 {each}개씩, 남는 사탕 {leftover}개')
+# 한 명당 14개씩, 남는 사탕 12개
+</code></pre>
+</details>
+</div>
 </div>
 </div>
 </body>

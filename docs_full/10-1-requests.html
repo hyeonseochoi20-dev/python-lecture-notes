@@ -343,6 +343,31 @@ res = requests.post(url, json={'id': 'user1', 'pw': '1234'})
 </code></pre>
 </div>
 
+<h3>CRUD와 HTTP 메소드의 대응 관계</h3>
+<p>데이터를 다루는 모든 프로그램(계산기, 게시판, 회원가입 시스템 등)은 결국 <strong>CRUD</strong>(Create 생성, Read 조회, Update 수정, Delete 삭제) 네 가지 동작으로 요약됩니다. 웹에서는 이 CRUD 각각이 관례적으로 특정 HTTP 메소드에 대응됩니다.</p>
+<table>
+<tr><th>CRUD</th><th>대응 HTTP 메소드</th><th>예시</th></tr>
+<tr><td>Create (생성)</td><td><code>POST</code></td><td>회원가입, 게시글 작성</td></tr>
+<tr><td>Read (조회)</td><td><code>GET</code></td><td>목록 보기, 상세 페이지 보기</td></tr>
+<tr><td>Update (수정)</td><td><code>PUT</code> / <code>PATCH</code></td><td>회원정보 수정, 게시글 수정</td></tr>
+<tr><td>Delete (삭제)</td><td><code>DELETE</code></td><td>회원 탈퇴, 게시글 삭제</td></tr>
+</table>
+<div class="note">
+<strong>💡 암묵적 약속</strong><br>
+이 매핑은 법으로 강제되는 규칙은 아니지만, 대부분의 개발자들이 지키는 <strong>업계 관례(convention)</strong>입니다. 이후 배울 Flask 같은 웹 프레임워크에서 라우트(경로)를 설계할 때도 이 CRUD-HTTP 대응 관계를 그대로 따르는 것이 표준입니다.
+</div>
+
+<h3>AJAX와 동적 페이지 - "몰래" 데이터를 받아오는 기술</h3>
+<div class="note">
+<strong>💡 AJAX(Asynchronous JavaScript And XML)란?</strong><br>
+페이지 전체를 새로고침하지 않고, 브라우저에서 자바스크립트가 <strong>백그라운드로 서버와 통신해서 필요한 데이터만 조용히 가져오는 기술</strong>입니다. 예를 들어 뉴스 사이트에서 "더보기" 버튼을 눌렀을 때 페이지가 깜빡이지 않고 아래에 기사가 추가되는 것이 AJAX 통신의 결과입니다.<br><br>
+이런 동적 페이지는 <code>requests.get(페이지주소)</code>로 처음 HTML을 가져와도 AJAX로 나중에 채워지는 데이터는 보이지 않습니다. 대신 브라우저 개발자도구의 Network 탭에서 AJAX가 실제로 호출하는 API 주소를 찾아내 그 주소를 직접 요청하면 데이터를 얻을 수 있습니다 (앞서 다룬 "리버스 엔지니어링" 절차와 동일합니다).
+</div>
+<div class="note">
+<strong>💡 Request Headers는 누가 보내는 값일까?</strong><br>
+브라우저로 웹사이트에 접속하면, <code>User-Agent</code>(브라우저 종류), <code>Referer</code>(어느 페이지에서 왔는지), <code>Cookie</code> 같은 값들이 <strong>내가 직접 입력하지 않아도 브라우저가 자동으로</strong> 서버에 함께 전송합니다. <code>requests</code>로 크롤링할 때 응답이 차단된다면, 바로 이 자동 전송되는 값들이 빠져있기 때문인 경우가 많습니다. 그래서 개발자도구에서 확인한 값을 <code>headers</code> 파라미터로 직접 채워 넣어 "나는 진짜 브라우저다"라고 서버를 설득하는 것입니다.
+</div>
+
 <h2>실전 예제: 실제 사이트 API 리버스 엔지니어링</h2>
 <div class="note">
 <strong>💡 리버스 엔지니어링 절차</strong>
@@ -465,6 +490,42 @@ def get_korean_holidays(year):
 #     status = "공휴일" if h['isHoliday'] else "주말"
 #     print(f"{h['date']}: {h['name']} ({status})")
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 환율 정보 API 확인하기</h4>
+<p>비슷한 구조로, 환율 정보를 제공하는 API를 호출해서 원하는 통화의 환율만 뽑아내는 함수를 작성해보세요. 단일 항목/리스트 두 경우를 모두 처리해야 합니다.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>import requests
+
+def get_exchange_rate(currency_code):
+    """환율 API에서 특정 통화의 환율 조회 (예시)"""
+    url = "https://api.example.com/exchange-rates"
+    params = {'base': currency_code, 'apikey': 'YOUR_API_KEY'}
+
+    try:
+        response = requests.get(url, params=params, timeout=10)
+        response.raise_for_status()
+
+        data = response.json()
+        rates = data.get('rates', [])
+
+        if isinstance(rates, dict):  # 단일 통화 응답
+            rates = [rates]
+
+        result = [{'currency': r['code'], 'rate': r['value']} for r in rates]
+        return result
+    except Exception as e:
+        print(f"환율 정보 가져오기 실패: {e}")
+        return []
+
+# 사용
+# rates = get_exchange_rate('USD')
+# for r in rates:
+#     print(f"{r['currency']}: {r['rate']}원")
+</code></pre>
+</details>
+</div>
 </div>
 
 <div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
@@ -534,6 +595,46 @@ def download_image(url, folder="downloads"):
 # 사용
 # download_image("https://example.com/image.jpg")
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 여러 개의 CSV 데이터 파일 일괄 다운로드</h4>
+<p>URL 목록을 받아서 각 파일을 순서대로 다운로드하고, 하나가 실패해도 나머지는 계속 진행하도록 만들어보세요. 성공/실패 개수를 마지막에 요약 출력합니다.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>import requests
+import os
+
+def download_all(urls, folder="downloads"):
+    """URL 목록을 순회하며 파일을 일괄 다운로드 (실패해도 계속 진행)"""
+    os.makedirs(folder, exist_ok=True)
+    success, fail = 0, 0
+
+    for url in urls:
+        filename = url.split('/')[-1]
+        filepath = os.path.join(folder, filename)
+        try:
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            with open(filepath, 'wb') as f:
+                f.write(response.content)
+            print(f"✅ 완료: {filename}")
+            success += 1
+        except requests.exceptions.RequestException as e:
+            print(f"❌ 실패: {filename} ({e})")
+            fail += 1
+
+    print(f"\n총 {len(urls)}개 중 성공 {success}개, 실패 {fail}개")
+
+# 사용
+urls = [
+    "https://example.com/data1.csv",
+    "https://example.com/data2.csv",
+    "https://example.com/data3.csv",
+]
+# download_all(urls)
+</code></pre>
+</details>
+</div>
 </div>
 </div>
 </body>

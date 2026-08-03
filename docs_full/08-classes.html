@@ -292,6 +292,48 @@ student.성적입력("영어", 87)
 student.성적입력("과학", 92)
 student.성적표출력()
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 도서관 대출 관리 클래스</h4>
+<p>회원이 빌린 책을 관리하는 <code>도서관회원</code> 클래스를 만들어보세요. 조건: (1) <code>대출(책이름)</code> 메서드는 대출 중인 책이 <strong>3권 미만</strong>일 때만 추가하고 결과를 반환, (2) <code>반납(책이름)</code> 메서드는 목록에서 해당 책을 제거, (3) <code>대출현황()</code> 메서드는 현재 대출 중인 책 개수와 목록을 출력.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>class 도서관회원:
+    최대대출권수 = 3
+
+    def __init__(self, 이름):
+        self.이름 = 이름
+        self.대출목록 = []
+
+    def 대출(self, 책이름):
+        if len(self.대출목록) &lt; self.최대대출권수:
+            self.대출목록.append(책이름)
+            return True
+        return False
+
+    def 반납(self, 책이름):
+        if 책이름 in self.대출목록:
+            self.대출목록.remove(책이름)
+            return True
+        return False
+
+    def 대출현황(self):
+        print(f"=== {self.이름}님의 대출 현황 ===")
+        print(f"대출 중: {len(self.대출목록)}/{self.최대대출권수}권")
+        for 책 in self.대출목록:
+            print(f"- {책}")
+
+# 사용
+member = 도서관회원("박민수")
+member.대출("파이썬 기초")
+member.대출("자료구조")
+member.대출("알고리즘")
+print(member.대출("데이터베이스"))  # False (이미 3권 대출 중)
+member.반납("자료구조")
+member.대출현황()
+</code></pre>
+</details>
+</div>
 </div>
 </div>
 </body>

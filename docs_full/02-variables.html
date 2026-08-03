@@ -97,6 +97,44 @@ def greet(name: str) -&gt; str:
 <tr><td>dict</td><td>딕셔너리</td><td><code>{'a': 1}</code></td></tr>
 <tr><td>set</td><td>집합</td><td><code>{1, 2, 3}</code></td></tr>
 </table>
+<div class="note">
+<strong>💡 학습 우선순위</strong><br>
+위 8개 자료형 중에서 <strong>int, float, str, bool, list, dict 6개</strong>가 실전에서 압도적으로 많이 쓰입니다. 처음에는 이 6개를 확실히 익히는 데 집중하고, <code>tuple</code>/<code>set</code>은 "리스트인데 이런 특수한 상황에서 쓰는구나" 정도로 가볍게 알아두어도 충분합니다.
+</div>
+
+<h2>값(Value) 자료형 vs 참조(Reference) 자료형</h2>
+<p>파이썬의 자료형은 변수에 값이 저장되는 방식에 따라 크게 두 가지로 나뉩니다. 이 차이를 모르면 나중에 "분명히 하나만 바꿨는데 다른 변수의 값까지 같이 바뀌었다" 같은 버그를 만났을 때 원인을 찾기 매우 어렵습니다.</p>
+<table>
+<tr><th>구분</th><th>해당 자료형</th><th>특징</th></tr>
+<tr><td><strong>값(Value) 자료형</strong></td><td>int, float, str, bool, tuple</td><td>변수를 다른 변수에 대입하면 값이 <strong>통째로 복사</strong>됨. 서로 완전히 독립적</td></tr>
+<tr><td><strong>참조(Reference) 자료형</strong></td><td>list, dict, set</td><td>변수를 다른 변수에 대입해도 값이 복사되지 않고, <strong>같은 데이터를 가리키는 주소만 복사</strong>됨</td></tr>
+</table>
+<div class="example">
+<h3>값 자료형 - 서로 영향을 주지 않음</h3>
+<pre><code>a = 100
+b = a       # a의 값 100을 b에 복사
+b += 1      # b만 101로 변경됨
+
+print(a)    # 100 (그대로)
+print(b)    # 101
+</code></pre>
+</div>
+<div class="example">
+<h3>참조 자료형 - 같은 데이터를 함께 가리킴 (주의!)</h3>
+<pre><code>list1 = [1, 2, 3]
+list2 = list1     # list1과 "같은 리스트"를 list2도 가리키게 됨 (복사 아님!)
+list2.append(4)   # list2를 통해 수정했을 뿐인데
+
+print(list1)   # [1, 2, 3, 4]  &lt;- list1도 함께 바뀌어버림!
+print(list2)   # [1, 2, 3, 4]
+print(list1 is list2)  # True (완전히 같은 객체를 가리킴)
+</code></pre>
+<p><strong>진짜 복사가 필요하다면?</strong> <code>list2 = list1.copy()</code> 또는 <code>list2 = list1[:]</code>처럼 명시적으로 복사해야 두 리스트가 독립적으로 동작합니다.</p>
+</div>
+<div class="note">
+<strong>💡 왜 이렇게 설계되어 있을까?</strong><br>
+리스트나 딕셔너리는 수백만 개의 데이터를 담을 수도 있습니다. 대입할 때마다 그 많은 데이터를 통째로 복사한다면 매우 비효율적이겠죠. 그래서 파이썬은 참조 자료형에 한해 "실제 데이터"가 아니라 "데이터가 저장된 위치(주소)"만 가볍게 복사합니다. 이 원리를 이해하면 함수에 리스트를 넘겼을 때 함수 안에서 리스트를 수정하면 함수 밖의 원본 리스트도 바뀌는 이유, 그리고 딕셔너리를 값으로 갖는 리스트를 다룰 때 왜 조심해야 하는지도 자연스럽게 이해할 수 있습니다.
+</div>
 
 <h2>문자열 연산</h2>
 <pre><code>s = "hello"
@@ -129,6 +167,23 @@ minute = (sec % 3600) // 60
 second = sec % 60
 
 print(f"{hour}시간 {minute}분 {second}초")  # 1시간 1분 43초</code></pre>
+</div>
+
+<div class="quiz">
+<h4>🎯 스스로 풀어보기 (변형문제)</h4>
+<p>이번엔 반대로, 어떤 작업을 완료하는 데 걸린 시간이 <strong>분(minute) 단위</strong>로 주어집니다. 이 분(minute) 값을 "N일 N시간 N분" 형태로 변환해서 출력하는 코드를 <code>//</code>와 <code>%</code> 연산자만 사용해서 작성해보세요. (1일 = 1440분, 1시간 = 60분)</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>total_minutes = 4325
+
+day = total_minutes // 1440
+remain = total_minutes % 1440
+hour = remain // 60
+minute = remain % 60
+
+print(f"{day}일 {hour}시간 {minute}분")  # 3일 0시간 5분
+</code></pre>
+</details>
 </div>
 </div>
 </body>

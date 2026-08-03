@@ -143,6 +143,23 @@ start = (1, 1)
 end = (5, 3)
 dx, dy = distance(start, end)
 print(f'dx: {dx}, dy: {dy}')  # dx: 4, dy: 2</code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 직사각형 둘레와 넓이 계산 함수</h4>
+<p>가로(<code>width</code>)와 세로(<code>height</code>)를 매개변수로 받아서, 둘레와 넓이를 <strong>동시에</strong> 반환하는 함수 <code>rectangle_info()</code>를 작성해보세요. (둘레 = (가로+세로)×2, 넓이 = 가로×세로)</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>def rectangle_info(width, height):
+    """직사각형의 둘레와 넓이 계산"""
+    perimeter = (width + height) * 2
+    area = width * height
+    return perimeter, area
+
+p, a = rectangle_info(6, 4)
+print(f'둘레: {p}, 넓이: {a}')  # 둘레: 20, 넓이: 24
+</code></pre>
+</details>
+</div>
 </div>
 </div>
 </body>

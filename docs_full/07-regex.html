@@ -513,6 +513,23 @@ def check_ssn(ssn):
 print(check_ssn('991231-1234567'))  # True
 print(check_ssn('99123-1234567'))   # False (앞자리 부족)
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 휴대폰 번호 형식 검증</h4>
+<p><code>010-XXXX-XXXX</code> 형식(하이픈으로 구분된 3자리-4자리-4자리 숫자)에 맞는지 검증하는 함수를 정규식으로 작성해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>import re
+
+def check_phone(phone):
+    pattern = re.compile(r'^010-\d{4}-\d{4}$')
+    return bool(pattern.match(phone))
+
+print(check_phone('010-1234-5678'))  # True
+print(check_phone('010-123-5678'))   # False (가운데 자릿수 부족)
+</code></pre>
+</details>
+</div>
 </div>
 
 <div class="example">
@@ -524,6 +541,21 @@ text = "오늘 #파이썬 공부 완료! #정규표현식 도 배웠다 #개발�
 hashtags = re.findall(r'#\w+', text)
 print(hashtags)  # ['#파이썬', '#정규표현식', '#개발자일지']
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 텍스트에서 모든 멘션(@아이디) 추출</h4>
+<p>SNS 게시글 텍스트에서 <code>@사용자명</code> 형태의 멘션을 모두 추출해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>import re
+
+text = "오늘 회의에 @김철수 @이영희 참석했고, @박민수 는 불참했습니다."
+
+mentions = re.findall(r'@\w+', text)
+print(mentions)  # ['@김철수', '@이영희', '@박민수']
+</code></pre>
+</details>
+</div>
 </div>
 
 </div>

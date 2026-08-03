@@ -586,6 +586,28 @@ print(f'텍스트 파일 개수: {len(txt_files)}')
 s_files = list(Path('.').glob('*s*'))
 print(f"'s' 포함 파일: {[f.name for f in s_files]}")
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 사진 아카이브 폴더 정리하기</h4>
+<p><code>archive</code> 폴더를 만들고, 그 안에 <code>note.txt</code> 파일을 생성한 뒤, 현재 디렉토리에서 확장자가 <code>.jpg</code>인 파일과 이름에 <code>2026</code>이 포함된 파일을 각각 찾아 출력해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>from pathlib import Path
+
+archive_dir = Path('archive')
+archive_dir.mkdir(exist_ok=True)
+
+note_file = archive_dir / 'note.txt'
+note_file.write_text('사진 정리 완료', encoding='utf8')
+
+jpg_files = list(Path('.').glob('*.jpg'))
+print(f'jpg 파일 개수: {len(jpg_files)}')
+
+files_2026 = list(Path('.').glob('*2026*'))
+print(f"'2026' 포함 파일: {[f.name for f in files_2026]}")
+</code></pre>
+</details>
+</div>
 </div>
 
 <div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
@@ -617,6 +639,37 @@ for student in high_scorers:
 average = sum(s['score'] for s in data['students']) / len(data['students'])
 print(f"평균 점수: {average:.1f}점")
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 재고 관리 JSON 데이터 처리</h4>
+<p>아래와 같은 상품 재고 JSON 데이터에서, 가격이 <strong>10000원 이상</strong>인 상품만 추려내고 전체 재고의 총 가치(가격×수량의 합)를 계산해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>import json
+
+inventory_json = '''
+{
+  "products": [
+    {"name": "노트", "price": 3000, "qty": 50},
+    {"name": "가방", "price": 25000, "qty": 10},
+    {"name": "필통", "price": 8000, "qty": 30},
+    {"name": "책상", "price": 120000, "qty": 5}
+  ]
+}
+'''
+
+data = json.loads(inventory_json)
+
+expensive_items = [p for p in data['products'] if p['price'] &gt;= 10000]
+print("고가 상품:")
+for item in expensive_items:
+    print(f"  {item['name']}: {item['price']}원")
+
+total_value = sum(p['price'] * p['qty'] for p in data['products'])
+print(f"전체 재고 가치: {total_value:,}원")
+</code></pre>
+</details>
+</div>
 </div>
 </div>
 </body>

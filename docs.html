@@ -296,6 +296,18 @@
         .tok-dec { color: #DCDCAA; }
         .tok-func { color: #DCDCAA; }
 
+        .quiz { border: 1px solid rgba(96,165,250,0.28); border-left: 3px solid var(--accent2); background: rgba(96,165,250,0.06); border-radius: var(--radius); padding: 18px 20px; margin: 18px 0; }
+        .quiz h4 { margin-top: 0; }
+        .quiz summary {
+            cursor: pointer; color: var(--accent2); font-weight: 700; font-size: 0.9rem;
+            padding: 10px 0 0; list-style: none; user-select: none;
+        }
+        .quiz summary::-webkit-details-marker { display: none; }
+        .quiz summary::before { content: '▶ '; display: inline-block; transition: transform 0.15s ease; }
+        .quiz details[open] summary::before { content: '▼ '; }
+        .quiz details { margin-top: 6px; }
+        .quiz details > *:not(summary) { margin-top: 10px; }
+
         .footer {
             text-align: center; margin-top: 60px; padding: 28px 0 0;
             border-top: 1px solid var(--border-soft);
@@ -320,7 +332,7 @@
     <header class="topbar">
         <span class="logo">🐍 Python 완전 백과사전</span>
         <span class="sub">스마트조선소 AI전문가 양성과정 · 파이썬 기초부터 웹 크롤링까지</span>
-        <span class="badge">15 Chapters</span>
+        <span class="badge">16 Chapters</span>
     </header>
 
     <div class="app">
@@ -341,6 +353,7 @@
                 <a href="#" class="nav-item" data-chapter="12"><span class="nav-icon">🍲</span><span class="nav-text"><span class="nav-num">12</span>BeautifulSoup</span></a>
                 <a href="#" class="nav-item" data-chapter="13"><span class="nav-icon">🎯</span><span class="nav-text"><span class="nav-num">13</span>그리디 알고리즘</span></a>
                 <a href="#" class="nav-item" data-chapter="14"><span class="nav-icon">🗄️</span><span class="nav-text"><span class="nav-num">14</span>데이터베이스 & SQL</span></a>
+                <a href="#" class="nav-item" data-chapter="15"><span class="nav-icon">🌶️</span><span class="nav-text"><span class="nav-num">15</span>Flask</span></a>
         </aside>
 
         <main class="main">
@@ -595,6 +608,24 @@ score = 85
 if 90 &lt;= score &lt;= 100:
     grade = 'A'</code></pre>
 
+<div class="quiz">
+<h4>🎯 스스로 풀어보기 (변형문제)</h4>
+<p>놀이공원의 롤러코스터는 <strong>키 140cm 이상</strong>이면서 <strong>보호자를 동반</strong>했거나, 혹은 <strong>성인(19세 이상)</strong>이면 탑승할 수 있습니다. 키(<code>height</code>), 보호자 동반 여부(<code>with_guardian</code>), 나이(<code>age</code>) 세 변수를 조건식 하나로 판단해서 탑승 가능 여부를 출력해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>height = 135
+with_guardian = True
+age = 16
+
+if (height &gt;= 140 and with_guardian) or age &gt;= 19:
+    print("탑승 가능")
+else:
+    print("탑승 불가")
+# 키가 140 미만이라도 보호자와 함께면 가능, 성인이면 키/보호자 상관없이 가능
+</code></pre>
+</details>
+</div>
+
 
 <h3>📦 변수와 자료형</h3>
 
@@ -674,6 +705,44 @@ def greet(name: str) -&gt; str:
 <tr><td>dict</td><td>딕셔너리</td><td><code>{'a': 1}</code></td></tr>
 <tr><td>set</td><td>집합</td><td><code>{1, 2, 3}</code></td></tr>
 </table>
+<div class="note">
+<strong>💡 학습 우선순위</strong><br>
+위 8개 자료형 중에서 <strong>int, float, str, bool, list, dict 6개</strong>가 실전에서 압도적으로 많이 쓰입니다. 처음에는 이 6개를 확실히 익히는 데 집중하고, <code>tuple</code>/<code>set</code>은 "리스트인데 이런 특수한 상황에서 쓰는구나" 정도로 가볍게 알아두어도 충분합니다.
+</div>
+
+<h2>값(Value) 자료형 vs 참조(Reference) 자료형</h2>
+<p>파이썬의 자료형은 변수에 값이 저장되는 방식에 따라 크게 두 가지로 나뉩니다. 이 차이를 모르면 나중에 "분명히 하나만 바꿨는데 다른 변수의 값까지 같이 바뀌었다" 같은 버그를 만났을 때 원인을 찾기 매우 어렵습니다.</p>
+<table>
+<tr><th>구분</th><th>해당 자료형</th><th>특징</th></tr>
+<tr><td><strong>값(Value) 자료형</strong></td><td>int, float, str, bool, tuple</td><td>변수를 다른 변수에 대입하면 값이 <strong>통째로 복사</strong>됨. 서로 완전히 독립적</td></tr>
+<tr><td><strong>참조(Reference) 자료형</strong></td><td>list, dict, set</td><td>변수를 다른 변수에 대입해도 값이 복사되지 않고, <strong>같은 데이터를 가리키는 주소만 복사</strong>됨</td></tr>
+</table>
+<div class="example">
+<h3>값 자료형 - 서로 영향을 주지 않음</h3>
+<pre><code>a = 100
+b = a       # a의 값 100을 b에 복사
+b += 1      # b만 101로 변경됨
+
+print(a)    # 100 (그대로)
+print(b)    # 101
+</code></pre>
+</div>
+<div class="example">
+<h3>참조 자료형 - 같은 데이터를 함께 가리킴 (주의!)</h3>
+<pre><code>list1 = [1, 2, 3]
+list2 = list1     # list1과 "같은 리스트"를 list2도 가리키게 됨 (복사 아님!)
+list2.append(4)   # list2를 통해 수정했을 뿐인데
+
+print(list1)   # [1, 2, 3, 4]  &lt;- list1도 함께 바뀌어버림!
+print(list2)   # [1, 2, 3, 4]
+print(list1 is list2)  # True (완전히 같은 객체를 가리킴)
+</code></pre>
+<p><strong>진짜 복사가 필요하다면?</strong> <code>list2 = list1.copy()</code> 또는 <code>list2 = list1[:]</code>처럼 명시적으로 복사해야 두 리스트가 독립적으로 동작합니다.</p>
+</div>
+<div class="note">
+<strong>💡 왜 이렇게 설계되어 있을까?</strong><br>
+리스트나 딕셔너리는 수백만 개의 데이터를 담을 수도 있습니다. 대입할 때마다 그 많은 데이터를 통째로 복사한다면 매우 비효율적이겠죠. 그래서 파이썬은 참조 자료형에 한해 "실제 데이터"가 아니라 "데이터가 저장된 위치(주소)"만 가볍게 복사합니다. 이 원리를 이해하면 함수에 리스트를 넘겼을 때 함수 안에서 리스트를 수정하면 함수 밖의 원본 리스트도 바뀌는 이유, 그리고 딕셔너리를 값으로 갖는 리스트를 다룰 때 왜 조심해야 하는지도 자연스럽게 이해할 수 있습니다.
+</div>
 
 <h2>문자열 연산</h2>
 <pre><code>s = "hello"
@@ -706,6 +775,23 @@ minute = (sec % 3600) // 60
 second = sec % 60
 
 print(f"{hour}시간 {minute}분 {second}초")  # 1시간 1분 43초</code></pre>
+</div>
+
+<div class="quiz">
+<h4>🎯 스스로 풀어보기 (변형문제)</h4>
+<p>이번엔 반대로, 어떤 작업을 완료하는 데 걸린 시간이 <strong>분(minute) 단위</strong>로 주어집니다. 이 분(minute) 값을 "N일 N시간 N분" 형태로 변환해서 출력하는 코드를 <code>//</code>와 <code>%</code> 연산자만 사용해서 작성해보세요. (1일 = 1440분, 1시간 = 60분)</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>total_minutes = 4325
+
+day = total_minutes // 1440
+remain = total_minutes % 1440
+hour = remain // 60
+minute = remain % 60
+
+print(f"{day}일 {hour}시간 {minute}분")  # 3일 0시간 5분
+</code></pre>
+</details>
 </div>
 
 </div>
@@ -900,6 +986,64 @@ if 3 in items:
 
 if 10 not in items:
     print('10이 없습니다')</code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 1 - BMI 구간 판별</h4>
+<p>체질량지수(BMI)를 입력받아 아래 기준으로 구간을 판별하는 코드를 <code>if-elif-else</code>로 작성해보세요.<br>18.5 미만: 저체중 / 18.5 이상 23 미만: 정상 / 23 이상 25 미만: 과체중 / 25 이상: 비만</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>bmi = float(input('BMI 입력: '))
+
+if bmi &lt; 18.5:
+    print('저체중')
+elif bmi &lt; 23:
+    print('정상')
+elif bmi &lt; 25:
+    print('과체중')
+else:
+    print('비만')
+# 핵심: elif는 앞 조건이 거짓일 때만 검사하므로 각 elif에서
+# 상한선만 써줘도 자동으로 "이전 구간을 벗어난 나머지 범위"가 됨
+</code></pre>
+</details>
+</div>
+
+<div class="quiz">
+<h4>🎯 변형문제 2 - 3의 배수이면서 5의 배수인지 판별</h4>
+<p>숫자 하나를 입력받아 3의 배수이면서 동시에 5의 배수이면 "15의 배수"를, 3의 배수만이면 "3의 배수"를, 5의 배수만이면 "5의 배수"를, 둘 다 아니면 "해당없음"을 출력하세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>num = int(input('숫자 입력: '))
+
+if num % 3 == 0 and num % 5 == 0:
+    print('15의 배수')
+elif num % 3 == 0:
+    print('3의 배수')
+elif num % 5 == 0:
+    print('5의 배수')
+else:
+    print('해당없음')
+</code></pre>
+</details>
+</div>
+
+<div class="quiz">
+<h4>🎯 변형문제 3 - 장바구니에 품절 상품이 있는지 확인</h4>
+<p>장바구니 리스트와 품절 상품 리스트가 각각 주어질 때, <code>in</code> 연산자를 사용해서 장바구니 안에 품절된 상품이 하나라도 있는지 확인하는 코드를 작성해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>cart = ['우유', '계란', '두부', '식빵']
+sold_out = ['식빵', '라면']
+
+if '식빵' in cart and '식빵' in sold_out:
+    print('식빵은 품절 상품입니다')
+
+# 응용: 장바구니 중 품절 상품만 추려내기
+sold_out_in_cart = [item for item in cart if item in sold_out]
+print(sold_out_in_cart)  # ['식빵']
+</code></pre>
+</details>
+</div>
 </div>
 
 </div>
@@ -1035,6 +1179,23 @@ start = (1, 1)
 end = (5, 3)
 dx, dy = distance(start, end)
 print(f'dx: {dx}, dy: {dy}')  # dx: 4, dy: 2</code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 직사각형 둘레와 넓이 계산 함수</h4>
+<p>가로(<code>width</code>)와 세로(<code>height</code>)를 매개변수로 받아서, 둘레와 넓이를 <strong>동시에</strong> 반환하는 함수 <code>rectangle_info()</code>를 작성해보세요. (둘레 = (가로+세로)×2, 넓이 = 가로×세로)</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>def rectangle_info(width, height):
+    """직사각형의 둘레와 넓이 계산"""
+    perimeter = (width + height) * 2
+    area = width * height
+    return perimeter, area
+
+p, a = rectangle_info(6, 4)
+print(f'둘레: {p}, 넓이: {a}')  # 둘레: 20, 넓이: 24
+</code></pre>
+</details>
+</div>
 </div>
 
 </div>
@@ -1193,6 +1354,48 @@ with open('python-image.jpg', 'wb') as f:
 print("이미지 파일 저장 완료!")</code></pre>
 </div>
 
+<div class="quiz">
+<h4>🎯 변형문제 1 - 쇼핑몰 주문 접수 기록 남기기</h4>
+<p>쇼핑몰에 주문이 들어올 때마다 <code>order.log</code> 파일에 "[시각] 주문번호 ORD-1001 접수" 같은 형식으로 <strong>누적</strong> 기록하는 코드를 작성해보세요. (기존 로그는 지우지 않고 이어서 씁니다)</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>import datetime
+
+now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+orders = ['ORD-1001', 'ORD-1002', 'ORD-1003']
+
+with open('order.log', 'a', encoding='utf8') as f:
+    for order_id in orders:
+        f.write(f"[{now}] 주문번호 {order_id} 접수\n")
+
+print("주문 접수 기록 완료!")
+</code></pre>
+</details>
+</div>
+
+<div class="quiz">
+<h4>🎯 변형문제 2 - 텍스트 데이터 파일 다운로드해서 저장하기</h4>
+<p>인터넷 주소에 있는 텍스트(csv) 파일을 다운로드해서 <code>weather_data.csv</code>라는 이름으로 내 컴퓨터에 저장하는 코드를 작성해보세요. (이미지와 달리 텍스트 파일이므로 인코딩 처리가 필요합니다)</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>import requests
+
+data_url = "http://example.com/data/weather.csv"
+
+print("데이터 파일을 요청하는 중...")
+response = requests.get(data_url)
+response.encoding = 'utf-8'
+
+with open('weather_data.csv', 'w', encoding='utf-8') as f:
+    f.write(response.text)
+
+print("CSV 파일 저장 완료!")
+# 핵심 차이: 이미지는 바이너리(wb + response.content),
+# 텍스트 파일은 텍스트 모드(w + response.text)로 저장
+</code></pre>
+</details>
+</div>
+
 </div>
 
 <div class="tab-content" id="content-5">
@@ -1307,6 +1510,23 @@ end = (5, 3)
 dx, dy = distance(start, end)
 print(f'x 차이: {dx}, y 차이: {dy}')  # x 차이: 4, y 차이: 2
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 하루 중 최고/최저 기온 차이 구하기</h4>
+<p><code>abs()</code>와 <code>max()</code>, <code>min()</code>을 사용해서, 하루 동안 측정된 기온 리스트에서 최고 기온과 최저 기온의 차이(일교차)를 구하는 코드를 작성해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>temps = [18, 23, 15, 27, 12, 21]
+
+highest = max(temps)
+lowest = min(temps)
+diff = abs(highest - lowest)
+
+print(f'최고 {highest}도, 최저 {lowest}도, 일교차: {diff}도')
+# 최고 27도, 최저 12도, 일교차: 15도
+</code></pre>
+</details>
+</div>
 </div>
 
 <div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
@@ -1316,6 +1536,21 @@ b = 16
 quotient, remainder = divmod(a, b)
 print(f'{a} ÷ {b} = {quotient}...{remainder}')  # 123 ÷ 16 = 7...11
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 사탕을 학생들에게 공평하게 나눠주기</h4>
+<p>사탕 <code>250</code>개를 학생 <code>17</code>명에게 최대한 공평하게 나눠줄 때, 한 명당 몇 개씩 받고 몇 개가 남는지 <code>divmod()</code>로 구해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>candies = 250
+students = 17
+
+each, leftover = divmod(candies, students)
+print(f'한 명당 {each}개씩, 남는 사탕 {leftover}개')
+# 한 명당 14개씩, 남는 사탕 12개
+</code></pre>
+</details>
+</div>
 </div>
 
 </div>
@@ -1888,6 +2123,28 @@ print(f'텍스트 파일 개수: {len(txt_files)}')
 s_files = list(Path('.').glob('*s*'))
 print(f"'s' 포함 파일: {[f.name for f in s_files]}")
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 사진 아카이브 폴더 정리하기</h4>
+<p><code>archive</code> 폴더를 만들고, 그 안에 <code>note.txt</code> 파일을 생성한 뒤, 현재 디렉토리에서 확장자가 <code>.jpg</code>인 파일과 이름에 <code>2026</code>이 포함된 파일을 각각 찾아 출력해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>from pathlib import Path
+
+archive_dir = Path('archive')
+archive_dir.mkdir(exist_ok=True)
+
+note_file = archive_dir / 'note.txt'
+note_file.write_text('사진 정리 완료', encoding='utf8')
+
+jpg_files = list(Path('.').glob('*.jpg'))
+print(f'jpg 파일 개수: {len(jpg_files)}')
+
+files_2026 = list(Path('.').glob('*2026*'))
+print(f"'2026' 포함 파일: {[f.name for f in files_2026]}")
+</code></pre>
+</details>
+</div>
 </div>
 
 <div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
@@ -1919,6 +2176,37 @@ for student in high_scorers:
 average = sum(s['score'] for s in data['students']) / len(data['students'])
 print(f"평균 점수: {average:.1f}점")
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 재고 관리 JSON 데이터 처리</h4>
+<p>아래와 같은 상품 재고 JSON 데이터에서, 가격이 <strong>10000원 이상</strong>인 상품만 추려내고 전체 재고의 총 가치(가격×수량의 합)를 계산해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>import json
+
+inventory_json = '''
+{
+  "products": [
+    {"name": "노트", "price": 3000, "qty": 50},
+    {"name": "가방", "price": 25000, "qty": 10},
+    {"name": "필통", "price": 8000, "qty": 30},
+    {"name": "책상", "price": 120000, "qty": 5}
+  ]
+}
+'''
+
+data = json.loads(inventory_json)
+
+expensive_items = [p for p in data['products'] if p['price'] &gt;= 10000]
+print("고가 상품:")
+for item in expensive_items:
+    print(f"  {item['name']}: {item['price']}원")
+
+total_value = sum(p['price'] * p['qty'] for p in data['products'])
+print(f"전체 재고 가치: {total_value:,}원")
+</code></pre>
+</details>
+</div>
 </div>
 
 </div>
@@ -2416,6 +2704,23 @@ def check_ssn(ssn):
 print(check_ssn('991231-1234567'))  # True
 print(check_ssn('99123-1234567'))   # False (앞자리 부족)
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 휴대폰 번호 형식 검증</h4>
+<p><code>010-XXXX-XXXX</code> 형식(하이픈으로 구분된 3자리-4자리-4자리 숫자)에 맞는지 검증하는 함수를 정규식으로 작성해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>import re
+
+def check_phone(phone):
+    pattern = re.compile(r'^010-\d{4}-\d{4}$')
+    return bool(pattern.match(phone))
+
+print(check_phone('010-1234-5678'))  # True
+print(check_phone('010-123-5678'))   # False (가운데 자릿수 부족)
+</code></pre>
+</details>
+</div>
 </div>
 
 <div class="example">
@@ -2427,6 +2732,21 @@ text = "오늘 #파이썬 공부 완료! #정규표현식 도 배웠다 #개발�
 hashtags = re.findall(r'#\w+', text)
 print(hashtags)  # ['#파이썬', '#정규표현식', '#개발자일지']
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 텍스트에서 모든 멘션(@아이디) 추출</h4>
+<p>SNS 게시글 텍스트에서 <code>@사용자명</code> 형태의 멘션을 모두 추출해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>import re
+
+text = "오늘 회의에 @김철수 @이영희 참석했고, @박민수 는 불참했습니다."
+
+mentions = re.findall(r'@\w+', text)
+print(mentions)  # ['@김철수', '@이영희', '@박민수']
+</code></pre>
+</details>
+</div>
 </div>
 
 
@@ -2706,6 +3026,48 @@ student.성적입력("영어", 87)
 student.성적입력("과학", 92)
 student.성적표출력()
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 도서관 대출 관리 클래스</h4>
+<p>회원이 빌린 책을 관리하는 <code>도서관회원</code> 클래스를 만들어보세요. 조건: (1) <code>대출(책이름)</code> 메서드는 대출 중인 책이 <strong>3권 미만</strong>일 때만 추가하고 결과를 반환, (2) <code>반납(책이름)</code> 메서드는 목록에서 해당 책을 제거, (3) <code>대출현황()</code> 메서드는 현재 대출 중인 책 개수와 목록을 출력.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>class 도서관회원:
+    최대대출권수 = 3
+
+    def __init__(self, 이름):
+        self.이름 = 이름
+        self.대출목록 = []
+
+    def 대출(self, 책이름):
+        if len(self.대출목록) &lt; self.최대대출권수:
+            self.대출목록.append(책이름)
+            return True
+        return False
+
+    def 반납(self, 책이름):
+        if 책이름 in self.대출목록:
+            self.대출목록.remove(책이름)
+            return True
+        return False
+
+    def 대출현황(self):
+        print(f"=== {self.이름}님의 대출 현황 ===")
+        print(f"대출 중: {len(self.대출목록)}/{self.최대대출권수}권")
+        for 책 in self.대출목록:
+            print(f"- {책}")
+
+# 사용
+member = 도서관회원("박민수")
+member.대출("파이썬 기초")
+member.대출("자료구조")
+member.대출("알고리즘")
+print(member.대출("데이터베이스"))  # False (이미 3권 대출 중)
+member.반납("자료구조")
+member.대출현황()
+</code></pre>
+</details>
+</div>
 </div>
 
 </div>
@@ -2938,6 +3300,30 @@ print(safe_divide(10, 2))   # 5.0
 print(safe_divide(10, 0))   # None (오류 메시지 출력)
 print(safe_divide(10, "a")) # None (오류 메시지 출력)
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 안전한 리스트 항목 접근기</h4>
+<p>리스트와 인덱스를 받아서, 범위를 벗어나거나 잘못된 타입의 인덱스가 들어와도 프로그램이 멈추지 않고 <code>None</code>을 반환하며 오류 메시지를 출력하는 <code>safe_get()</code> 함수를 작성해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>def safe_get(items, index):
+    """범위를 벗어나도 안전한 리스트 접근"""
+    try:
+        return items[index]
+    except IndexError:
+        print(f"오류: 인덱스 {index}는 범위를 벗어났습니다")
+        return None
+    except TypeError as e:
+        print(f"오류: 인덱스는 정수여야 합니다 - {e}")
+        return None
+
+fruits = ['사과', '바나나', '포도']
+print(safe_get(fruits, 1))     # 바나나
+print(safe_get(fruits, 10))    # None (오류 메시지 출력)
+print(safe_get(fruits, '1'))   # None (오류 메시지 출력)
+</code></pre>
+</details>
+</div>
 </div>
 
 <div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
@@ -2964,6 +3350,34 @@ if error:
 else:
     print(f"파일 내용 (처음 100자): {content[:100]}...")
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 안전한 API 요청 함수</h4>
+<p>웹 API에 요청을 보낼 때 발생할 수 있는 여러 오류(연결 실패, 타임아웃, 그 외 오류)를 각각 구분해서 처리하는 <code>safe_request()</code> 함수를 작성해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>import requests
+
+def safe_request(url):
+    """API 요청을 안전하게 처리하는 함수"""
+    try:
+        response = requests.get(url, timeout=5)
+        return response.json(), None
+    except requests.exceptions.ConnectionError:
+        return None, "서버에 연결할 수 없습니다"
+    except requests.exceptions.Timeout:
+        return None, "요청 시간이 초과되었습니다"
+    except requests.exceptions.RequestException as e:
+        return None, f"요청 중 오류 발생: {e}"
+
+data, error = safe_request("https://api.example.com/data")
+if error:
+    print(f"오류 발생: {error}")
+else:
+    print(f"응답 데이터: {data}")
+</code></pre>
+</details>
+</div>
 </div>
 
 </div>
@@ -3293,6 +3707,31 @@ res = requests.post(url, json={'id': 'user1', 'pw': '1234'})
 </code></pre>
 </div>
 
+<h3>CRUD와 HTTP 메소드의 대응 관계</h3>
+<p>데이터를 다루는 모든 프로그램(계산기, 게시판, 회원가입 시스템 등)은 결국 <strong>CRUD</strong>(Create 생성, Read 조회, Update 수정, Delete 삭제) 네 가지 동작으로 요약됩니다. 웹에서는 이 CRUD 각각이 관례적으로 특정 HTTP 메소드에 대응됩니다.</p>
+<table>
+<tr><th>CRUD</th><th>대응 HTTP 메소드</th><th>예시</th></tr>
+<tr><td>Create (생성)</td><td><code>POST</code></td><td>회원가입, 게시글 작성</td></tr>
+<tr><td>Read (조회)</td><td><code>GET</code></td><td>목록 보기, 상세 페이지 보기</td></tr>
+<tr><td>Update (수정)</td><td><code>PUT</code> / <code>PATCH</code></td><td>회원정보 수정, 게시글 수정</td></tr>
+<tr><td>Delete (삭제)</td><td><code>DELETE</code></td><td>회원 탈퇴, 게시글 삭제</td></tr>
+</table>
+<div class="note">
+<strong>💡 암묵적 약속</strong><br>
+이 매핑은 법으로 강제되는 규칙은 아니지만, 대부분의 개발자들이 지키는 <strong>업계 관례(convention)</strong>입니다. 이후 배울 Flask 같은 웹 프레임워크에서 라우트(경로)를 설계할 때도 이 CRUD-HTTP 대응 관계를 그대로 따르는 것이 표준입니다.
+</div>
+
+<h3>AJAX와 동적 페이지 - "몰래" 데이터를 받아오는 기술</h3>
+<div class="note">
+<strong>💡 AJAX(Asynchronous JavaScript And XML)란?</strong><br>
+페이지 전체를 새로고침하지 않고, 브라우저에서 자바스크립트가 <strong>백그라운드로 서버와 통신해서 필요한 데이터만 조용히 가져오는 기술</strong>입니다. 예를 들어 뉴스 사이트에서 "더보기" 버튼을 눌렀을 때 페이지가 깜빡이지 않고 아래에 기사가 추가되는 것이 AJAX 통신의 결과입니다.<br><br>
+이런 동적 페이지는 <code>requests.get(페이지주소)</code>로 처음 HTML을 가져와도 AJAX로 나중에 채워지는 데이터는 보이지 않습니다. 대신 브라우저 개발자도구의 Network 탭에서 AJAX가 실제로 호출하는 API 주소를 찾아내 그 주소를 직접 요청하면 데이터를 얻을 수 있습니다 (앞서 다룬 "리버스 엔지니어링" 절차와 동일합니다).
+</div>
+<div class="note">
+<strong>💡 Request Headers는 누가 보내는 값일까?</strong><br>
+브라우저로 웹사이트에 접속하면, <code>User-Agent</code>(브라우저 종류), <code>Referer</code>(어느 페이지에서 왔는지), <code>Cookie</code> 같은 값들이 <strong>내가 직접 입력하지 않아도 브라우저가 자동으로</strong> 서버에 함께 전송합니다. <code>requests</code>로 크롤링할 때 응답이 차단된다면, 바로 이 자동 전송되는 값들이 빠져있기 때문인 경우가 많습니다. 그래서 개발자도구에서 확인한 값을 <code>headers</code> 파라미터로 직접 채워 넣어 "나는 진짜 브라우저다"라고 서버를 설득하는 것입니다.
+</div>
+
 <h2>실전 예제: 실제 사이트 API 리버스 엔지니어링</h2>
 <div class="note">
 <strong>💡 리버스 엔지니어링 절차</strong>
@@ -3415,6 +3854,42 @@ def get_korean_holidays(year):
 #     status = "공휴일" if h['isHoliday'] else "주말"
 #     print(f"{h['date']}: {h['name']} ({status})")
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 환율 정보 API 확인하기</h4>
+<p>비슷한 구조로, 환율 정보를 제공하는 API를 호출해서 원하는 통화의 환율만 뽑아내는 함수를 작성해보세요. 단일 항목/리스트 두 경우를 모두 처리해야 합니다.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>import requests
+
+def get_exchange_rate(currency_code):
+    """환율 API에서 특정 통화의 환율 조회 (예시)"""
+    url = "https://api.example.com/exchange-rates"
+    params = {'base': currency_code, 'apikey': 'YOUR_API_KEY'}
+
+    try:
+        response = requests.get(url, params=params, timeout=10)
+        response.raise_for_status()
+
+        data = response.json()
+        rates = data.get('rates', [])
+
+        if isinstance(rates, dict):  # 단일 통화 응답
+            rates = [rates]
+
+        result = [{'currency': r['code'], 'rate': r['value']} for r in rates]
+        return result
+    except Exception as e:
+        print(f"환율 정보 가져오기 실패: {e}")
+        return []
+
+# 사용
+# rates = get_exchange_rate('USD')
+# for r in rates:
+#     print(f"{r['currency']}: {r['rate']}원")
+</code></pre>
+</details>
+</div>
 </div>
 
 <div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
@@ -3484,6 +3959,46 @@ def download_image(url, folder="downloads"):
 # 사용
 # download_image("https://example.com/image.jpg")
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 여러 개의 CSV 데이터 파일 일괄 다운로드</h4>
+<p>URL 목록을 받아서 각 파일을 순서대로 다운로드하고, 하나가 실패해도 나머지는 계속 진행하도록 만들어보세요. 성공/실패 개수를 마지막에 요약 출력합니다.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>import requests
+import os
+
+def download_all(urls, folder="downloads"):
+    """URL 목록을 순회하며 파일을 일괄 다운로드 (실패해도 계속 진행)"""
+    os.makedirs(folder, exist_ok=True)
+    success, fail = 0, 0
+
+    for url in urls:
+        filename = url.split('/')[-1]
+        filepath = os.path.join(folder, filename)
+        try:
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            with open(filepath, 'wb') as f:
+                f.write(response.content)
+            print(f"✅ 완료: {filename}")
+            success += 1
+        except requests.exceptions.RequestException as e:
+            print(f"❌ 실패: {filename} ({e})")
+            fail += 1
+
+    print(f"\n총 {len(urls)}개 중 성공 {success}개, 실패 {fail}개")
+
+# 사용
+urls = [
+    "https://example.com/data1.csv",
+    "https://example.com/data2.csv",
+    "https://example.com/data3.csv",
+]
+# download_all(urls)
+</code></pre>
+</details>
+</div>
 </div>
 
 </div>
@@ -4249,6 +4764,45 @@ for movie in movie_items:
     print(f"포스터: {poster_url}")
     print("-" * 50)
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 레시피 목록 크롤링</h4>
+<p>비슷한 구조로, 레시피 목록 HTML에서 각 레시피의 이름·조리시간·난이도·재료를 추출하는 코드를 작성해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>from bs4 import BeautifulSoup as bs
+
+html_content = '''
+&lt;div class="recipe-list"&gt;
+    &lt;div class="recipe-item"&gt;
+        &lt;h2 class="recipe-name"&gt;김치볶음밥&lt;/h2&gt;
+        &lt;span class="cook-time"&gt;15분&lt;/span&gt;
+        &lt;span class="level"&gt;쉬움&lt;/span&gt;
+        &lt;p class="ingredients"&gt;김치, 밥, 계란, 대파&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="recipe-item"&gt;
+        &lt;h2 class="recipe-name"&gt;된장찌개&lt;/h2&gt;
+        &lt;span class="cook-time"&gt;25분&lt;/span&gt;
+        &lt;span class="level"&gt;보통&lt;/span&gt;
+        &lt;p class="ingredients"&gt;된장, 두부, 애호박, 양파&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+'''
+
+soup = bs(html_content, 'html.parser')
+recipes = soup.select('.recipe-item')
+
+for r in recipes:
+    name = r.select_one('.recipe-name').text.strip()
+    cook_time = r.select_one('.cook-time').text.strip()
+    level = r.select_one('.level').text.strip()
+    ingredients = r.select_one('.ingredients').text.strip()
+    print(f"{name} | 조리시간: {cook_time} | 난이도: {level}")
+    print(f"재료: {ingredients}")
+    print("-" * 40)
+</code></pre>
+</details>
+</div>
 </div>
 
 <div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
@@ -4309,6 +4863,45 @@ for row in rows:
     print(f"거래량: {volume}주")
     print("-" * 30)
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 학급 성적표 크롤링</h4>
+<p>비슷한 테이블 구조로, 학급 성적표 HTML에서 각 학생의 이름·국어·영어·수학 점수를 추출하고 평균까지 계산해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>from bs4 import BeautifulSoup as bs
+
+html_content = '''
+&lt;table class="score-table"&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;&lt;th&gt;이름&lt;/th&gt;&lt;th&gt;국어&lt;/th&gt;&lt;th&gt;영어&lt;/th&gt;&lt;th&gt;수학&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td class="name"&gt;김민준&lt;/td&gt;
+            &lt;td class="kor"&gt;85&lt;/td&gt;&lt;td class="eng"&gt;92&lt;/td&gt;&lt;td class="math"&gt;78&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td class="name"&gt;이서연&lt;/td&gt;
+            &lt;td class="kor"&gt;91&lt;/td&gt;&lt;td class="eng"&gt;88&lt;/td&gt;&lt;td class="math"&gt;95&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
+'''
+
+soup = bs(html_content, 'html.parser')
+rows = soup.select('.score-table tbody tr')
+
+for row in rows:
+    name = row.select_one('.name').text.strip()
+    kor = int(row.select_one('.kor').text.strip())
+    eng = int(row.select_one('.eng').text.strip())
+    math = int(row.select_one('.math').text.strip())
+    avg = (kor + eng + math) / 3
+    print(f"{name}: 국어{kor} 영어{eng} 수학{math} | 평균 {avg:.1f}")
+</code></pre>
+</details>
+</div>
 </div>
 
 </div>
@@ -4386,7 +4979,6 @@ print(f"선택된 활동: {selected}")
 
     for weight, value in items:
         if remaining_capacity == 0:
-            break
             break
 
         if weight &lt;= remaining_capacity:
@@ -4634,68 +5226,82 @@ max_count = max_lectures(lectures)
 print(f"최대 강의 수: {max_count}")
 # 가능한 배정: (9,10), (10,12), (12,14) → 3개
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 택배 기사 최대 배송 건수</h4>
+<p>택배 기사 한 명이 하루 동안 처리할 수 있는 배송 건은 <strong>시간이 겹치지 않아야</strong> 합니다. 각 배송이 (시작시각, 종료시각)으로 주어질 때, 하루에 처리할 수 있는 <strong>최대 배송 건수</strong>를 구하는 함수를 작성해보세요. (활동 선택 문제와 완전히 동일한 원리입니다)</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>def max_deliveries(deliveries):
+    # deliveries: [(start_time, end_time), ...]
+    deliveries.sort(key=lambda x: x[1])  # 종료 시각 기준 정렬
+
+    count = 0
+    last_end = 0
+    for start, end in deliveries:
+        if start &gt;= last_end:
+            count += 1
+            last_end = end
+    return count
+
+deliveries = [(9, 10), (9, 12), (10, 11), (11, 13), (12, 14), (13, 15)]
+print(f"최대 배송 건수: {max_deliveries(deliveries)}개")
+# 가능한 배정: (9,10), (10,11), (11,13), (13,15) → 4개
+</code></pre>
+</details>
+</div>
 </div>
 
 <div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
 <strong>최대 곱 만들기 (Greedy with Sorting)</strong>
-<pre><code># 주어진 숫자들을 두 그룹으로 나누어 각 그룹의 수들의 곱의 합을 최대화
-# 예: [1, 2, 3, 4] → (1,4)와 (2,3) → 1*4 + 2*3 = 4 + 6 = 10
-#     또는 (1,2)와 (3,4) → 1*2 + 3*4 = 2 + 12 = 14 (최적)
-
-def max_product_sum(numbers):
-    # 오름차순 정렬
+<p>주어진 짝수 개의 숫자들을 두 개씩 짝지어, 각 짝의 곱을 모두 더한 값(곱의 합)이 <strong>최대</strong>가 되도록 만드는 문제입니다.</p>
+<div class="note">
+<strong>💡 직관에 반하는 정답: "극단적으로" 짝지으면 안 된다</strong><br>
+얼핏 보면 "가장 작은 수와 가장 큰 수를 짝지어야 유리할 것 같다"는 생각이 들 수 있지만, 실제로는 정반대입니다. <code>[1, 2, 3, 4]</code>로 직접 비교해보면:
+<ul>
+<li>가장 작은 값과 가장 큰 값끼리 짝짓기: (1,4)+(2,3) = 4+6 = <strong>10</strong></li>
+<li>정렬 후 <strong>인접한</strong> 값끼리 짝짓기: (1,2)+(3,4) = 2+12 = <strong>14</strong> ← 더 큼!</li>
+</ul>
+따라서 정답 전략은 정렬 후 <strong>바로 옆에 있는 값끼리 짝짓는 것</strong>입니다. (곱의 "합"을 최대화할 때는 크기가 비슷한 값끼리 곱해야 전체적으로 큰 곱들을 더 많이 만들어낼 수 있기 때문입니다.)
+</div>
+<pre><code>def max_product_sum(numbers):
+    """정렬 후 인접한 두 값씩 짝지어 곱의 합을 구함"""
     numbers.sort()
-
-    # 작은 수와 큰 수를 짝지어 곱하는 전략
-    # (두 수의 합이 고정되어 있다면 두 수가 비슷할수록 곱이 커지지만,
-    #  여기서는 반대로 여러 쌍의 곱들의 "합"을 최대화하는 것이 목표이므로
-    #  가장 작은 값과 가장 큰 값을 짝지어야 전체 합이 최대가 됨)
-
-    # 실제 최적 전략: 정렬 후 교차하여 페어링
-    # 가장 작은 수와 가장 큰 수를 pair, 두 번째 작은 수와 두 번째 큰 수를 pair, ...
-
-    n = len(numbers)
-    if n % 2 != 0:
-        raise ValueError("짝수 개수의 숫자가 필요합니다")
-
     total = 0
-    left = 0
-    right = n - 1
-
-    while left &lt; right:
-        product = numbers[left] * numbers[right]
-        total += product
-        left += 1
-        right -= 1
-
+    for i in range(0, len(numbers), 2):
+        total += numbers[i] * numbers[i + 1]
     return total
 
 # 사용 예시
 numbers = [1, 2, 3, 4]
 result = max_product_sum(numbers)
 print(f"숫자들: {numbers}")
-print(f"최대 곱의 합: {result}")
-# 페어링: (1,4) → 4, (2,3) → 6, 총합: 10
-# 다른 페어링: (1,2) → 2, (3,4) → 12, 총합: 14
-# 실제 최적은 (1,4)와 (2,3)인가? Let me recalculate...
-# Actually for [1,2,3,4]:
-# Option 1: (1,4)+(2,3)=4+6=10
-# Option 2: (1,2)+(3,4)=2+12=14 ← 이것이 더 큼
-# Option 3: (1,3)+(2,4)=3+8=11
-# 따라서 정렬 후 양 끝에서 inward로 페어링이 아닌,
-# 연속된 쌍으로 페어링이 더 나을 수 있음
+print(f"최대 곱의 합: {result}")  # 1*2 + 3*4 = 2 + 12 = 14
+</code></pre>
 
-# 올바른 접근: 정렬 후 인접한 요소들을 페어링
-def max_product_sum_corrected(numbers):
+<div class="quiz">
+<h4>🎯 변형문제 - 최소 곱의 합 만들기</h4>
+<p>반대로, 두 개씩 짝지었을 때 곱의 합이 <strong>최소</strong>가 되도록 만드는 함수를 작성해보세요. 앞의 원리를 뒤집어서 생각해보면 어떤 정렬/짝짓기 전략이 필요할지 유추할 수 있습니다.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>def min_product_sum(numbers):
+    """오름차순 정렬 후, 가장 작은 값과 가장 큰 값을 짝지어 곱의 합을 최소화"""
     numbers.sort()
     total = 0
-    for i in range(0, len(numbers), 2):
-        total += numbers[i] * numbers[i+1]
+    left, right = 0, len(numbers) - 1
+    while left &lt; right:
+        total += numbers[left] * numbers[right]
+        left += 1
+        right -= 1
     return total
 
-result_corrected = max_product_sum_corrected(numbers)
-print(f"수정된 버전 결과: {result_corrected}")  # 1*2 + 3*4 = 2 + 12 = 14
+numbers = [1, 2, 3, 4]
+print(min_product_sum(numbers))  # (1*4) + (2*3) = 4 + 6 = 10
+# 최대화 문제와 정반대로, 이번엔 "극단적으로" 짝지어야
+# 큰 값끼리 곱해지는 것을 막아 합을 최소화할 수 있습니다.
 </code></pre>
+</details>
+</div>
 </div>
 
 </div>
@@ -4821,17 +5427,70 @@ HAVING 그룹조건
 <h3>조회 SQL 실행 순서 (매우 중요!)</h3>
 <div class="sql-flow">
 <div class="sql-step"><span class="sql-step-num">1</span><code class="sql-step-kw">FROM</code><span class="sql-step-desc">어느 테이블에서 시작할지 지정</span></div>
-<div class="sql-step sql-step-sub"><span class="sql-step-num"></span><code class="sql-step-kw">JOIN / ON</code><span class="sql-step-desc">다른 테이블과 연결 (LEFT JOIN 또는 RIGHT JOIN 가능)</span></div>
-<div class="sql-step"><span class="sql-step-num">2</span><code class="sql-step-kw">WHERE</code><span class="sql-step-desc">원본 행 필터링</span></div>
-<div class="sql-step"><span class="sql-step-num">3</span><code class="sql-step-kw">GROUP BY</code><span class="sql-step-desc">그룹 나누기</span></div>
-<div class="sql-step"><span class="sql-step-num">4</span><code class="sql-step-kw">HAVING</code><span class="sql-step-desc">그룹 결과 필터링</span></div>
-<div class="sql-step"><span class="sql-step-num">5</span><code class="sql-step-kw">SELECT</code><span class="sql-step-desc">실제로 보여줄 컬럼 결정</span></div>
-<div class="sql-step"><span class="sql-step-num">6</span><code class="sql-step-kw">ORDER BY</code><span class="sql-step-desc">정렬</span></div>
-<div class="sql-step"><span class="sql-step-num">7</span><code class="sql-step-kw">LIMIT</code><span class="sql-step-desc">개수 제한</span></div>
+<div class="sql-step"><span class="sql-step-num">2</span><code class="sql-step-kw">JOIN</code><span class="sql-step-desc">연결할 다른 테이블 지정 (LEFT JOIN 또는 RIGHT JOIN 가능)</span></div>
+<div class="sql-step"><span class="sql-step-num">3</span><code class="sql-step-kw">ON</code><span class="sql-step-desc">두 테이블을 어떤 조건으로 연결할지 지정</span></div>
+<div class="sql-step"><span class="sql-step-num">4</span><code class="sql-step-kw">WHERE</code><span class="sql-step-desc">원본 행 필터링</span></div>
+<div class="sql-step"><span class="sql-step-num">5</span><code class="sql-step-kw">GROUP BY</code><span class="sql-step-desc">그룹 나누기</span></div>
+<div class="sql-step"><span class="sql-step-num">6</span><code class="sql-step-kw">HAVING</code><span class="sql-step-desc">그룹 결과 필터링</span></div>
+<div class="sql-step"><span class="sql-step-num">7</span><code class="sql-step-kw">SELECT</code><span class="sql-step-desc">실제로 보여줄 컬럼 결정</span></div>
+<div class="sql-step"><span class="sql-step-num">8</span><code class="sql-step-kw">ORDER BY</code><span class="sql-step-desc">정렬</span></div>
+<div class="sql-step"><span class="sql-step-num">9</span><code class="sql-step-kw">LIMIT</code><span class="sql-step-desc">개수 제한</span></div>
 </div>
 <div class="note">
 <strong>💡 왜 실행 순서를 알아야 할까?</strong><br>
-SQL 문장을 <strong>작성</strong>하는 순서(SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT)와 실제로 데이터베이스가 <strong>실행</strong>하는 순서는 다릅니다. 이 때문에 <code>WHERE</code>절에는 <code>GROUP BY</code>로 만든 별칭을 쓸 수 없고(아직 그룹이 안 만들어졌으므로), <code>HAVING</code>절에서는 집계 함수를 바로 쓸 수 있는 것입니다.
+SQL 문장을 <strong>작성</strong>하는 순서(SELECT → FROM → JOIN → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT)와 실제로 데이터베이스가 <strong>실행</strong>하는 순서는 다릅니다. <code>SELECT</code>는 문장 맨 앞에 쓰지만 실제로는 7번째로 가장 나중에 처리됩니다. 이 때문에 <code>WHERE</code>절에는 <code>GROUP BY</code>로 만든 별칭을 쓸 수 없고(아직 그룹이 안 만들어졌으므로), <code>HAVING</code>절에서는 집계 함수를 바로 쓸 수 있는 것입니다.
+</div>
+
+<h3>DDL vs DML - SQL 명령어의 두 종류</h3>
+<table>
+<tr><th>구분</th><th>의미</th><th>해당 명령어</th></tr>
+<tr><td><strong>DDL</strong> (Data Definition Language)</td><td>테이블 자체의 구조를 정의</td><td><code>CREATE TABLE</code>, <code>ALTER TABLE</code>, <code>DROP TABLE</code></td></tr>
+<tr><td><strong>DML</strong> (Data Manipulation Language)</td><td>테이블 안의 실제 데이터를 다룸</td><td><code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code> (=CRUD)</td></tr>
+</table>
+<div class="example">
+<pre><code>-- DDL: 테이블(그릇) 자체를 만든다
+CREATE TABLE member (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    age INT
+);
+
+-- DML: 만들어진 테이블 안의 데이터를 다룬다
+INSERT INTO member (id, name, age) VALUES (1, '홍길동', 25);
+SELECT * FROM member;
+UPDATE member SET age = 26 WHERE id = 1;
+DELETE FROM member WHERE id = 1;
+</code></pre>
+<p><strong>비유:</strong> DDL은 "그릇(테이블)을 만들고 깨는 것", DML은 "그 그릇 안에 담긴 음식(데이터)을 넣고 꺼내고 바꾸는 것"이라고 생각하면 헷갈리지 않습니다.</p>
+</div>
+
+<h3>파이썬 값과 SQL 값의 대응 관계</h3>
+<p>파이썬에서 변수에 아무 값도 없음을 <code>None</code>으로 표현하듯, 데이터베이스에서는 같은 개념을 <code>NULL</code>로 표현합니다.</p>
+<table>
+<tr><th>파이썬</th><th>SQL</th><th>의미</th></tr>
+<tr><td><code>None</code></td><td><code>NULL</code></td><td>값이 존재하지 않음 (0이나 빈 문자열과도 다름)</td></tr>
+<tr><td><code>int</code>, <code>float</code></td><td><code>INT</code>, <code>DECIMAL</code> 등</td><td>숫자</td></tr>
+<tr><td><code>str</code></td><td><code>VARCHAR</code>, <code>TEXT</code></td><td>문자열</td></tr>
+</table>
+<div class="warning" style="background:linear-gradient(180deg,#7f1d1d,#450a0a);border-left:4px solid #fca5a5;padding:20px;margin:25px 0;border-radius:0 8px 8px 0;">
+<strong>⚠️ NULL 비교의 함정</strong><br>
+<code>WHERE column = NULL</code>은 절대 작동하지 않습니다. NULL은 "알 수 없는 값"이라 <code>=</code>로 비교 자체가 불가능하기 때문입니다. 반드시 <code>WHERE column IS NULL</code> / <code>WHERE column IS NOT NULL</code>을 사용해야 합니다.
+</div>
+
+<h3>서브쿼리(Subquery) - 쿼리 안의 쿼리</h3>
+<p>통계(집계) 함수로 계산한 결과와 원본 데이터의 각 행을 <strong>동시에</strong> 보고 싶을 때가 있습니다. 이럴 때는 SELECT 안에 또 다른 SELECT문을 중첩해서 사용하는 서브쿼리가 필요합니다.</p>
+<div class="example">
+<pre><code>-- 예: 각 제품의 단가와, 전체 제품 평균 단가를 함께 조회
+SELECT 제품명, 단가,
+       (SELECT AVG(단가) FROM 제품) AS 평균단가
+  FROM 제품;
+
+-- 예: 평균 급여보다 많이 받는 사원만 조회
+SELECT name, salary
+  FROM employees
+ WHERE salary &gt; (SELECT AVG(salary) FROM employees);
+</code></pre>
+<p><strong>핵심 포인트:</strong> <code>AVG(단가)</code>처럼 통계 함수만 단독으로 조회하면 결과가 딱 한 줄로 뭉개져서 각 제품의 개별 정보를 함께 볼 수 없습니다. 서브쿼리를 괄호로 묶어 컬럼처럼 끼워 넣으면, 원본 행 개수는 그대로 유지하면서 계산된 통계값을 각 행에 나란히 붙여서 보여줄 수 있습니다.</p>
 </div>
 
 <h2>✏️ 연습문제 1: 함수 활용 - 주차장 지역번호 추출</h2>
@@ -5032,6 +5691,33 @@ SELECT DATE_FORMAT(VST_TIME, '%m'), COUNT(*)
 <strong>💡 3중 JOIN 패턴 정리</strong><br>
 이 예제처럼 <code>owner → animal → product</code>가 순서대로 연결된 구조는 실무에서 매우 흔합니다 (회원 → 주문 → 주문상품 같은 구조와 동일한 패턴). JOIN을 연결할 때는 항상 "누구의 기본키가 어디의 외래키인지"를 먼저 그림으로 그려보고 SQL을 작성하면 실수를 줄일 수 있습니다.
 </div>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 온라인 서점 스키마 (customer, order, book)</h4>
+<p>회원(<code>customer</code>) → 주문(<code>order</code>) → 도서(<code>book</code>)가 반려동물 예제와 동일한 패턴(1→N→N)으로 연결된 스키마입니다. <code>order</code> 테이블은 <code>customer_id</code>(외래키)와 <code>book_id</code>(외래키)를 함께 가지고 있습니다. 아래 문제를 위 예제와 같은 방식으로 풀어보세요.</p>
+<ol>
+<li>'김민준' 회원이 주문한 모든 책 제목을 출력하시오</li>
+<li>'이서연' 회원이 지금까지 주문한 총 금액을 구하시오</li>
+</ol>
+<details>
+<summary>정답 보기</summary>
+<pre><code>-- 1) '김민준' 회원이 주문한 모든 책 제목
+SELECT b.title
+  FROM customer c
+  JOIN "order" o ON c.id = o.customer_id
+  JOIN book b ON o.book_id = b.id
+ WHERE c.name = '김민준';
+
+-- 2) '이서연' 회원의 총 주문 금액
+SELECT SUM(b.price) AS total_spent
+  FROM customer c
+  JOIN "order" o ON c.id = o.customer_id
+  JOIN book b ON o.book_id = b.id
+ WHERE c.name = '이서연';
+</code></pre>
+<p><strong>핵심 포인트:</strong> <code>order</code>는 SQL 예약어(주문 정렬을 뜻하는 <code>ORDER BY</code>와 혼동)이기 때문에 실제 테이블명으로 쓸 때는 따옴표로 감싸거나 <code>orders</code> 같은 다른 이름을 쓰는 것이 안전합니다.</p>
+</details>
+</div>
 </div>
 
 <h2>✏️ 연습문제 6: JOIN 활용 - company (인사관리) 스키마</h2>
@@ -5069,6 +5755,271 @@ SELECT b.title, b.writer, f.file_name
 <h2>더 연습해보고 싶다면</h2>
 <div class="note">
 프로그래머스의 <a href="https://school.programmers.co.kr/learn/challenges?tab=sql_practice_kit" target="_blank" rel="noopener">SQL 고득점 Kit</a>에서 더 다양한 난이도의 SQL 문제를 풀어볼 수 있습니다.
+</div>
+
+
+</div>
+
+<div class="tab-content" id="content-15">
+
+<h2>13. Flask</h2>
+
+<div class="note">
+<strong>💡 학습 목표:</strong> Flask로 웹 서버를 직접 만들어보고, 지금까지 배운 requests/크롤링과 반대 방향(서버 쪽)의 관점을 이해하기
+</div>
+
+<h2>Flask란?</h2>
+<p><strong>Flask</strong>는 파이썬으로 웹 서버를 만들 수 있게 해주는 가벼운 웹 프레임워크입니다. 지금까지는 <code>requests</code>로 "다른 서버에 요청을 보내는 클라이언트" 입장이었다면, Flask는 반대로 "요청을 받아서 응답을 돌려주는 서버" 입장의 코드를 작성하게 됩니다.</p>
+<div class="note">
+<strong>💡 클라이언트와 서버, 두 관점을 모두 갖는다는 것</strong><br>
+크롤링(<code>requests</code>)을 배울 때는 "이미 존재하는 남의 서버"에 요청을 보내는 역할이었습니다. Flask를 배우면 이번엔 내가 <strong>직접 서버가 되어</strong> 브라우저나 다른 프로그램의 요청을 받고 응답을 만들어 돌려주는 쪽을 경험하게 됩니다. 두 관점을 모두 경험하면 웹 통신의 전체 그림이 훨씬 명확해집니다.
+</div>
+
+<h2>설치 및 기본 앱</h2>
+<div class="example">
+<pre><code># 터미널에서 실행
+pip install flask
+</code></pre>
+</div>
+<div class="example">
+<h3>가장 간단한 Flask 앱</h3>
+<pre><code>from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return 'Hello, Flask!'
+
+if __name__ == '__main__':
+    app.run(debug=True)
+</code></pre>
+<p>이 파일을 실행하면 <code>http://127.0.0.1:5000</code>에서 서버가 켜지고, 브라우저로 접속하면 "Hello, Flask!"가 화면에 표시됩니다.</p>
+<table>
+<tr><th>구성 요소</th><th>역할</th></tr>
+<tr><td><code>Flask(__name__)</code></td><td>Flask 애플리케이션 객체 생성</td></tr>
+<tr><td><code>@app.route('/')</code></td><td>"이 주소(경로)로 요청이 오면 아래 함수를 실행하라"는 데코레이터</td></tr>
+<tr><td><code>debug=True</code></td><td>코드를 수정하면 서버가 자동으로 재시작되고, 오류 발생 시 상세 정보를 브라우저에 표시 (개발 중에만 사용)</td></tr>
+</table>
+</div>
+
+<h2>라우팅(Routing) - 주소별로 다른 함수 연결하기</h2>
+<div class="example">
+<pre><code>from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return '메인 페이지'
+
+@app.route('/about')
+def about():
+    return '소개 페이지'
+
+# URL 안에 변수를 담아 전달받기
+@app.route('/user/&lt;name&gt;')
+def user_page(name):
+    return f'{name}님의 페이지입니다'
+
+# 타입 지정도 가능
+@app.route('/item/&lt;int:item_id&gt;')
+def item_page(item_id):
+    return f'{item_id}번 상품 (타입: {type(item_id)})'
+</code></pre>
+<p><strong>핵심 포인트:</strong> <code>&lt;name&gt;</code>처럼 꺾쇠괄호로 감싼 부분은 URL의 그 위치에 들어온 실제 값을 함수의 매개변수로 그대로 전달받습니다. 예를 들어 <code>/user/kim</code>으로 접속하면 <code>name</code>에 <code>'kim'</code>이 담겨 함수가 실행됩니다.</p>
+</div>
+
+<h2>GET과 POST 요청 처리하기</h2>
+<p>앞서 크롤링 챕터에서 배운 CRUD-HTTP 매핑이 여기서도 그대로 적용됩니다. 하나의 라우트가 GET과 POST를 모두 처리하게 하려면 <code>methods</code> 옵션을 지정합니다.</p>
+<div class="example">
+<pre><code>from flask import Flask, request
+
+app = Flask(__name__)
+
+@app.route('/search')
+def search():
+    # GET 방식: URL의 ?키워드=값 부분을 request.args로 받음
+    keyword = request.args.get('keyword', '')
+    return f'검색어: {keyword}'
+    # 접속 예: /search?keyword=파이썬
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        # POST 방식: HTML 폼으로 전송된 데이터는 request.form으로 받음
+        user_id = request.form.get('id')
+        password = request.form.get('password')
+        return f'{user_id}님, 로그인 시도됨'
+    else:
+        # GET으로 접속했을 때는 로그인 폼을 보여줌
+        return '''
+            &lt;form method="POST"&gt;
+                아이디: &lt;input type="text" name="id"&gt;&lt;br&gt;
+                비밀번호: &lt;input type="password" name="password"&gt;&lt;br&gt;
+                &lt;input type="submit" value="로그인"&gt;
+            &lt;/form&gt;
+        '''
+
+@app.route('/api/data', methods=['POST'])
+def api_data():
+    # JSON으로 전송된 데이터는 request.json으로 받음
+    data = request.json
+    return {'received': data, 'status': 'ok'}
+</code></pre>
+<table>
+<tr><th>요청 데이터 위치</th><th>Flask에서 읽는 방법</th></tr>
+<tr><td>URL 쿼리스트링 (<code>?key=value</code>)</td><td><code>request.args.get('key')</code></td></tr>
+<tr><td>HTML 폼 데이터 (POST Body)</td><td><code>request.form.get('key')</code></td></tr>
+<tr><td>JSON 데이터 (POST Body)</td><td><code>request.json</code></td></tr>
+</table>
+</div>
+
+<h2>템플릿(Template) - HTML을 파이썬 데이터와 결합하기</h2>
+<p>지금까지는 파이썬 코드 안에 HTML 문자열을 직접 썼지만, 실제로는 HTML을 별도 파일(템플릿)로 분리하고 파이썬에서 데이터만 넘겨주는 방식을 사용합니다. Flask는 기본적으로 <strong>Jinja2</strong> 템플릿 엔진을 사용합니다.</p>
+<div class="example">
+<h3>프로젝트 구조</h3>
+<pre><code>my_flask_app/
+├── app.py
+├── templates/          # HTML 템플릿은 반드시 이 폴더 안에
+│   └── index.html
+└── static/             # CSS, JS, 이미지 등 정적 파일
+    └── style.css
+</code></pre>
+<h3>app.py</h3>
+<pre><code>from flask import Flask, render_template
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    users = ['홍길동', '김철수', '이영희']
+    return render_template('index.html', title='회원 목록', users=users)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+</code></pre>
+<h3>templates/index.html</h3>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;{{ title }}&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;{{ title }}&lt;/h1&gt;
+    &lt;ul&gt;
+    {% for user in users %}
+        &lt;li&gt;{{ user }}&lt;/li&gt;
+    {% endfor %}
+    &lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p><strong>핵심 포인트:</strong> <code>{{ 변수명 }}</code>은 파이썬에서 넘겨준 값을 그 자리에 출력하고, <code>{% for %}</code> 같은 <code>{% %}</code> 구문은 반복문/조건문 등 로직을 HTML 안에서 사용할 수 있게 해줍니다. <code>render_template()</code>의 키워드 인자로 넘긴 이름이 곧 템플릿 안에서 쓸 수 있는 변수명이 됩니다.</p>
+</div>
+
+<h2>실전 예제: 미니 CRUD 게시판 (메모리 저장)</h2>
+<div class="example">
+<p>아직 데이터베이스를 연결하지 않고, 파이썬 리스트로 데이터를 임시 저장하는 간단한 CRUD 예제입니다. CRUD 각 동작이 어떤 HTTP 메소드와 라우트에 대응하는지 확인해보세요.</p>
+<pre><code>from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+# 메모리에 임시 저장 (서버를 재시작하면 사라짐)
+posts = [
+    {'id': 1, 'title': '첫 번째 글', 'content': '안녕하세요'},
+]
+next_id = 2
+
+@app.route('/posts', methods=['GET'])
+def get_posts():
+    """R: 전체 게시글 목록 조회"""
+    return jsonify(posts)
+
+@app.route('/posts/&lt;int:post_id&gt;', methods=['GET'])
+def get_post(post_id):
+    """R: 게시글 1개 상세 조회"""
+    post = next((p for p in posts if p['id'] == post_id), None)
+    if post is None:
+        return jsonify({'error': '게시글을 찾을 수 없습니다'}), 404
+    return jsonify(post)
+
+@app.route('/posts', methods=['POST'])
+def create_post():
+    """C: 게시글 생성"""
+    global next_id
+    data = request.json
+    new_post = {'id': next_id, 'title': data['title'], 'content': data['content']}
+    posts.append(new_post)
+    next_id += 1
+    return jsonify(new_post), 201
+
+@app.route('/posts/&lt;int:post_id&gt;', methods=['PUT'])
+def update_post(post_id):
+    """U: 게시글 수정"""
+    post = next((p for p in posts if p['id'] == post_id), None)
+    if post is None:
+        return jsonify({'error': '게시글을 찾을 수 없습니다'}), 404
+    data = request.json
+    post['title'] = data.get('title', post['title'])
+    post['content'] = data.get('content', post['content'])
+    return jsonify(post)
+
+@app.route('/posts/&lt;int:post_id&gt;', methods=['DELETE'])
+def delete_post(post_id):
+    """D: 게시글 삭제"""
+    global posts
+    posts = [p for p in posts if p['id'] != post_id]
+    return jsonify({'result': '삭제 완료'})
+
+if __name__ == '__main__':
+    app.run(debug=True)
+</code></pre>
+<p><strong>정리:</strong> <code>GET /posts</code>(목록 조회), <code>GET /posts/1</code>(상세 조회), <code>POST /posts</code>(생성), <code>PUT /posts/1</code>(수정), <code>DELETE /posts/1</code>(삭제) — 앞서 배운 CRUD-HTTP 대응 관계가 실제 라우트 설계에 그대로 적용된 모습입니다. 이후 데이터베이스 챕터에서 배운 SQL을 <code>posts</code> 리스트 대신 실제 테이블 조작으로 바꾸면, 이것이 곧 실전 웹 서비스의 기본 골격이 됩니다.</p>
+</div>
+
+<h2>✏️ 연습문제</h2>
+<div class="example">
+<h3>문제: 방문자 수 카운터 만들기</h3>
+<p>서버가 켜져 있는 동안, 홈페이지에 접속할 때마다 방문 횟수가 1씩 증가하여 화면에 표시되는 앱을 만드세요.</p>
+<pre><code>from flask import Flask
+
+app = Flask(__name__)
+visit_count = 0
+
+@app.route('/')
+def home():
+    global visit_count
+    visit_count += 1
+    return f'현재까지 방문자 수: {visit_count}명'
+
+if __name__ == '__main__':
+    app.run(debug=True)
+</code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 좋아요(Like) 버튼 카운터 API</h4>
+<p>게시글의 "좋아요" 개수를 관리하는 간단한 API를 만들어보세요. <code>GET /likes</code>로 현재 좋아요 개수를 조회하고, <code>POST /likes</code>로 요청이 올 때마다 좋아요 개수를 1 증가시켜 반환합니다.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>from flask import Flask, jsonify
+
+app = Flask(__name__)
+like_count = 0
+
+@app.route('/likes', methods=['GET'])
+def get_likes():
+    return jsonify({'likes': like_count})
+
+@app.route('/likes', methods=['POST'])
+def add_like():
+    global like_count
+    like_count += 1
+    return jsonify({'likes': like_count, 'message': '좋아요가 추가되었습니다'})
+
+if __name__ == '__main__':
+    app.run(debug=True)
+</code></pre>
+</details>
+</div>
 </div>
 
 

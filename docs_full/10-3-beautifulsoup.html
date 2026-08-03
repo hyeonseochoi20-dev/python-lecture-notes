@@ -502,6 +502,45 @@ for movie in movie_items:
     print(f"포스터: {poster_url}")
     print("-" * 50)
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 레시피 목록 크롤링</h4>
+<p>비슷한 구조로, 레시피 목록 HTML에서 각 레시피의 이름·조리시간·난이도·재료를 추출하는 코드를 작성해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>from bs4 import BeautifulSoup as bs
+
+html_content = '''
+&lt;div class="recipe-list"&gt;
+    &lt;div class="recipe-item"&gt;
+        &lt;h2 class="recipe-name"&gt;김치볶음밥&lt;/h2&gt;
+        &lt;span class="cook-time"&gt;15분&lt;/span&gt;
+        &lt;span class="level"&gt;쉬움&lt;/span&gt;
+        &lt;p class="ingredients"&gt;김치, 밥, 계란, 대파&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="recipe-item"&gt;
+        &lt;h2 class="recipe-name"&gt;된장찌개&lt;/h2&gt;
+        &lt;span class="cook-time"&gt;25분&lt;/span&gt;
+        &lt;span class="level"&gt;보통&lt;/span&gt;
+        &lt;p class="ingredients"&gt;된장, 두부, 애호박, 양파&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+'''
+
+soup = bs(html_content, 'html.parser')
+recipes = soup.select('.recipe-item')
+
+for r in recipes:
+    name = r.select_one('.recipe-name').text.strip()
+    cook_time = r.select_one('.cook-time').text.strip()
+    level = r.select_one('.level').text.strip()
+    ingredients = r.select_one('.ingredients').text.strip()
+    print(f"{name} | 조리시간: {cook_time} | 난이도: {level}")
+    print(f"재료: {ingredients}")
+    print("-" * 40)
+</code></pre>
+</details>
+</div>
 </div>
 
 <div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
@@ -562,6 +601,45 @@ for row in rows:
     print(f"거래량: {volume}주")
     print("-" * 30)
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 학급 성적표 크롤링</h4>
+<p>비슷한 테이블 구조로, 학급 성적표 HTML에서 각 학생의 이름·국어·영어·수학 점수를 추출하고 평균까지 계산해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>from bs4 import BeautifulSoup as bs
+
+html_content = '''
+&lt;table class="score-table"&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;&lt;th&gt;이름&lt;/th&gt;&lt;th&gt;국어&lt;/th&gt;&lt;th&gt;영어&lt;/th&gt;&lt;th&gt;수학&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td class="name"&gt;김민준&lt;/td&gt;
+            &lt;td class="kor"&gt;85&lt;/td&gt;&lt;td class="eng"&gt;92&lt;/td&gt;&lt;td class="math"&gt;78&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td class="name"&gt;이서연&lt;/td&gt;
+            &lt;td class="kor"&gt;91&lt;/td&gt;&lt;td class="eng"&gt;88&lt;/td&gt;&lt;td class="math"&gt;95&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
+'''
+
+soup = bs(html_content, 'html.parser')
+rows = soup.select('.score-table tbody tr')
+
+for row in rows:
+    name = row.select_one('.name').text.strip()
+    kor = int(row.select_one('.kor').text.strip())
+    eng = int(row.select_one('.eng').text.strip())
+    math = int(row.select_one('.math').text.strip())
+    avg = (kor + eng + math) / 3
+    print(f"{name}: 국어{kor} 영어{eng} 수학{math} | 평균 {avg:.1f}")
+</code></pre>
+</details>
+</div>
 </div>
 </div>
 </body>

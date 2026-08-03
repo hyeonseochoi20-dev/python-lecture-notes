@@ -141,17 +141,70 @@ HAVING 그룹조건
 <h3>조회 SQL 실행 순서 (매우 중요!)</h3>
 <div class="sql-flow">
 <div class="sql-step"><span class="sql-step-num">1</span><code class="sql-step-kw">FROM</code><span class="sql-step-desc">어느 테이블에서 시작할지 지정</span></div>
-<div class="sql-step sql-step-sub"><span class="sql-step-num"></span><code class="sql-step-kw">JOIN / ON</code><span class="sql-step-desc">다른 테이블과 연결 (LEFT JOIN 또는 RIGHT JOIN 가능)</span></div>
-<div class="sql-step"><span class="sql-step-num">2</span><code class="sql-step-kw">WHERE</code><span class="sql-step-desc">원본 행 필터링</span></div>
-<div class="sql-step"><span class="sql-step-num">3</span><code class="sql-step-kw">GROUP BY</code><span class="sql-step-desc">그룹 나누기</span></div>
-<div class="sql-step"><span class="sql-step-num">4</span><code class="sql-step-kw">HAVING</code><span class="sql-step-desc">그룹 결과 필터링</span></div>
-<div class="sql-step"><span class="sql-step-num">5</span><code class="sql-step-kw">SELECT</code><span class="sql-step-desc">실제로 보여줄 컬럼 결정</span></div>
-<div class="sql-step"><span class="sql-step-num">6</span><code class="sql-step-kw">ORDER BY</code><span class="sql-step-desc">정렬</span></div>
-<div class="sql-step"><span class="sql-step-num">7</span><code class="sql-step-kw">LIMIT</code><span class="sql-step-desc">개수 제한</span></div>
+<div class="sql-step"><span class="sql-step-num">2</span><code class="sql-step-kw">JOIN</code><span class="sql-step-desc">연결할 다른 테이블 지정 (LEFT JOIN 또는 RIGHT JOIN 가능)</span></div>
+<div class="sql-step"><span class="sql-step-num">3</span><code class="sql-step-kw">ON</code><span class="sql-step-desc">두 테이블을 어떤 조건으로 연결할지 지정</span></div>
+<div class="sql-step"><span class="sql-step-num">4</span><code class="sql-step-kw">WHERE</code><span class="sql-step-desc">원본 행 필터링</span></div>
+<div class="sql-step"><span class="sql-step-num">5</span><code class="sql-step-kw">GROUP BY</code><span class="sql-step-desc">그룹 나누기</span></div>
+<div class="sql-step"><span class="sql-step-num">6</span><code class="sql-step-kw">HAVING</code><span class="sql-step-desc">그룹 결과 필터링</span></div>
+<div class="sql-step"><span class="sql-step-num">7</span><code class="sql-step-kw">SELECT</code><span class="sql-step-desc">실제로 보여줄 컬럼 결정</span></div>
+<div class="sql-step"><span class="sql-step-num">8</span><code class="sql-step-kw">ORDER BY</code><span class="sql-step-desc">정렬</span></div>
+<div class="sql-step"><span class="sql-step-num">9</span><code class="sql-step-kw">LIMIT</code><span class="sql-step-desc">개수 제한</span></div>
 </div>
 <div class="note">
 <strong>💡 왜 실행 순서를 알아야 할까?</strong><br>
-SQL 문장을 <strong>작성</strong>하는 순서(SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT)와 실제로 데이터베이스가 <strong>실행</strong>하는 순서는 다릅니다. 이 때문에 <code>WHERE</code>절에는 <code>GROUP BY</code>로 만든 별칭을 쓸 수 없고(아직 그룹이 안 만들어졌으므로), <code>HAVING</code>절에서는 집계 함수를 바로 쓸 수 있는 것입니다.
+SQL 문장을 <strong>작성</strong>하는 순서(SELECT → FROM → JOIN → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT)와 실제로 데이터베이스가 <strong>실행</strong>하는 순서는 다릅니다. <code>SELECT</code>는 문장 맨 앞에 쓰지만 실제로는 7번째로 가장 나중에 처리됩니다. 이 때문에 <code>WHERE</code>절에는 <code>GROUP BY</code>로 만든 별칭을 쓸 수 없고(아직 그룹이 안 만들어졌으므로), <code>HAVING</code>절에서는 집계 함수를 바로 쓸 수 있는 것입니다.
+</div>
+
+<h3>DDL vs DML - SQL 명령어의 두 종류</h3>
+<table>
+<tr><th>구분</th><th>의미</th><th>해당 명령어</th></tr>
+<tr><td><strong>DDL</strong> (Data Definition Language)</td><td>테이블 자체의 구조를 정의</td><td><code>CREATE TABLE</code>, <code>ALTER TABLE</code>, <code>DROP TABLE</code></td></tr>
+<tr><td><strong>DML</strong> (Data Manipulation Language)</td><td>테이블 안의 실제 데이터를 다룸</td><td><code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code> (=CRUD)</td></tr>
+</table>
+<div class="example">
+<pre><code>-- DDL: 테이블(그릇) 자체를 만든다
+CREATE TABLE member (
+    id INT PRIMARY KEY,
+    name VARCHAR(50),
+    age INT
+);
+
+-- DML: 만들어진 테이블 안의 데이터를 다룬다
+INSERT INTO member (id, name, age) VALUES (1, '홍길동', 25);
+SELECT * FROM member;
+UPDATE member SET age = 26 WHERE id = 1;
+DELETE FROM member WHERE id = 1;
+</code></pre>
+<p><strong>비유:</strong> DDL은 "그릇(테이블)을 만들고 깨는 것", DML은 "그 그릇 안에 담긴 음식(데이터)을 넣고 꺼내고 바꾸는 것"이라고 생각하면 헷갈리지 않습니다.</p>
+</div>
+
+<h3>파이썬 값과 SQL 값의 대응 관계</h3>
+<p>파이썬에서 변수에 아무 값도 없음을 <code>None</code>으로 표현하듯, 데이터베이스에서는 같은 개념을 <code>NULL</code>로 표현합니다.</p>
+<table>
+<tr><th>파이썬</th><th>SQL</th><th>의미</th></tr>
+<tr><td><code>None</code></td><td><code>NULL</code></td><td>값이 존재하지 않음 (0이나 빈 문자열과도 다름)</td></tr>
+<tr><td><code>int</code>, <code>float</code></td><td><code>INT</code>, <code>DECIMAL</code> 등</td><td>숫자</td></tr>
+<tr><td><code>str</code></td><td><code>VARCHAR</code>, <code>TEXT</code></td><td>문자열</td></tr>
+</table>
+<div class="warning" style="background:linear-gradient(180deg,#7f1d1d,#450a0a);border-left:4px solid #fca5a5;padding:20px;margin:25px 0;border-radius:0 8px 8px 0;">
+<strong>⚠️ NULL 비교의 함정</strong><br>
+<code>WHERE column = NULL</code>은 절대 작동하지 않습니다. NULL은 "알 수 없는 값"이라 <code>=</code>로 비교 자체가 불가능하기 때문입니다. 반드시 <code>WHERE column IS NULL</code> / <code>WHERE column IS NOT NULL</code>을 사용해야 합니다.
+</div>
+
+<h3>서브쿼리(Subquery) - 쿼리 안의 쿼리</h3>
+<p>통계(집계) 함수로 계산한 결과와 원본 데이터의 각 행을 <strong>동시에</strong> 보고 싶을 때가 있습니다. 이럴 때는 SELECT 안에 또 다른 SELECT문을 중첩해서 사용하는 서브쿼리가 필요합니다.</p>
+<div class="example">
+<pre><code>-- 예: 각 제품의 단가와, 전체 제품 평균 단가를 함께 조회
+SELECT 제품명, 단가,
+       (SELECT AVG(단가) FROM 제품) AS 평균단가
+  FROM 제품;
+
+-- 예: 평균 급여보다 많이 받는 사원만 조회
+SELECT name, salary
+  FROM employees
+ WHERE salary &gt; (SELECT AVG(salary) FROM employees);
+</code></pre>
+<p><strong>핵심 포인트:</strong> <code>AVG(단가)</code>처럼 통계 함수만 단독으로 조회하면 결과가 딱 한 줄로 뭉개져서 각 제품의 개별 정보를 함께 볼 수 없습니다. 서브쿼리를 괄호로 묶어 컬럼처럼 끼워 넣으면, 원본 행 개수는 그대로 유지하면서 계산된 통계값을 각 행에 나란히 붙여서 보여줄 수 있습니다.</p>
 </div>
 
 <h2>✏️ 연습문제 1: 함수 활용 - 주차장 지역번호 추출</h2>
@@ -351,6 +404,33 @@ SELECT DATE_FORMAT(VST_TIME, '%m'), COUNT(*)
 <div class="note">
 <strong>💡 3중 JOIN 패턴 정리</strong><br>
 이 예제처럼 <code>owner → animal → product</code>가 순서대로 연결된 구조는 실무에서 매우 흔합니다 (회원 → 주문 → 주문상품 같은 구조와 동일한 패턴). JOIN을 연결할 때는 항상 "누구의 기본키가 어디의 외래키인지"를 먼저 그림으로 그려보고 SQL을 작성하면 실수를 줄일 수 있습니다.
+</div>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 온라인 서점 스키마 (customer, order, book)</h4>
+<p>회원(<code>customer</code>) → 주문(<code>order</code>) → 도서(<code>book</code>)가 반려동물 예제와 동일한 패턴(1→N→N)으로 연결된 스키마입니다. <code>order</code> 테이블은 <code>customer_id</code>(외래키)와 <code>book_id</code>(외래키)를 함께 가지고 있습니다. 아래 문제를 위 예제와 같은 방식으로 풀어보세요.</p>
+<ol>
+<li>'김민준' 회원이 주문한 모든 책 제목을 출력하시오</li>
+<li>'이서연' 회원이 지금까지 주문한 총 금액을 구하시오</li>
+</ol>
+<details>
+<summary>정답 보기</summary>
+<pre><code>-- 1) '김민준' 회원이 주문한 모든 책 제목
+SELECT b.title
+  FROM customer c
+  JOIN "order" o ON c.id = o.customer_id
+  JOIN book b ON o.book_id = b.id
+ WHERE c.name = '김민준';
+
+-- 2) '이서연' 회원의 총 주문 금액
+SELECT SUM(b.price) AS total_spent
+  FROM customer c
+  JOIN "order" o ON c.id = o.customer_id
+  JOIN book b ON o.book_id = b.id
+ WHERE c.name = '이서연';
+</code></pre>
+<p><strong>핵심 포인트:</strong> <code>order</code>는 SQL 예약어(주문 정렬을 뜻하는 <code>ORDER BY</code>와 혼동)이기 때문에 실제 테이블명으로 쓸 때는 따옴표로 감싸거나 <code>orders</code> 같은 다른 이름을 쓰는 것이 안전합니다.</p>
+</details>
 </div>
 </div>
 

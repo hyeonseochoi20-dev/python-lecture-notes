@@ -206,6 +206,64 @@ if 3 in items:
 
 if 10 not in items:
     print('10이 없습니다')</code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 1 - BMI 구간 판별</h4>
+<p>체질량지수(BMI)를 입력받아 아래 기준으로 구간을 판별하는 코드를 <code>if-elif-else</code>로 작성해보세요.<br>18.5 미만: 저체중 / 18.5 이상 23 미만: 정상 / 23 이상 25 미만: 과체중 / 25 이상: 비만</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>bmi = float(input('BMI 입력: '))
+
+if bmi &lt; 18.5:
+    print('저체중')
+elif bmi &lt; 23:
+    print('정상')
+elif bmi &lt; 25:
+    print('과체중')
+else:
+    print('비만')
+# 핵심: elif는 앞 조건이 거짓일 때만 검사하므로 각 elif에서
+# 상한선만 써줘도 자동으로 "이전 구간을 벗어난 나머지 범위"가 됨
+</code></pre>
+</details>
+</div>
+
+<div class="quiz">
+<h4>🎯 변형문제 2 - 3의 배수이면서 5의 배수인지 판별</h4>
+<p>숫자 하나를 입력받아 3의 배수이면서 동시에 5의 배수이면 "15의 배수"를, 3의 배수만이면 "3의 배수"를, 5의 배수만이면 "5의 배수"를, 둘 다 아니면 "해당없음"을 출력하세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>num = int(input('숫자 입력: '))
+
+if num % 3 == 0 and num % 5 == 0:
+    print('15의 배수')
+elif num % 3 == 0:
+    print('3의 배수')
+elif num % 5 == 0:
+    print('5의 배수')
+else:
+    print('해당없음')
+</code></pre>
+</details>
+</div>
+
+<div class="quiz">
+<h4>🎯 변형문제 3 - 장바구니에 품절 상품이 있는지 확인</h4>
+<p>장바구니 리스트와 품절 상품 리스트가 각각 주어질 때, <code>in</code> 연산자를 사용해서 장바구니 안에 품절된 상품이 하나라도 있는지 확인하는 코드를 작성해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>cart = ['우유', '계란', '두부', '식빵']
+sold_out = ['식빵', '라면']
+
+if '식빵' in cart and '식빵' in sold_out:
+    print('식빵은 품절 상품입니다')
+
+# 응용: 장바구니 중 품절 상품만 추려내기
+sold_out_in_cart = [item for item in cart if item in sold_out]
+print(sold_out_in_cart)  # ['식빵']
+</code></pre>
+</details>
+</div>
 </div>
 </div>
 </body>

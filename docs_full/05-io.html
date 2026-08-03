@@ -165,6 +165,48 @@ with open('python-image.jpg', 'wb') as f:
 
 print("이미지 파일 저장 완료!")</code></pre>
 </div>
+
+<div class="quiz">
+<h4>🎯 변형문제 1 - 쇼핑몰 주문 접수 기록 남기기</h4>
+<p>쇼핑몰에 주문이 들어올 때마다 <code>order.log</code> 파일에 "[시각] 주문번호 ORD-1001 접수" 같은 형식으로 <strong>누적</strong> 기록하는 코드를 작성해보세요. (기존 로그는 지우지 않고 이어서 씁니다)</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>import datetime
+
+now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+orders = ['ORD-1001', 'ORD-1002', 'ORD-1003']
+
+with open('order.log', 'a', encoding='utf8') as f:
+    for order_id in orders:
+        f.write(f"[{now}] 주문번호 {order_id} 접수\n")
+
+print("주문 접수 기록 완료!")
+</code></pre>
+</details>
+</div>
+
+<div class="quiz">
+<h4>🎯 변형문제 2 - 텍스트 데이터 파일 다운로드해서 저장하기</h4>
+<p>인터넷 주소에 있는 텍스트(csv) 파일을 다운로드해서 <code>weather_data.csv</code>라는 이름으로 내 컴퓨터에 저장하는 코드를 작성해보세요. (이미지와 달리 텍스트 파일이므로 인코딩 처리가 필요합니다)</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>import requests
+
+data_url = "http://example.com/data/weather.csv"
+
+print("데이터 파일을 요청하는 중...")
+response = requests.get(data_url)
+response.encoding = 'utf-8'
+
+with open('weather_data.csv', 'w', encoding='utf-8') as f:
+    f.write(response.text)
+
+print("CSV 파일 저장 완료!")
+# 핵심 차이: 이미지는 바이너리(wb + response.content),
+# 텍스트 파일은 텍스트 모드(w + response.text)로 저장
+</code></pre>
+</details>
+</div>
 </div>
 </body>
 </html>

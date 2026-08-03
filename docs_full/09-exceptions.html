@@ -247,6 +247,30 @@ print(safe_divide(10, 2))   # 5.0
 print(safe_divide(10, 0))   # None (오류 메시지 출력)
 print(safe_divide(10, "a")) # None (오류 메시지 출력)
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 안전한 리스트 항목 접근기</h4>
+<p>리스트와 인덱스를 받아서, 범위를 벗어나거나 잘못된 타입의 인덱스가 들어와도 프로그램이 멈추지 않고 <code>None</code>을 반환하며 오류 메시지를 출력하는 <code>safe_get()</code> 함수를 작성해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>def safe_get(items, index):
+    """범위를 벗어나도 안전한 리스트 접근"""
+    try:
+        return items[index]
+    except IndexError:
+        print(f"오류: 인덱스 {index}는 범위를 벗어났습니다")
+        return None
+    except TypeError as e:
+        print(f"오류: 인덱스는 정수여야 합니다 - {e}")
+        return None
+
+fruits = ['사과', '바나나', '포도']
+print(safe_get(fruits, 1))     # 바나나
+print(safe_get(fruits, 10))    # None (오류 메시지 출력)
+print(safe_get(fruits, '1'))   # None (오류 메시지 출력)
+</code></pre>
+</details>
+</div>
 </div>
 
 <div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
@@ -273,6 +297,34 @@ if error:
 else:
     print(f"파일 내용 (처음 100자): {content[:100]}...")
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 안전한 API 요청 함수</h4>
+<p>웹 API에 요청을 보낼 때 발생할 수 있는 여러 오류(연결 실패, 타임아웃, 그 외 오류)를 각각 구분해서 처리하는 <code>safe_request()</code> 함수를 작성해보세요.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>import requests
+
+def safe_request(url):
+    """API 요청을 안전하게 처리하는 함수"""
+    try:
+        response = requests.get(url, timeout=5)
+        return response.json(), None
+    except requests.exceptions.ConnectionError:
+        return None, "서버에 연결할 수 없습니다"
+    except requests.exceptions.Timeout:
+        return None, "요청 시간이 초과되었습니다"
+    except requests.exceptions.RequestException as e:
+        return None, f"요청 중 오류 발생: {e}"
+
+data, error = safe_request("https://api.example.com/data")
+if error:
+    print(f"오류 발생: {error}")
+else:
+    print(f"응답 데이터: {data}")
+</code></pre>
+</details>
+</div>
 </div>
 </div>
 </body>

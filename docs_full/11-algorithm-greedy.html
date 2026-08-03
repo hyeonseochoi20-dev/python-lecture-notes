@@ -339,68 +339,82 @@ max_count = max_lectures(lectures)
 print(f"최대 강의 수: {max_count}")
 # 가능한 배정: (9,10), (10,12), (12,14) → 3개
 </code></pre>
+
+<div class="quiz">
+<h4>🎯 변형문제 - 택배 기사 최대 배송 건수</h4>
+<p>택배 기사 한 명이 하루 동안 처리할 수 있는 배송 건은 <strong>시간이 겹치지 않아야</strong> 합니다. 각 배송이 (시작시각, 종료시각)으로 주어질 때, 하루에 처리할 수 있는 <strong>최대 배송 건수</strong>를 구하는 함수를 작성해보세요. (활동 선택 문제와 완전히 동일한 원리입니다)</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>def max_deliveries(deliveries):
+    # deliveries: [(start_time, end_time), ...]
+    deliveries.sort(key=lambda x: x[1])  # 종료 시각 기준 정렬
+
+    count = 0
+    last_end = 0
+    for start, end in deliveries:
+        if start &gt;= last_end:
+            count += 1
+            last_end = end
+    return count
+
+deliveries = [(9, 10), (9, 12), (10, 11), (11, 13), (12, 14), (13, 15)]
+print(f"최대 배송 건수: {max_deliveries(deliveries)}개")
+# 가능한 배정: (9,10), (10,11), (11,13), (13,15) → 4개
+</code></pre>
+</details>
+</div>
 </div>
 
 <div style="background:#1f2937;border-left:4px solid #a78bfa;padding:16px;margin:20px 0">
 <strong>최대 곱 만들기 (Greedy with Sorting)</strong>
-<pre><code># 주어진 숫자들을 두 그룹으로 나누어 각 그룹의 수들의 곱의 합을 최대화
-# 예: [1, 2, 3, 4] → (1,4)와 (2,3) → 1*4 + 2*3 = 4 + 6 = 10
-#     또는 (1,2)와 (3,4) → 1*2 + 3*4 = 2 + 12 = 14 (최적)
-
-def max_product_sum(numbers):
-    # 오름차순 정렬
+<p>주어진 짝수 개의 숫자들을 두 개씩 짝지어, 각 짝의 곱을 모두 더한 값(곱의 합)이 <strong>최대</strong>가 되도록 만드는 문제입니다.</p>
+<div class="note">
+<strong>💡 직관에 반하는 정답: "극단적으로" 짝지으면 안 된다</strong><br>
+얼핏 보면 "가장 작은 수와 가장 큰 수를 짝지어야 유리할 것 같다"는 생각이 들 수 있지만, 실제로는 정반대입니다. <code>[1, 2, 3, 4]</code>로 직접 비교해보면:
+<ul>
+<li>가장 작은 값과 가장 큰 값끼리 짝짓기: (1,4)+(2,3) = 4+6 = <strong>10</strong></li>
+<li>정렬 후 <strong>인접한</strong> 값끼리 짝짓기: (1,2)+(3,4) = 2+12 = <strong>14</strong> ← 더 큼!</li>
+</ul>
+따라서 정답 전략은 정렬 후 <strong>바로 옆에 있는 값끼리 짝짓는 것</strong>입니다. (곱의 "합"을 최대화할 때는 크기가 비슷한 값끼리 곱해야 전체적으로 큰 곱들을 더 많이 만들어낼 수 있기 때문입니다.)
+</div>
+<pre><code>def max_product_sum(numbers):
+    """정렬 후 인접한 두 값씩 짝지어 곱의 합을 구함"""
     numbers.sort()
-
-    # 작은 수와 큰 수를 짝지어 곱하는 전략
-    # (두 수의 합이 고정되어 있다면 두 수가 비슷할수록 곱이 커지지만,
-    #  여기서는 반대로 여러 쌍의 곱들의 "합"을 최대화하는 것이 목표이므로
-    #  가장 작은 값과 가장 큰 값을 짝지어야 전체 합이 최대가 됨)
-
-    # 실제 최적 전략: 정렬 후 교차하여 페어링
-    # 가장 작은 수와 가장 큰 수를 pair, 두 번째 작은 수와 두 번째 큰 수를 pair, ...
-
-    n = len(numbers)
-    if n % 2 != 0:
-        raise ValueError("짝수 개수의 숫자가 필요합니다")
-
     total = 0
-    left = 0
-    right = n - 1
-
-    while left &lt; right:
-        product = numbers[left] * numbers[right]
-        total += product
-        left += 1
-        right -= 1
-
+    for i in range(0, len(numbers), 2):
+        total += numbers[i] * numbers[i + 1]
     return total
 
 # 사용 예시
 numbers = [1, 2, 3, 4]
 result = max_product_sum(numbers)
 print(f"숫자들: {numbers}")
-print(f"최대 곱의 합: {result}")
-# 페어링: (1,4) → 4, (2,3) → 6, 총합: 10
-# 다른 페어링: (1,2) → 2, (3,4) → 12, 총합: 14
-# 실제 최적은 (1,4)와 (2,3)인가? Let me recalculate...
-# Actually for [1,2,3,4]:
-# Option 1: (1,4)+(2,3)=4+6=10
-# Option 2: (1,2)+(3,4)=2+12=14 ← 이것이 더 큼
-# Option 3: (1,3)+(2,4)=3+8=11
-# 따라서 정렬 후 양 끝에서 inward로 페어링이 아닌,
-# 연속된 쌍으로 페어링이 더 나을 수 있음
+print(f"최대 곱의 합: {result}")  # 1*2 + 3*4 = 2 + 12 = 14
+</code></pre>
 
-# 올바른 접근: 정렬 후 인접한 요소들을 페어링
-def max_product_sum_corrected(numbers):
+<div class="quiz">
+<h4>🎯 변형문제 - 최소 곱의 합 만들기</h4>
+<p>반대로, 두 개씩 짝지었을 때 곱의 합이 <strong>최소</strong>가 되도록 만드는 함수를 작성해보세요. 앞의 원리를 뒤집어서 생각해보면 어떤 정렬/짝짓기 전략이 필요할지 유추할 수 있습니다.</p>
+<details>
+<summary>정답 보기</summary>
+<pre><code>def min_product_sum(numbers):
+    """오름차순 정렬 후, 가장 작은 값과 가장 큰 값을 짝지어 곱의 합을 최소화"""
     numbers.sort()
     total = 0
-    for i in range(0, len(numbers), 2):
-        total += numbers[i] * numbers[i+1]
+    left, right = 0, len(numbers) - 1
+    while left &lt; right:
+        total += numbers[left] * numbers[right]
+        left += 1
+        right -= 1
     return total
 
-result_corrected = max_product_sum_corrected(numbers)
-print(f"수정된 버전 결과: {result_corrected}")  # 1*2 + 3*4 = 2 + 12 = 14
+numbers = [1, 2, 3, 4]
+print(min_product_sum(numbers))  # (1*4) + (2*3) = 4 + 6 = 10
+# 최대화 문제와 정반대로, 이번엔 "극단적으로" 짝지어야
+# 큰 값끼리 곱해지는 것을 막아 합을 최소화할 수 있습니다.
 </code></pre>
+</details>
+</div>
 </div>
 </div>
 </body>
